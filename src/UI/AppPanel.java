@@ -13,15 +13,29 @@ import javax.swing.JFrame;
 public class AppPanel extends JFrame
 {
     // Application dimensions
-    private int appWidth = 300 ;
-    private int appHeight = 200 ;
-    private String applicationName = "CWS vs 0.1";
+    private int appWidth = 911 ;
+    private int appHeight = 774 ;
+    private String applicationName = "Credit Worthiness System";
     private Dimension d = null; 
     
     public AppPanel()
     {
         d = new Dimension(appWidth,appHeight);
-        setName(applicationName);
+        setTitle(applicationName);
         setSize(d);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        buildContentPane();
+    }
+    
+    private void buildContentPane()
+    {
+        setLayout(new StackLayout());
+        
+        GradientPanel gradient = new GradientPanel();
+        CurvesPanel curves = new CurvesPanel();
+        
+        add(gradient , StackLayout.TOP);
+        add(curves , StackLayout.TOP);
     }
 }
