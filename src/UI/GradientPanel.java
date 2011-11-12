@@ -18,15 +18,17 @@ import java.awt.event.ComponentListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class GradientPanel extends JPanel {
     protected BufferedImage gradientImage;
-    protected Color gradientStart = new Color(204, 249, 124);
-    protected Color gradientEnd = new Color(174, 222, 94);
+    protected Color gradientStart = new Color(253, 223, 64);
+    protected Color gradientEnd = new Color(255, 255, 109);
 
-    public GradientPanel() {
-        this(new BorderLayout());
+    public GradientPanel() 
+    {
+        this(new BorderLayout()); 
     }
 
     public GradientPanel(LayoutManager layout) {
@@ -39,7 +41,8 @@ public class GradientPanel extends JPanel {
         createImageCache();
 
         if (gradientImage != null) {
-            g.drawImage(gradientImage, 0, 0, getWidth(), getHeight(), null);
+            g.drawImage(gradientImage, 0, 0, getWidth(), 
+                    getHeight()- StatusBar.statusBarHeight , null);
         }
     }
 

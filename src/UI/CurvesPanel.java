@@ -62,7 +62,7 @@ public class CurvesPanel extends JPanel {
         g2.setRenderingHints(hints);
         
         float width = getWidth();
-        float height = getHeight();
+        float height = getHeight() - StatusBar.statusBarHeight;
         
         g2.translate(0, -30);
 
