@@ -40,7 +40,7 @@ public class AppPanel extends JFrame
         screenHeight = screenSize.height;
         screenWidth = screenSize.width;
         
-        setLocation(screenWidth/7, screenHeight/7);
+        setLocation(screenWidth/7, 0);
         
         // add the rest of the panels
         // using the StackLayout

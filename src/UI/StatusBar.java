@@ -11,8 +11,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
 import java.awt.Paint;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -28,13 +26,14 @@ public class StatusBar extends JPanel
 {
    public static int statusBarHeight = 21 ;
    private Color bgColor = new Color(255, 255, 255, 255);
-   private JProgressBar jp = new JProgressBar();
-   private JLabel l = new JLabel("Connected");
+   private JProgressBar jpbar = new JProgressBar();
+   private JLabel statusMessage = new JLabel("Connected");
    private JSeparator verticalSeparator ;
+   private FlowLayout fLayout;
     
    public StatusBar() 
    {
-       FlowLayout fLayout = new FlowLayout(FlowLayout.RIGHT);
+       fLayout = new FlowLayout(FlowLayout.RIGHT);
        verticalSeparator = new JSeparator(SwingConstants.VERTICAL);
        UIManager.getDefaults().put("Separator.foreground", Color.BLACK);
        
@@ -43,9 +42,9 @@ public class StatusBar extends JPanel
        setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
        setMinimumSize(new Dimension(getWidth(), statusBarHeight));
 
-       add(jp);
+       add(jpbar);
        add(verticalSeparator);
-       add(l); 
+       add(statusMessage); 
    }
    
    @Override
@@ -68,4 +67,15 @@ public class StatusBar extends JPanel
         g2.setPaint(oldPaint);
         super.paintComponent(g);
     }
+   
+   public void updateStatusMessage(String message)
+   {
+       statusMessage.setText(message);
+   }
+   
+   public void updateProgressBar(int count)
+   {
+       // @TODO
+       // updates the progress bar
+   }
 }
