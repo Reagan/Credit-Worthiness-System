@@ -70,6 +70,7 @@ public class MenuBar extends JMenuBar
         // add the File JMenuItems
         AppAction newUserAction = new AppAction(newUserMenuItem, "New User"
                                     , true , KeyEvent.VK_N);
+        newUserAction.addActionClass(new NewUserAction());
         newUserMenuItem.setAction(newUserAction);
         fileMenu.add(newUserMenuItem);
         
@@ -89,6 +90,7 @@ public class MenuBar extends JMenuBar
         
         AppAction exitAction = new AppAction(exitMenuItem, 
                                                "Exit", true , KeyEvent.VK_X);
+        exitAction.addActionClass(new ExitAction());
         exitMenuItem.setAction(exitAction);
         fileMenu.add(exitMenuItem);
         
@@ -96,11 +98,13 @@ public class MenuBar extends JMenuBar
         // add the Transactions JMenuItems
         AppAction newTransactionAction = new AppAction(newTransactionMenuItem,
                                       "New Transaction", true, KeyEvent.VK_T);
+        newTransactionAction.addActionClass(new NewTransactionAction());
         newTransactionMenuItem.setAction(newTransactionAction);
         transactionsMenu.add(newTransactionMenuItem);
         
         AppAction deleteTransactionAction = new AppAction(deleteTransactionMenuItem,
                                        "Delete Transaction", false, KeyEvent.VK_E);
+        deleteTransactionAction.addActionClass(new DeleteTransactionAction());
         deleteTransactionMenuItem.setAction(deleteTransactionAction);
         transactionsMenu.add(deleteTransactionMenuItem);
         
@@ -111,6 +115,7 @@ public class MenuBar extends JMenuBar
         
         AppAction deleteTransactionDetailsAction = new AppAction(deleteTransactionDetailsMenuItem,
                                       "Delete Transaction Details", false, KeyEvent.VK_L);
+        deleteTransactionDetailsAction.addActionClass(new DeleteTransactionDetailsAction());
         deleteTransactionDetailsMenuItem.setAction(deleteTransactionDetailsAction);
         transactionsMenu.add(deleteTransactionDetailsMenuItem);
         
@@ -119,6 +124,7 @@ public class MenuBar extends JMenuBar
         AppAction userTransLogAction = new AppAction(userTransLogMenuItem,
                                        "Print User Transaction Log", false, KeyEvent.VK_P);
         userTransLogMenuItem.setAction(userTransLogAction);
+        userTransLogAction.addActionClass(new PrintUserTransactionLogAction()) ;
         printMenu.add(userTransLogMenuItem);
         
         AppAction monthlyReportAction = new AppAction(monthlyReportMenuItem,
@@ -130,11 +136,11 @@ public class MenuBar extends JMenuBar
                                       "Pending Credit Items", true, KeyEvent.VK_C);
         pendingCreditItemsMenuItem.setAction(pendingCreditItemsAction);
         printMenu.add(pendingCreditItemsMenuItem);
-        
-        
+                
         // add the About JMenuItems
         AppAction aboutAction = new AppAction(aboutMenuItem,
                                         "About", true, KeyEvent.VK_A);
+        aboutAction.addActionClass(new AboutAction());
         aboutMenuItem.setAction(aboutAction);
         aboutMenu.add(aboutMenuItem);
     }

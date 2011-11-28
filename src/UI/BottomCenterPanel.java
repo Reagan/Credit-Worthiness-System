@@ -4,6 +4,8 @@
 package UI;
 
 import AppActions.AppAction;
+import UIListeners.TransactionListener;
+import UIModels.UserTransacationsModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -13,6 +15,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -22,7 +25,7 @@ public class BottomCenterPanel extends JPanel
 {
     private DepthButton createNewButton ;
     private DepthButton deleteButton ;
-    private JList transactionsList ;
+    private static JList transactionsList ;
     private String labels[] = {"Milk, 25th Jan", "Rice, 26th Jan", "Choclate, 27th Jan", 
         "Milo, 28th Jan", "Cocoa & Bread, 29th Jan", "Milk, 14th Feb", "Baby Powder, 19th Feb", 
         "Royco, 21st Feb", "Vaseline, 22nd Feb", "Loan, 1st March","Milk, 25th Jan", "Rice, 26th Jan", "Choclate, 27th Jan", 
@@ -30,7 +33,9 @@ public class BottomCenterPanel extends JPanel
         "Royco, 21st Feb", "Vaseline, 22nd Feb", "Loan, 1st March", "Milk, 25th Jan", "Rice, 26th Jan", "Choclate, 27th Jan", 
         "Milo, 28th Jan", "Cocoa & Bread, 29th Jan", "Milk, 14th Feb", "Baby Powder, 19th Feb", 
         "Royco, 21st Feb", "Vaseline, 22nd Feb", "Loan, 1st March"};
-
+    
+    private static UserTransacationsModel userTransactions ;
+    private TransactionListener transactionListener ;
     
     public BottomCenterPanel()
     {
@@ -45,7 +50,13 @@ public class BottomCenterPanel extends JPanel
         deleteButton = new DepthButton(deleteTransaction);
         
         
-        transactionsList = new JList(labels);
+        // set the transaction listener
+        transactionListener = new TransactionListener(); 
+        
+        // create the JList and attache the transaction listener
+        transactionsList = new JList();
+        transactionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        transactionsList.addListSelectionListener(transactionListener);
         transactionsList.setOpaque(false);
         
         // lay out the components
@@ -70,5 +81,17 @@ public class BottomCenterPanel extends JPanel
         setOpaque(false);        
         setPreferredSize(new Dimension(278, 295));
         setBorder(BorderFactory.createTitledBorder("Transactions"));
+    }
+    
+    /**
+     * sets the user transactions into the Transactions Model
+     */
+    public static void setUserTransactionsModel (int userID)
+    {
+        // create the transactions model
+         userTransactions = new UserTransacationsModel(userID);
+         
+         // set the model
+         transactionsList.setModel(userTransactions);                
     }
 }

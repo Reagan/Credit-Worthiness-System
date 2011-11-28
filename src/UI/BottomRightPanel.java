@@ -33,12 +33,12 @@ public class BottomRightPanel extends JPanel
     private JLabel itemLabel ;
     private JLabel itemNumberLabel ;
     
-    private JTextField date ;
-    private JTextField numberOfItems ;
-    private JComboBox items ;
+    private static JTextField date ;
+    private static JTextField numberOfItems ;
+    private static JComboBox items ;
     
     private JLabel notesLabel ;
-    private JTextArea transactionNotes ;
+    private static  JTextArea transactionNotes ;
     
     private JSeparator verticalSeparator ;      
     
@@ -72,7 +72,7 @@ public class BottomRightPanel extends JPanel
         notesLabel = new JLabel("Notes");
         
         transactionNotes = new JTextArea("important areas ");
-        transactionNotes.setMaximumSize(new Dimension(343, 208));
+        transactionNotes.setMaximumSize(new Dimension(343, 198));
         
         verticalSeparator = new JSeparator(SwingConstants.VERTICAL);
         
@@ -139,7 +139,22 @@ public class BottomRightPanel extends JPanel
             
         //finalise and display panel   
         setOpaque(false);
-        setPreferredSize(new Dimension(410, 295));                     
+        setPreferredSize(new Dimension(430, 305));                     
         setBorder(BorderFactory.createTitledBorder("Transaction Details"));
+    }
+    
+    /**
+     * This method displays the transaction details 
+     * for a selected transaction for editing
+     * @param transactionID 
+     */
+    public static void setTransactionDetails(int transactionID)
+    {
+        // @TODO : this should be automatically updated
+        // with information from the database
+        date.setText("21/11/2011") ;
+        numberOfItems.setText("2");
+        items.setSelectedIndex(0);
+        transactionNotes.setText("Information on this transaction");
     }
 }

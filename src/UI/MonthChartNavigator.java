@@ -5,6 +5,7 @@ package UI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -16,12 +17,13 @@ import javax.swing.JPanel;
  */
 public class MonthChartNavigator extends JPanel
 {
-    private final int COMPONENT_WIDTH = 230;
-    private final int COMPONENT_HEIGHT = 38;
+    private final int COMPONENT_WIDTH = 260;
+    private final int COMPONENT_HEIGHT = 30;
     private final DepthButton previousMonthButton ;
     private final DepthButton nextMonth ;
     private final JLabel monthNameLabel ;
     private final String monthName ;
+    private Font monthFont ;
     
     public MonthChartNavigator()
     {
@@ -30,8 +32,10 @@ public class MonthChartNavigator extends JPanel
         nextMonth = new DepthButton(">");
         
         // set the monthName and year
+        monthFont = new Font("Serif", Font.PLAIN, 17) ;
         monthName = "November, 2011";
         monthNameLabel = new JLabel(monthName);   
+        monthNameLabel.setFont(monthFont);
         monthNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
        
         // lay out the components

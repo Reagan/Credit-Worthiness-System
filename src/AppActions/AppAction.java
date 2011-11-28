@@ -15,12 +15,16 @@ import javax.swing.Action;
  */
 public class AppAction extends AbstractAction
 {
-    private Component parentComponent;
+    private Component parentComponent ;
+    private ActionEvent actionEvent ;
+    private AbstractedAction action ;
     
     public AppAction(Component parentComponent, String actionName, 
                     boolean enabledStatus, Integer keyEvent)
     {
         super(actionName);
+        action = new AbstractedAction();
+        
         this.parentComponent = parentComponent ;
         putValue(Action.MNEMONIC_KEY, new Integer(keyEvent));
         setEnabled(enabledStatus);
@@ -29,7 +33,14 @@ public class AppAction extends AbstractAction
     @Override
     public void actionPerformed(ActionEvent e) 
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        actionEvent = e ;
+        action.run();
     }
     
+    public void addActionClass(AbstractedAction action)
+    {
+        // instantiate the class and run the desired 
+        // method
+        this.action = action ;        
+    }    
 }

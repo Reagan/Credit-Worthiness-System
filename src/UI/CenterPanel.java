@@ -6,6 +6,8 @@ package UI;
 import UI.Charts.Chart;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.util.Calendar;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -25,14 +27,24 @@ public class CenterPanel extends JPanel
     private final VerticalJLabel yAxisLabel; 
     private Chart chart;
     
+    // sets the month & year for the chart
+    // @TODO: make this automated
+    private int chartMonth = Calendar.NOVEMBER ;
+    private int chartYear = 2011 ;
+    
     public CenterPanel()
     {
         // initialise the components
         alerter = new AlertLabel();
         monthNav = new MonthChartNavigator();
         title = new JLabel("Transactions");
+        title.setFont(new Font("Serif", Font.PLAIN, 31));
         yAxisLabel = new VerticalJLabel("Amount, Kshs");
-        chart = new Chart();
+        
+        // create the chart component and add the 
+        // model for the chart
+        setChart(chartMonth, chartYear);
+                
         
         // lay out and add the components
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -76,5 +88,21 @@ public class CenterPanel extends JPanel
         // finalize the JPanel
         setOpaque(false);
         setPreferredSize(new Dimension(686, 344));
+    }
+    
+    public void setChart(int chartMonth, int chartYear)
+    {
+        // create a new Chart instance
+         chart = new Chart(chartMonth, chartYear);
+    }
+    
+    /**
+     * this method sets the model 
+     * for the chart that plots all the 
+     * nodes displayed on the chart
+     */
+    public void setChartModel()
+    {
+        
     }
 }

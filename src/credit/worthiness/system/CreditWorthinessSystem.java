@@ -22,6 +22,8 @@ public class CreditWorthinessSystem
      * @param args the command line arguments
      */
     
+    private static int currentUser ; // specifies the current user
+     private static int currentUserID ; // will store the current user ID
     
     public static void main(String[] args)
     {
@@ -78,5 +80,15 @@ public class CreditWorthinessSystem
                    
         // start the application
         EventQueue.invokeLater(mainApp);
+    }
+    
+    public static void specifyCurrentUser(int userID)
+    {
+        currentUser = userID ;
+    }
+    
+    public static int getCurrentUserID()
+    {
+        return currentUserID ;
     }
 }

@@ -34,11 +34,12 @@ public class AlertLabel extends JComponent
     private final Color textColor = new Color(255, 255, 255);
     
     private final Point2D.Double alertConditionPosition 
-                = new Point2D.Double(10, 20);
+                = new Point2D.Double(5, 30);
     private final Point2D.Double amountOverOrUnderAmountPostion 
-            = new Point2D.Double(10, 50);
+            = new Point2D.Double(5, 50);
     
     private Font statusFont ;
+    private Font statusAmountFont ;
     private Font creditOrDebitAmountFont ;
     
     public AlertLabel()
@@ -49,7 +50,8 @@ public class AlertLabel extends JComponent
         alertColor = overSpentColor ;
         alertStatus = overspentCondition ;
         
-        statusFont = new Font("Serif", Font.PLAIN, 11);
+        statusFont = new Font("Serif", Font.PLAIN, 28);
+        statusAmountFont = new Font("Serif", Font.PLAIN, 13) ;
         
         creditOrDebit = 214.55 ;
         
@@ -68,6 +70,7 @@ public class AlertLabel extends JComponent
         String currentStatus = (alertStatus == overspentCondition) ?
                 overspentCondition : underspentCondition ;
         
+        
         // obtain the color of the alerter
         Color alerterColor = (alertStatus == overspentCondition) ?
                 overSpentColor : underSpentColor;
@@ -83,18 +86,19 @@ public class AlertLabel extends JComponent
         graphics.setColor(textColor);                
         Font currentFont = graphics.getFont();
         
-        setFont(statusFont);
+        graphics.setFont(statusFont);
         graphics.drawString(currentStatus, (int) alertConditionPosition.x 
                         , (int) alertConditionPosition.y );        
         
         // amount by which the user is overspent 
         // or underspent
+        graphics.setFont(statusAmountFont) ;
         String amountOverOrUnderSpent = (currentStatus == overspentCondition) ?
                 "+" :"-";
         
         amountOverOrUnderSpent += "Kshs "
                                     + Double.toString(roundTwoDecimals(creditOrDebit)) ;
-        setFont(currentFont);
+        graphics.setFont(currentFont);
         graphics.drawString(amountOverOrUnderSpent, (int) amountOverOrUnderAmountPostion.x,
                 (int) amountOverOrUnderAmountPostion.y );
         

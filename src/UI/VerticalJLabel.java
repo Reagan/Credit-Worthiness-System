@@ -5,6 +5,7 @@ package UI;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -20,11 +21,13 @@ public class VerticalJLabel extends JPanel
     private int vLabelHeight = 129 ;
     private Color labelFontColor ;
     private String text ;
+    private Font stringFont ;
     
     public VerticalJLabel(String text)
     {
         labelFontColor = new Color(0, 0, 0);
         this.text = text;
+        stringFont = new Font("Serif", Font.PLAIN, 17) ;
        
         // lay out the components and display them
         setOpaque(false);
@@ -45,7 +48,8 @@ public class VerticalJLabel extends JPanel
         graphics.rotate(  -Math.PI /2);
         graphics.translate(-vLabelHeight+5 , vLabelWidth-5 );
         
-        graphics.drawString(text, 5, 0);
+        graphics.setFont(stringFont);
+        graphics.drawString(text, -20, 0);
         
         graphics.setTransform(tr);
         
