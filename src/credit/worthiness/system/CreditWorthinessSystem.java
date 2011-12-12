@@ -10,7 +10,6 @@ package credit.worthiness.system;
 import AppSplashScreen.AppSplashScreen;
 import UI.AppPanel;
 import java.awt.EventQueue;
-import java.awt.Panel;
 
 /**
  *
@@ -55,7 +54,6 @@ public class CreditWorthinessSystem
                 
                 // check and/or create folder for storing 
                 // images
-                // @TODO
                 splash.DisplayLoadingOperation(splash.graphicsObj,
                                     "Checking images folder...");
                 if(!SystemCheck.checkImageFolder())
@@ -82,7 +80,7 @@ public class CreditWorthinessSystem
         EventQueue.invokeLater(mainApp);
     }
     
-    public static void specifyCurrentUser(int userID)
+    public static void specifyCurrentUserID(int userID)
     {
         currentUser = userID ;
     }

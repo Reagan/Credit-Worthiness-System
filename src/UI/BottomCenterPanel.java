@@ -41,7 +41,7 @@ public class BottomCenterPanel extends JPanel
     {
         // initialise the variables
         AppAction createTransaction = new AppAction(createNewButton, "Create"
-                                        , true, KeyEvent.VK_T);
+                                        , false, KeyEvent.VK_T);
         createNewButton = new DepthButton(createTransaction);
         
         

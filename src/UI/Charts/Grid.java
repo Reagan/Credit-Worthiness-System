@@ -3,15 +3,14 @@
  */
 package UI.Charts;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -30,8 +29,7 @@ public class Grid extends JComponent
     private final int X_POS = 79 ;
     private final int NO_OF_HORIZONTAL_LINES = 5 ;
     private final int NO_OF_VERTICAL_LINES = 10 ;
-    private Rectangle2D gridRect ;
-    
+   
     private final Color bgColor  = Color.WHITE ;
     private final Color gridBorderColor = new Color(51, 51, 51) ;
     private final Color gridLinesColor = new Color(204, 204, 204) ;
@@ -43,14 +41,7 @@ public class Grid extends JComponent
     
     private String[] legendItems ;
     private Color[] legendColors ;
-    
-    // Node Types
-    public final int CREDIT_ITEM_NODE = 1 ;
-    public final int TRANSACTION_ITEM_NODE = 2 ;
-    public final int TRANSACTION_LOAN_NODE = 3 ;
-    public final int TRANSACTION_PAYMENT_NODE = 4 ;
-    
-    
+               
     private Legend legend = new Legend();
     
     public Grid(int month, int year, int[] yMinAndMaxValues)
@@ -62,15 +53,33 @@ public class Grid extends JComponent
             
             // set layout properties
             setOpaque(true);
-            setPreferredSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
+            
+            // setPreferredSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
             setBackground(bgColor);
+            setLayout(new BorderLayout());
     }
 
+    public void goToMonth(int month, int year, 
+            int[] yMinAndMaxValues)
+    {
+        calendarMonth = month ;
+        calendarYear = year ;
+        this.yMinAndMaxValues = yMinAndMaxValues ;
+        
+        repaint();
+    }
+    
     @Override
     protected void paintComponent(Graphics g) 
     {
         // get the graphics object
-        Graphics2D graphics  = (Graphics2D) g ;
+        Graphics2D graphics  = (Graphics2D) g ;        
+        
+        // add the antialis to make sure that the 
+        // displayed text and images all look 
+        // OK
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+                RenderingHints.VALUE_ANTIALIAS_ON);
            
         // fill the background 
         graphics.setColor(bgColor);
@@ -161,10 +170,10 @@ public class Grid extends JComponent
         drawLegend(graphics, legendItems, legendColors);
         
         // draw the nodes
-        drawNode(graphics, TRANSACTION_ITEM_NODE, new Point2D.Double(100, 100));
+        // drawNode(graphics, TRANSACTION_ITEM_NODE, new Point2D.Double(100, 100));        
         
-        // finally get rid of the graphics object
-        graphics.dispose();
+        // finally get rid of the graphics object        
+        graphics.dispose();     
     }
 
     /**
@@ -176,7 +185,7 @@ public class Grid extends JComponent
     {
         int DAY_OF_MONTH = 1 ;
         Calendar cal = new GregorianCalendar(calendarYear, calendarMonth, DAY_OF_MONTH) ;
-        return cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
+        return cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;        
     }
 
     public void setLegendValues(String[] legendItems, Color[] legendColors) 
@@ -209,44 +218,5 @@ public class Grid extends JComponent
         graphics.drawString(creditLimitText, 479, 30);
         graphics.drawString(transactions, 479, 47);
         
-    }
-    
-    /** 
-     * Displays a node on the grid for the specified
-     * date and of the required model
-     * @param nodeType
-     * @param date 
-     */
-    private void drawNode(Graphics2D graphics, int nodeType, 
-                    Point2D.Double plotValues)
-    {
-        int nodeRadius = 0 ;
-        Color nodeColor ;
-        Ellipse2D circle ;
-     
-        // set the radius of the node type
-        switch(nodeType)
-        {
-            case CREDIT_ITEM_NODE: nodeRadius = 10 ;
-            case TRANSACTION_ITEM_NODE: nodeRadius = 10 ;
-            case TRANSACTION_LOAN_NODE: nodeRadius = 12 ;
-            case TRANSACTION_PAYMENT_NODE: nodeRadius = 15 ;
-        }      
-        
-        // set the color of the node
-        if(nodeType == CREDIT_ITEM_NODE)
-        {
-            nodeColor = new Color(255, 0, 0) ;
-        }
-        else
-        {
-            nodeColor = new Color(0, 97, 0);
-        }
-        
-        // draw the node
-        graphics.setColor(nodeColor);
-        circle = new Ellipse2D.Double(plotValues.x,  plotValues.y
-                    , nodeRadius, nodeRadius) ;  
-        graphics.fill(circle);
-    }
+    }       
 }

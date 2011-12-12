@@ -52,7 +52,7 @@ public class SystemCheck
     {
         cImages = new ClientImages();
         
-        if(cImages.checkImagesFolder())
+        if(ClientImages.checkImagesFolder())
         {
             return true; 
         }

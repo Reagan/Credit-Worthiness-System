@@ -48,7 +48,7 @@ public class UsersSelectionListener implements ActionListener
                 // set the current User ID
                 // @TODO: get the current user ID by query to the
                 // database or call to the model
-                CreditWorthinessSystem.specifyCurrentUser(userID);
+                CreditWorthinessSystem.specifyCurrentUserID(userID);
                 
                 try 
                 {

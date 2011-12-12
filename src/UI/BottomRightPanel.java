@@ -78,15 +78,15 @@ public class BottomRightPanel extends JPanel
         
         // buttons
         AppAction settingsAction = new AppAction(settingsButton, "Settings"
-                                        , true, KeyEvent.VK_S);
+                                        , false, KeyEvent.VK_S);
         settingsButton = new DepthButton(settingsAction) ;
         
         AppAction saveAction = new AppAction(saveButton, "Save"
-                                        , true, KeyEvent.VK_S);
+                                        , false, KeyEvent.VK_S);
         saveButton = new DepthButton(saveAction) ;
         
         AppAction deleteAction = new AppAction(deleteButton, "Delete"
-                                        , true, KeyEvent.VK_S);
+                                        , false, KeyEvent.VK_S);
         deleteButton = new DepthButton(deleteAction) ;         
         
         AppAction printLogAction = new AppAction(printLogButton, "Print Transactions Log"

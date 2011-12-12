@@ -66,7 +66,7 @@ public class LeftPanel extends JPanel
         
         userImage = new UserImage();        
         deleteUserAction = new AppAction(deleteUserButton, "Delete User", 
-                                true, KeyEvent.VK_D);
+                                false, KeyEvent.VK_D);
         deleteUserAction.addActionClass(new DeleteUserAction());
         deleteUserButton = new DepthButton(deleteUserAction);
         
