@@ -10,19 +10,23 @@ package credit.worthiness.system;
 import AppSplashScreen.AppSplashScreen;
 import UI.AppPanel;
 import java.awt.EventQueue;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  *
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
-public class CreditWorthinessSystem 
+public class CreditWorthinessSystem
 {
     /**
      * @param args the command line arguments
      */
     
-    private static int currentUser ; // specifies the current user
-     private static int currentUserID ; // will store the current user ID
+    private static String currentUser = null ; // specifies the current user
+    private static int currentUserID = 0 ; // will store the current user ID
+                                            // at startup, the userID specified 
+                                            // is 0
     
     public static void main(String[] args)
     {
@@ -82,11 +86,21 @@ public class CreditWorthinessSystem
     
     public static void specifyCurrentUserID(int userID)
     {
-        currentUser = userID ;
+        currentUserID = userID ;
     }
     
     public static int getCurrentUserID()
     {
         return currentUserID ;
     }
+    
+    public static void specifyCurrentUser(String username)
+    {
+        currentUser = username ;
+    }
+    
+    public static String getCurrentUser()
+    {
+        return currentUser ;
+    }       
 }

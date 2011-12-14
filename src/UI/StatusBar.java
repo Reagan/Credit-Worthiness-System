@@ -27,7 +27,7 @@ public class StatusBar extends JPanel
    public static int statusBarHeight = 21 ;
    private Color bgColor = new Color(255, 255, 255, 255);
    private JProgressBar jpbar = new JProgressBar();
-   private JLabel statusMessage = new JLabel("Connected");
+   private static JLabel statusMessage = new JLabel("Started");
    private JSeparator verticalSeparator ;
    private FlowLayout fLayout;
     
@@ -68,7 +68,7 @@ public class StatusBar extends JPanel
         super.paintComponent(g);
     }
    
-   public void updateStatusMessage(String message)
+   public static void updateStatusMessage(String message)
    {
        statusMessage.setText(message);
    }

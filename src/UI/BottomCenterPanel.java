@@ -4,8 +4,8 @@
 package UI;
 
 import AppActions.AppAction;
-import UIListeners.TransactionListener;
-import UIModels.UserTransacationsModel;
+import UI.Listeners.TransactionListener;
+import UI.Models.UserTransacationsModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;

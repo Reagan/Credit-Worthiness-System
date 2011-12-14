@@ -6,8 +6,9 @@ package UI;
 import AppActions.AppAction;
 import AppActions.DeleteUserAction;
 import ClientImages.DisplayUserImage;
-import UIListeners.UsersSelectionListener;
-import UIModels.UsersModel;
+import DbConnection.UsersDetails;
+import UI.Listeners.UsersSelectionListener;
+import UI.Models.UsersModel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -15,54 +16,77 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.Void;
+import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 /**
  *
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
 public class LeftPanel extends JPanel
-{
-    String labels[] = {"Angie Muthoni", "Reagan Mbitiru"};
-    private JComboBox userSelectCombo ;
+{    
+    private static JComboBox userSelectCombo ;
     private static UserImage userImage ;
     private DepthButton deleteUserButton ;
-    private AppAction deleteUserAction ;
+    public static AppAction deleteUserAction ;
     private static JLabel userName ;
     private static JLabel joinedDate ;
     
     // add the model and listeners for the JComboBox
+    private Vector<String> usersNames;
     private UsersModel users ;
     private UsersSelectionListener usersSelectionListener ;
-       
+    
+    private static int currSelectedUserIndex = 0; // indicates the selected users
+                                            // index in the JComboBox
+    public static final String DEFAULTUSERIMAGE = "1.gif" ;           
             
     public LeftPanel()
     {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));        
         
-        // initialise the components
-        users  = new UsersModel();
+        // retireve the list of names, ID#s and for 
+        // joining date for all the users 
+        // as stored in the database
+        usersNames = new Vector<String>() ;
+        
+        if(SwingUtilities.isEventDispatchThread())
+        {
+            // Inform the progress bar of retrieval of 
+            // user's names
+            StatusBar.updateStatusMessage("Fetching names...");
+            
+            // get the names of the users from the database
+            // and add them to the model of the JComboBox
+            // and then add this model to the JComboBox
+            fetchUserNames();                        
+        }
+        
+        // initialise the Selection Listener        
         usersSelectionListener = new UsersSelectionListener() ;
         
         // create the JComboBox for selecting users
-        userSelectCombo = new JComboBox();
+        userSelectCombo = new JComboBox();            
         
-        // add the model & listener for the JComboBox
-        userSelectCombo.setModel(users);
+        // add the listener for the JComboBox        
         userSelectCombo.addActionListener(usersSelectionListener);
         
         // ensure that only data in the model 
         // is available for display
         userSelectCombo.setEditable(false);
         
+        // set the preferred dimensions
         userSelectCombo.setPreferredSize(new Dimension(150, 27));
-        userSelectCombo.setMaximumSize(new Dimension(150, 27));
-        
+        userSelectCombo.setMaximumSize(new Dimension(150, 27));        
         
         userImage = new UserImage();        
         deleteUserAction = new AppAction(deleteUserButton, "Delete User", 
@@ -107,17 +131,24 @@ public class LeftPanel extends JPanel
     }
     
     /**
-     * This method sets the user name for the user
-     * and the joining date for that user
+     * This method get the user's ID, name and 
+     * Joining Date and sets the user name for the user
+     * and the joining date for that user in the JLabel
      * @param userName 
      */
-    public static void setUserDetails(String newUserName, int userID)
+    public static void setUserDetails(String[] userDetails) throws IOException 
+                                                // userDetais stores the userID(0),
+                                                //  userName(1), joiningDate (2),
+                                                // image_path(3)
     {
-        userName.setText(newUserName);
+        // set the userName
+        userName.setText(userDetails[1]);
+                
+        // get the joining Date for the user        
+        joinedDate.setText("Joined: " + userDetails[2]);
         
-        // @TODO: this value should be obtained from the 
-        // a database query or from a cached object
-        joinedDate.setText(newUserName);
+        // set the image for the user
+        setUserImage(userDetails[3]);                                    
     }
     
     /**
@@ -146,5 +177,70 @@ public class LeftPanel extends JPanel
     public static void showLoadingLabel(boolean stateOfLabel)
     {
         userImage.setLoadingLabel(stateOfLabel);
+    }
+
+    private void fetchUserNames() 
+    {
+        // create a swing worker thread to 
+        // fetch the names of the users in the database
+        // while updating the status bar
+        //
+        // get the names of the users from the database
+        // and add them to the model of the JComboBox
+        // and then add this model to the JComboBox
+        
+        SwingWorker worker = new SwingWorker<Vector, Void> ()
+        {            
+            @Override
+            protected Vector doInBackground() 
+            {
+                UsersDetails users = new UsersDetails();
+                return users.getUsersNames() ;
+            }
+            
+            @Override
+            public void done()
+            {
+                // inform the status bar that the
+                // required users informatio has been obtained
+                StatusBar.updateStatusMessage("Users' Names obtained");
+                
+                try 
+                {
+                    // set the obtained values as the 
+                    // usersNames
+                    usersNames = get() ;
+                    
+                    // add the names obtained to the model
+                    users  = new UsersModel(usersNames);
+                    
+                    // add the model to the JComboBox
+                    userSelectCombo.setModel(users);
+                }
+                catch (InterruptedException ie){}
+                catch (ExecutionException e)
+                {
+                    Throwable cause = e.getCause() ;
+                    
+                    if(null != cause)
+                    {
+                        StatusBar.updateStatusMessage("Error: " + cause);
+                    }
+                }                                
+            }        
+        };
+        
+        // schedule the thread
+        worker.execute();
+    }
+    
+    public static void setCurrUserSelectedIndex(int index)
+    {
+        currSelectedUserIndex =  index ;
+    }
+    
+    public static int getCurrUserSelectedIndex()
+    {
+        return currSelectedUserIndex ;
     }
 }

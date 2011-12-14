@@ -4,7 +4,7 @@
 package UI.Charts;
 
 import UI.StackLayout;
-import UIModels.ChartModel;
+import UI.Models.ChartModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

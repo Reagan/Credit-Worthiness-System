@@ -27,7 +27,7 @@ public class AppAction extends AbstractAction
         
         this.parentComponent = parentComponent ;
         putValue(Action.MNEMONIC_KEY, new Integer(keyEvent));
-        setEnabled(enabledStatus);
+        enableAction(enabledStatus);
     }
     
     @Override
@@ -42,5 +42,14 @@ public class AppAction extends AbstractAction
         // instantiate the class and run the desired 
         // method
         this.action = action ;        
-    }    
+    }   
+    
+    /**
+     * This method disables or enables an action
+     * @param state 
+     */
+    public void enableAction(boolean status)
+    {
+        setEnabled(status);
+    }
 }

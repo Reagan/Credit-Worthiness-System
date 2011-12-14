@@ -1,7 +1,7 @@
 /**
  * Credit Worthiness System Version 1.0
  */
-package UIModels;
+package UI.Models;
 
 /**
  *
