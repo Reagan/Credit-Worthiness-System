@@ -5,6 +5,9 @@
 package UI.Listeners;
 
 import UI.BottomRightPanel;
+import UI.Models.UserTransactionsModel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -18,16 +21,37 @@ import javax.swing.event.ListSelectionListener;
  */
 public class TransactionListener implements ListSelectionListener
 {
+    private int currentlySelectedTransactionID ; 
+    
     @Override
     public void valueChanged(ListSelectionEvent e) 
     {
          if(SwingUtilities.isEventDispatchThread())
         {
             // get the selected transaction ID
+            //
+            // make sure that the selected value on
+            // the JList is not adjusting
+            boolean adjusting = e.getValueIsAdjusting() ;
             
-            // populate the fields on the bottom left 
-            // of the application
-            BottomRightPanel.setTransactionDetails(0);
+            // if not adjusting, then get the selected index
+            if(false == adjusting)
+            {
+                // populate the fields on the bottom left 
+                // of the application with details on the 
+                // transaction
+                JList list = (JList) e.getSource() ;
+                
+                int selection = list.getSelectedIndex();                
+                
+                // now obtain the transaction ID for 
+                // the selected item
+                currentlySelectedTransactionID = 
+                        UserTransactionsModel.transIDs[selection] ;
+                
+                BottomRightPanel
+                        .setTransactionDetails(UserTransactionsModel.transIDs[selection]);
+            }                       
         }
     }    
 }

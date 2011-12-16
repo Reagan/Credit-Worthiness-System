@@ -36,38 +36,21 @@ public class Chart extends JPanel
                         // further customization
     private  GraphPanel graph ; // will store the nodes and the chart lines
     
-    private final Color bgColor = Color.WHITE; 
-    
-    private static int year ;
-    private static int month ;
-    private static int[] yMinAndMaxValues = {0, 500};
+    private final Color bgColor = Color.WHITE;     
     
     private String[] legendItems  = {"Credit Limit" , "Transactions"} ;
     private Color[] legendColors = { new Color(255, 0, 0), new Color(0, 97, 0)} ;
-    
-    // Node Types
-    public final int CREDIT_ITEM_NODE = 1 ;
-    public final int TRANSACTION_ITEM_NODE = 2 ;
-    public final int TRANSACTION_LOAN_NODE = 3 ;
-    public final int TRANSACTION_PAYMENT_NODE = 4 ;    
-    
+            
     private static Calendar cal ;
-    
-    public Chart(int month, int year)
-    {
-        // initialise the components
-        this.year = year ;
-        this.month = month ;
-        grid = new Grid(month, year, yMinAndMaxValues) ;
-        graph = new GraphPanel() ;
         
+    private static ChartModel cModel ;       
+    
+    public Chart()
+    {
         // set the display properties       
         setPreferredSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
         setMinimumSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
-        setOpaque(false);
-        
-        // add the components
-        setComponents();        
+        setOpaque(false);                    
     }
 
     /**
@@ -84,8 +67,7 @@ public class Chart extends JPanel
         
         // add the grid
         add(grid, StackLayout.TOP) ;
-        add(graph, StackLayout.TOP) ;
-        
+        add(graph, StackLayout.TOP) ;        
     }     
     
     /** 
@@ -93,9 +75,19 @@ public class Chart extends JPanel
      * chart object
      * @param model 
      */
-    public void setModel(ChartModel model)
-    {
+    public void setModel(int month, int year, 
+                int[] yMinAndMaxValues, Node[] nodes)
+    {                       
+        // initialise the model
+        cModel = new ChartModel(month, year, 
+                yMinAndMaxValues, nodes) ;        
+                
+        // add the model to the grid and graph
+        grid = new Grid(cModel) ;
+        graph = new GraphPanel(cModel) ; 
         
+        // Lay out the visual components
+        setComponents();                 
     }   
     
     /**
@@ -106,13 +98,17 @@ public class Chart extends JPanel
     {
         int currTime[] = new int[2] ;
         int DAY_OF_MONTH = 1 ;
-        cal = new GregorianCalendar(year, month, DAY_OF_MONTH) ;
+        int month ; 
+        int year ;
+        
+        cal = new GregorianCalendar(cModel.getYear(), 
+                cModel.getMonth(), DAY_OF_MONTH) ;
         cal.add(Calendar.MONTH, 1);
         
         month = cal.get(Calendar.MONTH) ;
         year = cal.get(Calendar.YEAR) ;
         
-        grid.goToMonth(month, year, yMinAndMaxValues); 
+        grid.goToMonth(month, year, cModel.getYMinMax()); 
         currTime[0] = month ;
         currTime[1] = year ;
         
@@ -128,14 +124,17 @@ public class Chart extends JPanel
     {
         int currTime[] = new int[2] ;
         int DAY_OF_MONTH = 1 ;
+        int month ; 
+        int year ;
         
-        cal = new GregorianCalendar(year, month, DAY_OF_MONTH) ;
+        cal = new GregorianCalendar(cModel.getYear(), 
+                cModel.getMonth(), DAY_OF_MONTH);
         cal.add(Calendar.MONTH, -1);
         
         month = cal.get(Calendar.MONTH) ;
         year = cal.get(Calendar.YEAR) ;                
         
-        grid.goToMonth(month, year, yMinAndMaxValues);   
+        grid.goToMonth(month, year, cModel.getYMinMax());   
         currTime[0] = month ;
         currTime[1] = year ;
         

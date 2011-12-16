@@ -3,6 +3,7 @@
  */
 package UI.Charts;
 
+import UI.Models.ChartModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -44,12 +45,12 @@ public class Grid extends JComponent
                
     private Legend legend = new Legend();
     
-    public Grid(int month, int year, int[] yMinAndMaxValues)
+    public Grid(ChartModel cModel)
     {   
             // initialise variables
-            calendarMonth = month ;
-            calendarYear = year ;
-            this.yMinAndMaxValues = yMinAndMaxValues ;
+            calendarMonth = cModel.getMonth() ;
+            calendarYear = cModel.getYear() ;
+            this.yMinAndMaxValues = cModel.getYMinMax() ;
             
             // set layout properties
             setOpaque(true);

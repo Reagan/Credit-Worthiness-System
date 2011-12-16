@@ -64,7 +64,13 @@ public class UsersSelectionListener implements
                 final ItemSelectable is = (ItemSelectable) e.getSource() ;
                 Object selected[] = is.getSelectedObjects() ;
                 
-                final String sName = (selected.length == 0)? "null": (String)selected[0];
+                final String sName = (selected.length == 0)? null: (String)selected[0];
+                
+                if(null == sName )
+                {
+                    System.out.println ("Error: Error with the selected user !" ) ;
+                    return ;
+                }
                 
                 SwingWorker updateLeftPanel = new SwingWorker<String[],Void>()
                 {
@@ -121,8 +127,7 @@ public class UsersSelectionListener implements
                             // set the model for the JList with the list 
                             // of transactions from the current user's model
                             BottomCenterPanel
-                                    .setUserTransactionsModel(Integer
-                                                        .parseInt(usersDetails[0]));
+                                    .setUserTransactionsModel();
                         } 
                         catch (InterruptedException ex) 
                         {

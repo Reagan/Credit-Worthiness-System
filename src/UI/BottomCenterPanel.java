@@ -4,18 +4,24 @@
 package UI;
 
 import AppActions.AppAction;
+import AppActions.DeleteTransactionAction;
+import AppActions.NewTransactionAction;
 import UI.Listeners.TransactionListener;
-import UI.Models.UserTransacationsModel;
+import UI.Models.UserTransactionsModel;
+import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.ExecutionException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -25,29 +31,31 @@ public class BottomCenterPanel extends JPanel
 {
     private DepthButton createNewButton ;
     private DepthButton deleteButton ;
-    private static JList transactionsList ;
-    private String labels[] = {"Milk, 25th Jan", "Rice, 26th Jan", "Choclate, 27th Jan", 
-        "Milo, 28th Jan", "Cocoa & Bread, 29th Jan", "Milk, 14th Feb", "Baby Powder, 19th Feb", 
-        "Royco, 21st Feb", "Vaseline, 22nd Feb", "Loan, 1st March","Milk, 25th Jan", "Rice, 26th Jan", "Choclate, 27th Jan", 
-        "Milo, 28th Jan", "Cocoa & Bread, 29th Jan", "Milk, 14th Feb", "Baby Powder, 19th Feb", 
-        "Royco, 21st Feb", "Vaseline, 22nd Feb", "Loan, 1st March", "Milk, 25th Jan", "Rice, 26th Jan", "Choclate, 27th Jan", 
-        "Milo, 28th Jan", "Cocoa & Bread, 29th Jan", "Milk, 14th Feb", "Baby Powder, 19th Feb", 
-        "Royco, 21st Feb", "Vaseline, 22nd Feb", "Loan, 1st March"};
+    private static JList transactionsList ;    
     
-    private static UserTransacationsModel userTransactions ;
+    private static UserTransactionsModel userTransactions ;
     private TransactionListener transactionListener ;
+    public static int currSelectedTransactionIndex = -1 ;  // stores the currently selected
+                                                        // transaction 
+                                                        // -1 indicates that the transaction 
+                                                        // has not yet been selected    
+    // set the app actions
+    private static AppAction createTransactionAction ;
+    private static AppAction deleteTransactionAction ;
     
     public BottomCenterPanel()
     {
         // initialise the variables
-        AppAction createTransaction = new AppAction(createNewButton, "Create"
+        createTransactionAction = new AppAction(createNewButton, "Create"
                                         , false, KeyEvent.VK_T);
-        createNewButton = new DepthButton(createTransaction);
+        createTransactionAction.addActionClass(new NewTransactionAction());
+        createNewButton = new DepthButton(createTransactionAction);
         
         
-        AppAction deleteTransaction = new AppAction(deleteButton, "Delete"
+        deleteTransactionAction = new AppAction(deleteButton, "Delete"
                                         , false, KeyEvent.VK_L);
-        deleteButton = new DepthButton(deleteTransaction);
+        deleteTransactionAction.addActionClass(new DeleteTransactionAction());
+        deleteButton = new DepthButton(deleteTransactionAction);
         
         
         // set the transaction listener
@@ -86,12 +94,44 @@ public class BottomCenterPanel extends JPanel
     /**
      * sets the user transactions into the Transactions Model
      */
-    public static void setUserTransactionsModel (int userID)
+    public static void setUserTransactionsModel ()
     {
-        // create the transactions model
-         userTransactions = new UserTransacationsModel(userID);
-         
-         // set the model
-         transactionsList.setModel(userTransactions);                
+        // get the currently selected user
+        final int userID = CreditWorthinessSystem.getCurrentUserID() ;
+        
+        JOptionPane.showMessageDialog(null, " Getting transactions for user : "
+                + userID, "User Transaction Details", JOptionPane.PLAIN_MESSAGE);
+        
+        // Indicate on status bar that fetching for
+        // user's transactions
+        StatusBar.updateStatusMessage("Obtaining user's transactions");
+        
+        SwingWorker worker = new SwingWorker <UserTransactionsModel, Void> ()
+        {            
+            @Override
+            protected UserTransactionsModel doInBackground() 
+            {
+                // create the transactions model
+                userTransactions = new UserTransactionsModel(userID);
+                return userTransactions ;
+            }
+            
+            @Override
+            public void done()
+            {                                
+                    // set the model with the user's
+                    // list of transactions
+                    transactionsList.setModel(userTransactions);                        
+                    
+                    // enable the create new Transaction button
+                    createTransactionAction.enableAction(true);
+                    
+                    // inform user on the status bar
+                    StatusBar.updateStatusMessage("User's transactions obtained " );                   
+                }                                                   
+        };
+        
+        // schedule the thread
+        worker.execute();               
     }
 }

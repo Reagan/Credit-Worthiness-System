@@ -17,6 +17,10 @@ public class UsersDetails
     private String getUserIDQuery = null ;
     private String getUserJoiningDateQuery = null ;
     private String getUserAvatarQuery = null ;
+    private String getUserTransactionsQuery = null ;
+    private String getUserTransactionsIDsQuery = null ;    
+    private final String [] months =  {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+                "Aug", "Sep", "Oct", "Nov", "Dec" };
     
     public UsersDetails(){}
 
@@ -74,10 +78,7 @@ public class UsersDetails
     }
     
     public String getUserJoiningDate(String userName)
-    {
-        String [] months =  {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-                "Aug", "Sep", "Oct", "Nov", "Dec" };
-                
+    {                        
         Vector joiningDate = null ;
         String [] results = new String[3] ;
         
@@ -117,5 +118,95 @@ public class UsersDetails
         results = (String[]) avatarName.get(0) ;
         return (results[0] == null) ? LeftPanel.DEFAULTUSERIMAGE: 
                 results[0];
+    }
+    
+    /**
+     * This method obtains the transactions for a user
+     * as identified by a specific user ID and returns
+     * the transactions data in the following structure
+     * for each transaction
+     * [ Item {#}, date ]
+     * @param userID
+     * @return 
+     */
+    public Vector getUserTransactions(int userID)
+    {
+        Vector userTransactions = null;
+        Vector userTransactionsRes = new Vector() ;
+        
+        getUserTransactionsQuery = "SELECT IF(transaction_type=1,(SELECT items_name FROM items WHERE "
+                + "items.items_id = (SELECT items_id FROM credit_transactions WHERE "
+                + "credit_transactions.transaction_id = s.transaction_id)),(SELECT CONCAT (\"Kshs \", amount) "
+                + "FROM debit_transactions WHERE "
+                + "debit_transactions.transaction_id = s.transaction_id)) "
+                + "AS item_name, if(transaction_type=1,(SELECT items_number "
+                + "FROM credit_transactions WHERE "
+                + "credit_transactions.transaction_id = s.transaction_id),\"Loan\") "
+                + "AS item_number, day, month, year FROM (SELECT * FROM transactions "
+                + "WHERE customers_id = "
+                + userID
+                + ") AS s ";        
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        userTransactions = dbConn.fetch(getUserTransactionsQuery);
+        
+        // open up the returned values and 
+        // return the use transactions in the following
+        // format
+        // 
+        // [item_id, item_number, day, month, year ]
+        
+        for(int transNo = 0, s = userTransactions.size();
+                transNo < s ; transNo ++)
+        {
+            String [] currTransaction = (String[]) userTransactions.get(transNo) ;
+            userTransactionsRes.add(currTransaction[0] 
+                    + " [" 
+                    + currTransaction[1]
+                    + "], "
+                    + currTransaction[2]
+                    + " "
+                    + months[Integer.parseInt(currTransaction[3])]
+                    + " "
+                    + currTransaction[4]);
+        }                
+        
+        return userTransactionsRes ;
+    }
+    
+    /**
+     * This method obtains the transaction IDs for the
+     * various transactions for a specific user
+     * @param userID
+     * @return 
+     */
+    public int[] getUserTransactionIDs(int userID, int transactionsNumber)
+    {
+        Vector userTransIDs = null ;
+        int [] transIDs = new int[transactionsNumber] ;
+        
+        getUserTransactionsIDsQuery = "SELECT transaction_id FROM transactions "
+                + "WHERE customers_id = "
+                + userID ;        
+                
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        userTransIDs = dbConn.fetch(getUserTransactionsIDsQuery);
+        
+        // open up the returned IDs and        
+        
+        for(int transIDsNo = 0, s = userTransIDs.size();
+                transIDsNo < s ; transIDsNo ++)
+        {            
+            String [] results = new String[1] ;
+            results = (String[]) userTransIDs.get(transIDsNo) ;
+            transIDs[transIDsNo] 
+                    = Integer.parseInt(results[0]) ;            
+        }                               
+        
+        return transIDs ;
     }
 }

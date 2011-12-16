@@ -1,105 +1,84 @@
-/**
- * Credit Worthiness System Version 1.0
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package UI.Models;
 
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
+import DbConnection.UsersDetails;
+import credit.worthiness.system.CreditWorthinessSystem;
+import java.util.Vector;
+import javax.swing.AbstractListModel;
 
 /**
  *
- * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
+ * @author rmbitiru
  */
-public class UserTransactionsModel implements TableModel 
+public class UserTransactionsModel extends AbstractListModel
 {
-    private int currentUserID ;
+
+    // create the object to store the data for the 
+    // transactions JList
+    
+    // @TODO : make sure that this JList is populated programmatically
+    private int currentUserID ; // current User ID's transactions
+    
+    private Vector <String> transactions ; // list of all the transactions for 
+                                // the JList
+    public static int[] transIDs ; // stores the transaction IDs for the various transactions
+    private UsersDetails userTransactions ; // connects to the DB and returns the
+                                            // stored transactions
     
     public UserTransactionsModel(int userID)
     {
-        // @TODO: This method determines the transactions for a 
-        // specific user
         currentUserID = userID ;
+        userTransactions = new UsersDetails() ;
+                
+        // populate the transactions list
+        // @TODO: this should be populated from 
+        // the database
+        transactions = populateTransactionsList() ;
         
+        // populate the transactionIDs         
+        transIDs = new int[transactions.size()] ;
+        populateTransIDs();
     }
     
-    private final Object[][] Transactions = 
+    @Override
+    public int getSize() 
     {
-        // structure of the transactions
-        // #Date, #Item, #ItemWorth, #AmountPaid
-        {"1st Jan, 2011", "Milk", 200, 100},
-        {"1st Jan, 2011", "Milk", 200, 100},
-        {"1st Jan, 2011", "Milk", 200, 100},
-        {"1st Jan, 2011", "Milk", 200, 100},
-        {"1st Jan, 2011", "Milk", 200, 100},
-    };
+        return transactions.size();
+    }
 
     @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {}
+    public Object getElementAt(int index) 
+    {
+        return (String) transactions.get(index) ;
+    }
     
-    @Override
-    public void addTableModelListener(TableModelListener l) {}
+    /**
+     * populates the transaction list for the 
+     * user's transactions
+     */
+    public Vector populateTransactionsList()
+    {
+        transactions = new Vector <String> ();
+                
+        // update the model for the transactions 
+        // list
+        //
+        // get this from the database
+        
+        transactions = userTransactions
+                .getUserTransactions(CreditWorthinessSystem.getCurrentUserID());       
+                    
+        return transactions ;
+    }    
     
-    @Override
-    public void removeTableModelListener(TableModelListener l) {}
-
-    public boolean isCellEditable(int rowIndex, int columnIndex) 
+    private void populateTransIDs()
     {
-        return false;
-    }
-
-    @Override
-    public Class<?> getColumnClass(int col) 
-    {
-        switch(col) 
-        {
-            case 0:
-            case 1:
-                return String.class;
-            case 2:
-            case 3:
-                return Integer.class;
-        }
-
-        throw new AssertionError("invalid column");
-    }
-
-    public int getRowCount() 
-    {
-        return Transactions.length;
-    }
-
-    @Override
-    public int getColumnCount() 
-    {
-        return 4;
-    }
-
-    @Override
-    public String getColumnName(int col) 
-    {
-        switch(col) 
-        {
-            case 0: return "Date";
-            case 1: return "Item";
-            case 2: return "Item Worth";
-            case 3: return "Amount Paid";
-        }
-
-        throw new AssertionError("invalid column");
-    }
-
-    @Override
-    public Object getValueAt(int row, int col) 
-    {
-        switch(col) 
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                return Transactions[row][col];            
-        }
-
-        throw new AssertionError("invalid column");
+         // set the transaction IDs
+        transIDs = userTransactions
+                .getUserTransactionIDs(CreditWorthinessSystem.getCurrentUserID(), 
+                transIDs.length);        
     }
 }

@@ -50,7 +50,7 @@ public class DatabaseConnection
     }
     
     public Vector fetch(String SQLStatement)
-    {
+    {               
         Vector retResults = new Vector();
         
         try 
@@ -75,7 +75,7 @@ public class DatabaseConnection
                 
                 for(int resCounter = 1; resCounter <= noOfColumns; 
                         resCounter ++)
-                {                    
+                {                      
                     innerRes[resCounter-1] = result.getObject(resCounter).toString() ;                    
                 }
                  

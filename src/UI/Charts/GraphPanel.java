@@ -3,6 +3,7 @@
  */
 package UI.Charts;
 
+import UI.Models.ChartModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,32 +30,21 @@ import javax.swing.event.MouseInputAdapter;
  */
 public class GraphPanel extends JPanel 
 {
-    private CreditNode[] nodes = new CreditNode[2];
+    private AbstractNode[] nodes ;
     private ChartEdge creditEdge ;
     private MouseHandler mh ;    
-    
-    private int nodeType = Node.TRANSACTION_ITEM_NODE ;
-    private int edgeType = Edge.TRANSACTION_EDGE ;
-
-    private Point2D.Double plotValues = new Point2D.Double(100, 200 );
-    private Point2D.Double plotValues2 = new Point2D.Double(300, 130 );
-    
-    String [] info = {"Rice", "200", "100" } ;
-    
-    public GraphPanel()
-    {        
+       
+    public GraphPanel(ChartModel cModel)
+    {       
         setLayout(new BorderLayout());
         setOpaque(false);
        
         mh = new MouseHandler();
         addMouseListener(mh);
-        addMouseMotionListener(mh);
-        
-        nodes[0] = new CreditNode(nodeType, 
-                    plotValues, info) ;
-        
-        nodes[1] = new CreditNode( nodeType, 
-                    plotValues2, info) ;
+        addMouseMotionListener(mh); 
+                
+        // assign the nodes from the chart Model
+        nodes =  (AbstractNode[]) cModel.getNodesData() ;        
     }
 
     @Override
@@ -67,13 +57,8 @@ public class GraphPanel extends JPanel
         Graphics2D graphics = (Graphics2D) g ;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        
-        nodeType = Node.TRANSACTION_ITEM_NODE ;
-        edgeType = Edge.TRANSACTION_EDGE ;
-        
-        
-        plotValues = new Point2D.Double(100, 200 );
-        plotValues2 = new Point2D.Double(300, 130 );
+                                
+        int edgeType = Edge.TRANSACTION_EDGE ;
         
         // draw the nodes and the interconnecting 
         // lines for the Nodes

@@ -93,6 +93,7 @@ public abstract class AbstractNode
      * each node
      * @return 
      */
+    @Override
     public int getSequenceID()
     {
         return sequenceID ;
@@ -199,8 +200,7 @@ public abstract class AbstractNode
     public void showPopupInfo(String[] info) 
     {
         // ensure that the Node is not
-        // a credit node type
-        Rectangle2D.Double popup = new Rectangle2D.Double() ;
+        // a credit node type        
         String items ; // will indicate the items
         String worth ; // will indicate the worth of the items
         String paid ; // will indicate how much the client is paying
@@ -213,21 +213,21 @@ public abstract class AbstractNode
         int popupHeight = 50 ;
         int arcWidth = 10 ;
         int arcHeight = 10 ;
-        
-        // draw the popup with the pop up info
-        // draw the back ground  
-        graphics.setColor(Color.WHITE) ;
-        graphics.fillRoundRect((int) plotLocation.x + 15, (int) plotLocation.y - 50,
-                popUpwidth, popupHeight, arcWidth, arcHeight);
-
-        // draw the border
-        graphics.setColor(Color.BLACK);
-        graphics.drawRoundRect((int) plotLocation.x + 15, (int) plotLocation.y - 50,
-                popUpwidth, popupHeight, arcWidth, arcHeight);
-          
+                  
         // add details as required
         if(nodeType != Node.CREDIT_ITEM_NODE)
         {
+            // draw the popup with the pop up info
+            // draw the back ground  
+            graphics.setColor(Color.WHITE) ;
+            graphics.fillRoundRect((int) plotLocation.x + 15, (int) plotLocation.y - 50,
+                    popUpwidth, popupHeight, arcWidth, arcHeight);
+
+            // draw the border
+            graphics.setColor(Color.BLACK);
+            graphics.drawRoundRect((int) plotLocation.x + 15, (int) plotLocation.y - 50,
+                popUpwidth, popupHeight, arcWidth, arcHeight);
+        
             // specify the details for a transaction payment
             if(nodeType == Node.TRANSACTION_ITEM_NODE)
             {
@@ -238,10 +238,10 @@ public abstract class AbstractNode
                     return ;
                 }
                 
-                // populate the fields
+                // populate the fields                
                 items = info[0] ;
                 worth = info[1] ;
-                paid = info[2] ;
+                paid = info[2] ;                
                 
                 // draw the text
                 // 1. draw the title

@@ -4,9 +4,12 @@
 package UI;
 
 import UI.Charts.Chart;
+import UI.Charts.CreditNode;
+import UI.Charts.Node;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.geom.Point2D;
 import java.util.Calendar;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -41,10 +44,27 @@ public class CenterPanel extends JPanel
         title.setFont(new Font("Serif", Font.PLAIN, 31));
         yAxisLabel = new VerticalJLabel("Amount, Kshs");
         
+        // #######################################################
         // create the chart component and add the 
         // model for the chart
-        setChart(chartMonth, chartYear);
-                
+        Point2D.Double plots0 = new Point2D.Double(100, 100) ;
+        Point2D.Double plots1 = new Point2D.Double(120, 130) ;
+        String[] info = {"Rice", "200", "100"} ;
+        
+        CreditNode[] nodes = new CreditNode[2];
+        nodes[0] = new CreditNode(Node.TRANSACTION_ITEM_NODE, plots0, info) ;
+        nodes[1] = new CreditNode(Node.TRANSACTION_ITEM_NODE, plots1, info) ;
+        
+        int month = 11 ;
+        int year = 2011 ;
+        int[] yMinMax = {0, 500} ;
+        
+        // create a new Chart instance
+        chart = new Chart();
+        
+        setChartModel(month, year, yMinMax, nodes);
+        
+        // #########################################################
         
         // lay out and add the components
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -90,19 +110,9 @@ public class CenterPanel extends JPanel
         setPreferredSize(new Dimension(686, 344));
     }
     
-    public void setChart(int chartMonth, int chartYear)
-    {
-        // create a new Chart instance
-         chart = new Chart(chartMonth, chartYear);
-    }
-    
-    /**
-     * this method sets the model 
-     * for the chart that plots all the 
-     * nodes displayed on the chart
-     */
-    public void setChartModel()
-    {
-        
-    }
+    public void setChartModel(int chartMonth, int chartYear, 
+            int[] yMinMax, Node[] nodes)
+    {        
+         chart.setModel(chartMonth, chartYear, yMinMax, nodes);
+    }        
 }
