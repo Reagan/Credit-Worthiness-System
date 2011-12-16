@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
  *
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
-public class CreditNode extends AbstractNode
+public class GraphNode extends AbstractNode
 {
     /**
      * 
@@ -18,7 +18,7 @@ public class CreditNode extends AbstractNode
      * @param info 
      * @param plotLocation
      */
-    public CreditNode(int nodeType, 
+    public GraphNode(int nodeType, 
                     Point2D.Double plotLocation, String[] info)  
     {
         super(plotLocation, nodeType, info) ;
@@ -35,5 +35,5 @@ public class CreditNode extends AbstractNode
     public void setNodeID(int nodeID) 
     {
         super.setNodeID(nodeID);
-    }  
+    }         
 }

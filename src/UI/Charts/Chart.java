@@ -76,11 +76,11 @@ public class Chart extends JPanel
      * @param model 
      */
     public void setModel(int month, int year, 
-                int[] yMinAndMaxValues, Node[] nodes)
+                int[] yMinAndMaxValues, ChartPlot[] chartPlots)
     {                       
         // initialise the model
         cModel = new ChartModel(month, year, 
-                yMinAndMaxValues, nodes) ;        
+                yMinAndMaxValues, chartPlots) ;        
                 
         // add the model to the grid and graph
         grid = new Grid(cModel) ;

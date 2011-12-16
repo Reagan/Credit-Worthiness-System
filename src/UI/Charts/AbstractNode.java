@@ -38,6 +38,8 @@ public abstract class AbstractNode
                                 // is selected
     private final int smallerWidthNodes = 5 ;  // shows the width of the sorrounding 
                                         // nodes
+    private int translatedYValue ;
+    private int translatedXValue ;
     
     public AbstractNode(Point2D.Double nodeLocation, int nodeKind, 
             String [] info) 
@@ -129,7 +131,7 @@ public abstract class AbstractNode
         else 
         {
             nodeColor = new Color(0, 97, 0);
-        }
+        }                   
         
         // if a node is selected, draw an imaginary border around
         // the node
@@ -164,7 +166,7 @@ public abstract class AbstractNode
         
         // draw the node
         graphics.setColor(nodeColor);
-        circle = new Ellipse2D.Double(plotLocation.x,  plotLocation.y
+        circle = new Ellipse2D.Double((int) plotLocation.x - 2, (int) plotLocation.y
                     , nodeRadius, nodeRadius) ;  
         graphics.fill(circle);
         
@@ -219,13 +221,33 @@ public abstract class AbstractNode
         {
             // draw the popup with the pop up info
             // draw the back ground  
+            int yLocation  ; 
+            int yLocation1 ;
+            int yLocation2 ;
+            int yLocation3 ;
+            
+            if((int)plotLocation.y < 100)
+            {
+                yLocation = (int) plotLocation.y  + 15 ;
+                yLocation1 = (int) plotLocation.y + 30 ;
+                yLocation2 = (int) plotLocation.y + 47 ;
+                yLocation3 = (int) plotLocation.y + 61 ; 
+            }
+            else
+            {
+                yLocation = (int) plotLocation.y - 50 ;
+                yLocation1 = (int) plotLocation.y - 37 ;
+                yLocation2 = (int) plotLocation.y - 20 ;
+                yLocation3 = (int) plotLocation.y - 6 ; 
+            }
+            
             graphics.setColor(Color.WHITE) ;
-            graphics.fillRoundRect((int) plotLocation.x + 15, (int) plotLocation.y - 50,
+            graphics.fillRoundRect((int) plotLocation.x + 15, yLocation,
                     popUpwidth, popupHeight, arcWidth, arcHeight);
 
             // draw the border
             graphics.setColor(Color.BLACK);
-            graphics.drawRoundRect((int) plotLocation.x + 15, (int) plotLocation.y - 50,
+            graphics.drawRoundRect((int) plotLocation.x + 15, yLocation,
                 popUpwidth, popupHeight, arcWidth, arcHeight);
         
             // specify the details for a transaction payment
@@ -246,15 +268,15 @@ public abstract class AbstractNode
                 // draw the text
                 // 1. draw the title
                 graphics.drawString(items, (int) plotLocation.x + 18,
-                        (int) plotLocation.y - 37) ;
+                        yLocation1) ;
                 
                 // 2. draw the worth of the items
                 graphics.drawString("W: " + worth, (int) plotLocation.x + 18,
-                        (int) plotLocation.y - 20) ;
+                        yLocation2) ;
                 
                 // 3. draw the amount paid for the items
                 graphics.drawString("P: " + paid, (int) plotLocation.x + 18,
-                        (int) plotLocation.y - 6) ;                           
+                        yLocation3) ;                           
             }
             else
             {
@@ -270,10 +292,10 @@ public abstract class AbstractNode
                 
                 // draw the text
                 graphics.drawString(loanTakenOrPaid, (int) plotLocation.x + 18,
-                        (int) plotLocation.y - 37);
+                        yLocation1);
                 
                 graphics.drawString("W: " + loanTakenOrPaid, (int) plotLocation.x + 18,
-                        (int) plotLocation.y - 20) ;
+                        yLocation2) ;
             }  
         }        
     }

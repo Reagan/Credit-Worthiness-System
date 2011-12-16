@@ -20,6 +20,18 @@ import javax.swing.JComponent;
 /**
  * This class displays the grid that appears 
  * as the background of the Chart
+ * 
+ * Plottable Grid Dimensions where nodes 
+ * may be drawn are 
+ * 
+ *   (72,2) xxxxxxxxxxxxxxxxxxxxxxxxxxxxx (570,2)
+ *          x                           x
+ *          x                           x
+ *          x                           x
+ *          x                           x
+ *          x                           x
+ * (72,200) xxxxxxxxxxxxxxxxxxxxxxxxxxxxx (570,200)
+ * 
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
 public class Grid extends JComponent

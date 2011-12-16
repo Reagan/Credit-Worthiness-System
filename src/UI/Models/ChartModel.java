@@ -3,6 +3,7 @@
  */
 package UI.Models;
 
+import UI.Charts.ChartPlot;
 import UI.Charts.Node;
 
 /**
@@ -14,7 +15,7 @@ import UI.Charts.Node;
  */
 public class ChartModel 
 {
-    private Node[] nodes ; // this stores the series of nodes making 
+    private ChartPlot[] plots ; // this stores the series of nodes making 
                         // up the various plots
     private int currMonth ; // sets the current month
     private int currYear ; // sets the current year
@@ -22,16 +23,16 @@ public class ChartModel
                                         // the minimum and maximum value 
                                         // provided
     /**
-     * The constructor initialises the model
+     * The constructor initializes the model
      * with the plots data
      */
     public ChartModel() {}
     
     public ChartModel(int month, int year, 
-                int [] yMinAndMaxValues, Node[] plots)
+                int [] yMinAndMaxValues, ChartPlot[] chartPlots)
     {
         setData(month, year, 
-                yMinAndMaxValues, plots);
+                yMinAndMaxValues, chartPlots);
     }
     
     /** 
@@ -39,9 +40,9 @@ public class ChartModel
      * plotted by the chart
      * @return 
      */
-    protected int getMinimumValue()
+    public int getMinimumValue()
     {
-        return 0 ;
+        return yMinMaxValues[0] ;
     }
     
     /**
@@ -49,9 +50,9 @@ public class ChartModel
      * be plotted by the chart
      * @return 
      */
-    protected int getMaximumValue()
+    public int getMaximumValue()
     {
-        return 500 ;
+        return  yMinMaxValues[1] ;
     }
     
     /**
@@ -88,12 +89,12 @@ public class ChartModel
      * @param plots 
      */
     public void setData(int month, int year, 
-                int[] yMinAndMaxValues, Node[] plots)
+                int[] yMinAndMaxValues, ChartPlot[] chartPlots)
     {
         currMonth = month ;
         currYear = year ;
         yMinMaxValues = yMinAndMaxValues ;
-        nodes = plots ;
+        plots = chartPlots ;
     }
     
     /**
@@ -101,9 +102,9 @@ public class ChartModel
      * for a graph
      * @return 
      */
-    public Node[] getNodesData()
+    public ChartPlot[] getPlotsData()
     {
-        return nodes ;
+        return plots ;
     }
     
     public int getMonth()

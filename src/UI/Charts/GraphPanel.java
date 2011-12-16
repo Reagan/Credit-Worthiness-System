@@ -30,8 +30,8 @@ import javax.swing.event.MouseInputAdapter;
  */
 public class GraphPanel extends JPanel 
 {
-    private AbstractNode[] nodes ;
-    private ChartEdge creditEdge ;
+    private ChartPlot[] chartPlots ;
+    private GraphEdge graphEdge ;
     private MouseHandler mh ;    
        
     public GraphPanel(ChartModel cModel)
@@ -44,7 +44,7 @@ public class GraphPanel extends JPanel
         addMouseMotionListener(mh); 
                 
         // assign the nodes from the chart Model
-        nodes =  (AbstractNode[]) cModel.getNodesData() ;        
+        chartPlots =  (ChartPlot[]) cModel.getPlotsData() ;        
     }
 
     @Override
@@ -56,26 +56,44 @@ public class GraphPanel extends JPanel
         // obtain the required nodes
         Graphics2D graphics = (Graphics2D) g ;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-                                
-        int edgeType = Edge.TRANSACTION_EDGE ;
+                RenderingHints.VALUE_ANTIALIAS_ON);                                        
         
+        // scale the plot to ensure that the node
+        // is displayed at the correct point
+       
+        
+        // extract the plots from the ChartPlot[]
+        // and then extract the nodes and then
         // draw the nodes and the interconnecting 
-        // lines for the Nodes
-        
-        for(int nodesCounter = 0, n = nodes.length; 
-                nodesCounter < n; nodesCounter ++ )
+        // lines for the Nodes                
+        for(int plotsCounter = 0 , plots = chartPlots.length;
+                plotsCounter < plots ; plotsCounter ++ )
         {
-            nodes[nodesCounter].drawNode(graphics);
+            ChartPlot p = chartPlots[plotsCounter] ;
+            int plotType = p.getPlotType() ;
+            AbstractNode[] plot = p.getPlot() ;
             
-            // add the edges to the nodes
-            if(nodesCounter > 0)
+            // for each of the plots get the nodes
+            for(int nodesCounter = 0, n = plot.length ;
+                    nodesCounter < n; nodesCounter ++)
             {
-                // join the nodes
-                creditEdge = new ChartEdge(graphics, edgeType, 
-                        (AbstractNode)nodes[nodesCounter-1], (AbstractNode)nodes[nodesCounter]);
+                plot[nodesCounter].drawNode(graphics);
+
+                // add the edges to the nodes
+                if(nodesCounter > 0)
+                {
+                    // join the nodes depending on the type
+                    // of plot made
+                    int edgeType = (plotType == ChartPlot.CREDIT_PLOT)
+                            ? Edge.CREDIT_EDGE : Edge.TRANSACTION_EDGE ; 
+                            
+                    graphEdge = new GraphEdge(graphics, edgeType, 
+                            (AbstractNode)plot[nodesCounter-1], 
+                                (AbstractNode)plot[nodesCounter]);
+                }
             }
-        }                               
+            
+        }
     }        
     
     final class MouseHandler extends MouseInputAdapter
@@ -95,11 +113,19 @@ public class GraphPanel extends JPanel
             {
                 // make sure that no popup for any node 
                 // is displayed
-                for(int nodesCounter = 0, n = nodes.length; 
-                    nodesCounter < n; nodesCounter ++ )
+                for(int plotsCounter = 0 , plots = chartPlots.length;
+                plotsCounter < plots ; plotsCounter ++ )
                 {
-                    nodes[nodesCounter].popUpEnabled = false ;
-                }
+                    ChartPlot plot = chartPlots[plotsCounter] ;
+                    AbstractNode[] plotNodes = plot.getPlot() ;
+
+                    // for each of the plots get the nodes
+                    for(int nodesCounter = 0, n = plotNodes.length ;
+                            nodesCounter < n; nodesCounter ++)
+                    {
+                        plotNodes[nodesCounter].popUpEnabled = false ;
+                    }
+                }                
                 
                 hoveredNode.popUpEnabled = true ;
                 repaint();
@@ -116,11 +142,19 @@ public class GraphPanel extends JPanel
                 // select the node
                 // make sure first that no node has a border
                 // around it
-                for(int nodesCounter = 0, n = nodes.length; 
-                    nodesCounter < n; nodesCounter ++ )
+                for(int plotsCounter = 0 , plots = chartPlots.length;
+                plotsCounter < plots ; plotsCounter ++ )
                 {
-                    nodes[nodesCounter].selected = false ;
-                }
+                    ChartPlot plot = chartPlots[plotsCounter] ;
+                    AbstractNode[] plotNodes = plot.getPlot() ;
+
+                    // for each of the plots get the nodes
+                    for(int nodesCounter = 0, n = plotNodes.length ;
+                            nodesCounter < n; nodesCounter ++)
+                    {
+                        plotNodes[nodesCounter].selected = false ;
+                    }
+                }                  
              
                 hoveredNode.selected = true ;
             }
@@ -130,15 +164,27 @@ public class GraphPanel extends JPanel
         {
             AbstractNode hoveredNode = null;
 
-            for (int i = 0, n = nodes.length; i<n; i++)
+            for(int plotsCounter = 0 , plots = chartPlots.length;
+                plotsCounter < plots ; plotsCounter ++ )
             {
-                hoveredNode = (AbstractNode)nodes[i];
-                if (hoveredNode.contains(p))
+                ChartPlot plot = chartPlots[plotsCounter] ;
+                AbstractNode[] plotNodes = plot.getPlot() ;
+
+                // for each of the plots get the nodes
+                for(int nodesCounter = 0, n = plotNodes.length ;
+                        nodesCounter < n; nodesCounter ++)
                 {
-                    return(hoveredNode);
-                }
+                    hoveredNode = (AbstractNode)plotNodes[nodesCounter];
+                    if (hoveredNode.contains(p))
+                    {
+                        return(hoveredNode);
+                    }
+                }                
             }
-            return(null);
-        }
+            
+            // non of the nodes falls under the mouse
+            // ignore
+            return null;
+        }            
     }
 }
