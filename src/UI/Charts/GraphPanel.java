@@ -3,6 +3,8 @@
  */
 package UI.Charts;
 
+import AppActions.AppAction;
+import AppActions.UpdateTransactionAction;
 import UI.Models.ChartModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -156,7 +159,29 @@ public class GraphPanel extends JPanel
                     }
                 }                  
              
-                hoveredNode.selected = true ;
+                hoveredNode.selected = true ;                
+                
+                // add the border around the node
+                repaint();               
+                 
+                // check if the transaction IDs are more than 1
+                // if more than 1, ask user to select from below panel
+                // if 1 then display transaction dialog
+                int[] transIDs = hoveredNode.getNodeTransactionIDs() ;
+                
+                if(transIDs.length > 1)
+                {
+                    JOptionPane.showMessageDialog(null, "More than 1 transaction is included here. Please use Transactions List below "                         
+                        ,"Multiple Transactions!", JOptionPane.PLAIN_MESSAGE);
+                }
+                else
+                {
+                    // display the update transactions dialog 
+                    // to display the transaction details
+                    UpdateTransactionAction updateAction = 
+                            new UpdateTransactionAction(0);
+                    updateAction.run();
+                }              
             }
         }
         

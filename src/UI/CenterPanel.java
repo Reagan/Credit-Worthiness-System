@@ -12,6 +12,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.geom.Point2D;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -50,20 +51,40 @@ public class CenterPanel extends JPanel
         // model for the chart
         // create the locations for the plot
         //
-        // plotsLocation  == [ date for transaction, amount for transaction ] 
+        // initial values for the CenterPanel
+        int month = 3 ;
+        int year = 2011 ;
+        int[] yMinMax = {0, 480} ;
         
+        // get the number of days in a month
+        int noOfDaysInMonth ;
+        Calendar cal = new GregorianCalendar(year, month, 1) ;
+        noOfDaysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;      
+        
+        // plotsLocation  == [ date for transaction, amount for transaction ] 
+        // actual values for a node
         Point2D.Double plotsLocationA = new Point2D.Double(12,100) ;
         
         // get the translated values
-        Point2D.Double plotsLocation0 = new Point2D.Double(( 72 + (plotsLocationA.x * 498.0/31 )),
-                ( 200  - 2 - ( plotsLocationA.y * 198.0/500 ))) ;
+        Point2D.Double plotsLocation0 = new Point2D.Double(( 72 
+                + (plotsLocationA.x * (yMinMax[1]-yMinMax[0]-2)/noOfDaysInMonth )),
+                ( 200  - 2 - ( plotsLocationA.y * 198.0/(yMinMax[1]-yMinMax[0]-2) ))) ;
         
-        Point2D.Double plotsLocationB = new Point2D.Double(18,420) ;
+        // actual values for  node
+        Point2D.Double plotsLocationB = new Point2D.Double(18,480) ;
         
-        Point2D.Double plotsLocation1 = new Point2D.Double(( 72 + (plotsLocationB.x * 498.0/31 )),
-                ( 200  - 2 - ( plotsLocationB.y * 198.0/500 ))) ;
+        // translated values for a node
+        Point2D.Double plotsLocation1 = new Point2D.Double(( 72 
+                + (plotsLocationB.x * (yMinMax[1]-yMinMax[0]-2)/noOfDaysInMonth )),
+                ( 200  - 2 - ( plotsLocationB.y * 198.0/(yMinMax[1]-yMinMax[0]-2) ))) ;
         
+        // information sent to node is in the structure
+        // [ Items, Items_Worth, Items_total_amount_paid, Transaction_id ]
+        int[] transactionsID0 = {1234, 4567 } ;
         String[] info = {"Rice", "200", "100"} ;
+        
+        int [] transactionsID1 = {2345};
+        String[] info1 = {"Rice", "200", "100"} ;
         
         // initialise the nodes
         // Chartplot args [ plot type and plots number ]
@@ -79,8 +100,8 @@ public class CenterPanel extends JPanel
         
         // variables for the Node are
         // NodeType, plots, info
-        nodes[0] = new GraphNode(Node.TRANSACTION_ITEM_NODE, plotsLocation0, info) ;
-        nodes[1] = new GraphNode(Node.TRANSACTION_ITEM_NODE, plotsLocation1, info) ;
+        nodes[0] = new GraphNode(transactionsID0, Node.TRANSACTION_ITEM_NODE, plotsLocation0, info) ;
+        nodes[1] = new GraphNode(transactionsID1, Node.TRANSACTION_ITEM_NODE, plotsLocation1, info1) ;
         
         // add the nodes to the plot
         plot1.addNode(nodes[0]);
@@ -112,11 +133,7 @@ public class CenterPanel extends JPanel
         // add these to the array of plots
         allChartPlots[0] = plot1 ;
         allChartPlots[1] = plot2 ;
-        */
-        
-        int month = 11 ;
-        int year = 2011 ;
-        int[] yMinMax = {0, 500} ;
+        */        
         
         // create a new Chart instance
         chart = new Chart();

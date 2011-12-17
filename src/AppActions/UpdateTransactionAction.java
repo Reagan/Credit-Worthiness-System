@@ -1,56 +1,52 @@
-/**
- * Credit Worthiness System Version 1.0
- */
 package AppActions;
 
 import UI.BottomRightPanel;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
+
+/**
+ * Credit Worthiness System Version 1.0
+ */
 /**
  *
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
-public class NewTransactionAction extends AbstractedAction
+public class UpdateTransactionAction extends AbstractedAction
 {
     // JOptionPane Options
     private String appMessage ;
     private String aboutDialogTitle ;
     private int messageType ;
+    private int transactionID ;    
     
-    // Main panel options
-    
-    
-    public NewTransactionAction()
+    public UpdateTransactionAction(int transID)
     {
         aboutDialogTitle = "Alert!";
         appMessage = "Please fill missing information?";
         messageType = JOptionPane.YES_NO_OPTION;
+        transactionID = transID ;
     }
 
     @Override
     public void run() 
     {
-        new NewTansactionDialog(new JFrame(), "Create New Transaction", 
-                "Dialog to create New Transaction Details");
+        new UpdateTansactionDialog(new JFrame(), "Update Transaction", 
+                "Dialog to update Transaction Details");
     }      
     
     
     // the inner class will display the
     // JFrame with the main ciomponents for the
     // transaction details
-    class NewTansactionDialog extends JDialog implements ActionListener 
+    class UpdateTansactionDialog extends JDialog implements ActionListener 
     {
-        public NewTansactionDialog(JFrame parent, String title, String message) 
+        public UpdateTansactionDialog(JFrame parent, String title, String message) 
         {
             super(parent, title, true);
             
@@ -62,7 +58,7 @@ public class NewTransactionAction extends AbstractedAction
             }
 
             BottomRightPanel panel = new BottomRightPanel();   
-            BottomRightPanel.setTransactionDetails(1) ;
+           // BottomRightPanel.setTransactionDetails(transactionID) ;
             getContentPane().add(panel);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             pack(); 
@@ -77,3 +73,4 @@ public class NewTransactionAction extends AbstractedAction
         }
     }
 }
+

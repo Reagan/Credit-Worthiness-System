@@ -18,10 +18,10 @@ public class GraphNode extends AbstractNode
      * @param info 
      * @param plotLocation
      */
-    public GraphNode(int nodeType, 
+    public GraphNode(int[] transactionIDs, int nodeType, 
                     Point2D.Double plotLocation, String[] info)  
     {
-        super(plotLocation, nodeType, info) ;
+        super(transactionIDs, plotLocation, nodeType, info) ;
         
     }
 

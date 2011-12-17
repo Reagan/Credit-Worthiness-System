@@ -24,7 +24,7 @@ public abstract class AbstractNode
     private int nodeType ; // sets the type of a node
     private static int sequenceID = 0; // sets the number that the node
                             // falls in
-    private transient Rectangle2D bounds;
+    public transient Rectangle2D bounds;
     public Point2D.Double plotLocation = null ;
     public boolean popUpEnabled  = false ; // bu default all Nodes should
                                         // have transation details displayed
@@ -40,8 +40,10 @@ public abstract class AbstractNode
                                         // nodes
     private int translatedYValue ;
     private int translatedXValue ;
+    private int[] transactionIDs ; // stores the ID for the transaction that the node
+                                    // represents
     
-    public AbstractNode(Point2D.Double nodeLocation, int nodeKind, 
+    public AbstractNode(int[] transIDs, Point2D.Double nodeLocation, int nodeKind, 
             String [] info) 
     {
         plotLocation = nodeLocation ;
@@ -51,6 +53,7 @@ public abstract class AbstractNode
         bounds.setFrame(plotLocation.x, plotLocation.y, 
                 20, 20 );
         selectRectBorderColor = new Color(255, 0, 0) ;
+        transactionIDs = transIDs ;
     }   
     
     /**
@@ -255,15 +258,15 @@ public abstract class AbstractNode
             {
                 if(info.length !=3 )
                 {
-                    // there is an error; all the three fields
-                    // must be captures
+                    // there is an error; all the four fields
+                    // must be captured
                     return ;
                 }
                 
                 // populate the fields                
                 items = info[0] ;
                 worth = info[1] ;
-                paid = info[2] ;                
+                paid = info[2] ;
                 
                 // draw the text
                 // 1. draw the title
@@ -298,5 +301,15 @@ public abstract class AbstractNode
                         yLocation2) ;
             }  
         }        
+    }
+    
+    /**
+     * This method returns the transaction ID for a specific
+     * Node. 
+     * @return 
+     */
+    public int[] getNodeTransactionIDs()
+    {
+        return transactionIDs ;
     }
 }
