@@ -67,7 +67,11 @@ public class Chart extends JPanel
         
         // add the grid
         add(grid, StackLayout.TOP) ;
-        add(graph, StackLayout.TOP) ;        
+        
+        if(null != graph)
+        {
+            add(graph, StackLayout.TOP) ;        
+        }
     }     
     
     /** 
@@ -84,7 +88,11 @@ public class Chart extends JPanel
                 
         // add the model to the grid and graph
         grid = new Grid(cModel) ;
-        graph = new GraphPanel(cModel) ; 
+        
+        if(null != chartPlots)
+        {
+            graph = new GraphPanel(cModel) ; 
+        }
         
         // Lay out the visual components
         setComponents();                 

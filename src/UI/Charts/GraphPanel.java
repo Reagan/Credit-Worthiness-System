@@ -25,7 +25,7 @@ import javax.swing.event.MouseInputAdapter;
  * This class will read the chart model and draw the nodes and
  * lines and nodes for the graph. It also implements a 
  * mouse listener to ensure that the nodes are selectable as a 
- * way of changing values and a small popup
+ * way of changing values and a small pop-up
  * displays when a mouse over action occurs on a node
  * 
  * 
@@ -60,11 +60,7 @@ public class GraphPanel extends JPanel
         Graphics2D graphics = (Graphics2D) g ;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);                                        
-        
-        // scale the plot to ensure that the node
-        // is displayed at the correct point
-       
-        
+
         // extract the plots from the ChartPlot[]
         // and then extract the nodes and then
         // draw the nodes and the interconnecting 
@@ -135,6 +131,7 @@ public class GraphPanel extends JPanel
             }
         }
         
+        @Override
         public void mousePressed(MouseEvent e)
         {
             Point p = e.getPoint();

@@ -4,6 +4,7 @@
 package UI.Charts;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
@@ -206,7 +207,7 @@ public abstract class AbstractNode
     {
         // ensure that the Node is not
         // a credit node type        
-        String items ; // will indicate the items
+        String items = null ; // will indicate the items
         String worth ; // will indicate the worth of the items
         String paid ; // will indicate how much the client is paying
         String loanTakenOrPaid ; // will store whether or not a loan
@@ -214,8 +215,8 @@ public abstract class AbstractNode
         String amountLoanedOrPaid ; // will store the amount taken or paid
         
         // dimensions for the popup
-        int popUpwidth = 50 ;
-        int popupHeight = 50 ;
+        int popUpwidth  ;
+        int popupHeight = 35 ;
         int arcWidth = 10 ;
         int arcHeight = 10 ;
                   
@@ -244,19 +245,12 @@ public abstract class AbstractNode
                 yLocation3 = (int) plotLocation.y - 6 ; 
             }
             
-            graphics.setColor(Color.WHITE) ;
-            graphics.fillRoundRect((int) plotLocation.x + 15, yLocation,
-                    popUpwidth, popupHeight, arcWidth, arcHeight);
-
-            // draw the border
-            graphics.setColor(Color.BLACK);
-            graphics.drawRoundRect((int) plotLocation.x + 15, yLocation,
-                popUpwidth, popupHeight, arcWidth, arcHeight);
+           
         
             // specify the details for a transaction payment
             if(nodeType == Node.TRANSACTION_ITEM_NODE)
             {
-                if(info.length !=3 )
+                if(info.length !=2 )
                 {
                     // there is an error; all the four fields
                     // must be captured
@@ -266,7 +260,6 @@ public abstract class AbstractNode
                 // populate the fields                
                 items = info[0] ;
                 worth = info[1] ;
-                paid = info[2] ;
                 
                 // draw the text
                 // 1. draw the title
@@ -275,11 +268,7 @@ public abstract class AbstractNode
                 
                 // 2. draw the worth of the items
                 graphics.drawString("W: " + worth, (int) plotLocation.x + 18,
-                        yLocation2) ;
-                
-                // 3. draw the amount paid for the items
-                graphics.drawString("P: " + paid, (int) plotLocation.x + 18,
-                        yLocation3) ;                           
+                        yLocation2) ;                          
             }
             else
             {
@@ -300,6 +289,15 @@ public abstract class AbstractNode
                 graphics.drawString("W: " + loanTakenOrPaid, (int) plotLocation.x + 18,
                         yLocation2) ;
             }  
+            
+            // draw the border
+            FontMetrics metrics = graphics.getFontMetrics(graphics.getFont()) ;
+            popUpwidth = (int) metrics.getStringBounds(items, graphics).getWidth() + 7  ;
+            popUpwidth = (popUpwidth < 50 )? 50 : popUpwidth ;
+            
+            graphics.setColor(Color.BLACK);
+            graphics.drawRoundRect((int) plotLocation.x + 15, yLocation,
+                popUpwidth , popupHeight, arcWidth, arcHeight);
         }        
     }
     

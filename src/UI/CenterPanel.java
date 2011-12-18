@@ -30,12 +30,11 @@ public class CenterPanel extends JPanel
     private MonthChartNavigator monthNav ;
     private final JLabel title ;
     private final VerticalJLabel yAxisLabel; 
-    private Chart chart;
-    
-    // sets the month & year for the chart
-    // @TODO: make this automated
-    private int chartMonth = Calendar.NOVEMBER ;
-    private int chartYear = 2011 ;
+    private static Chart chart;
+    public static int month ;
+    public static int year ;
+    private int[] yMinMax = {0, 500};    
+    private ChartPlot[] allChartPlots = null ;
     
     public CenterPanel()
     {
@@ -46,21 +45,31 @@ public class CenterPanel extends JPanel
         title.setFont(new Font("Serif", Font.PLAIN, 31));
         yAxisLabel = new VerticalJLabel("Amount, Kshs");
         
+        // get the current month and year
+        getCurrentMonthAndYear();
+        
+        // create a new Chart instance
+        chart = new Chart();
+               
+        /*
         // #######################################################
         // create the chart component and add the 
         // model for the chart
-        // create the locations for the plot
-        //
-        // initial values for the CenterPanel
-        int month = 3 ;
-        int year = 2011 ;
-        int[] yMinMax = {0, 480} ;
+        
+        // get the current month and year
+        getCurrentMonthAndYear();
+        
+        // initialise values for the chart
+        month = 3 ;
+        year = 2011 ;
+        yMinMax[0] = 0 ;
+        yMinMax[1] = 480 ;
         
         // get the number of days in a month
         int noOfDaysInMonth ;
         Calendar cal = new GregorianCalendar(year, month, 1) ;
         noOfDaysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;      
-        
+               
         // plotsLocation  == [ date for transaction, amount for transaction ] 
         // actual values for a node
         Point2D.Double plotsLocationA = new Point2D.Double(12,100) ;
@@ -79,21 +88,23 @@ public class CenterPanel extends JPanel
                 ( 200  - 2 - ( plotsLocationB.y * 198.0/(yMinMax[1]-yMinMax[0]-2) ))) ;
         
         // information sent to node is in the structure
-        // [ Items, Items_Worth, Items_total_amount_paid, Transaction_id ]
+        // [ Items, Items_Worth ]
         int[] transactionsID0 = {1234, 4567 } ;
-        String[] info = {"Rice", "200", "100"} ;
+        String[] info = {"Rice, Biscuits, Milk", "200"} ;
         
         int [] transactionsID1 = {2345};
-        String[] info1 = {"Rice", "200", "100"} ;
+        String[] info1 = {"Rice", "200"} ;
         
         // initialise the nodes
         // Chartplot args [ plot type and plots number ]
         
         // initialise the object to store the plots
         // no more than 2 plots anticipated
-        // these are for the credit & transaction plots
-        ChartPlot[] allChartPlots = new ChartPlot[1] ;
+        // these are for the credit & transaction plots        
+        allChartPlots = null ;
+        allChartPlots = new ChartPlot[1] ;
         
+         
         ChartPlot plot1 = new ChartPlot(ChartPlot.TRANSACTION_PLOT,
                 2);  // number of plots are 2
         GraphNode[] nodes = new GraphNode[2];
@@ -132,12 +143,13 @@ public class CenterPanel extends JPanel
         
         // add these to the array of plots
         allChartPlots[0] = plot1 ;
-        allChartPlots[1] = plot2 ;
-        */        
+        allChartPlots[1] = plot2 ;                    
+        */
         
-        // create a new Chart instance
-        chart = new Chart();
+        // set the model to null since no user has been selected
+        allChartPlots = null ;
         
+        // set the chart model
         setChartModel(month, year, yMinMax, allChartPlots);
         
         // #########################################################
@@ -186,9 +198,19 @@ public class CenterPanel extends JPanel
         setPreferredSize(new Dimension(686, 344));
     }
     
-    public void setChartModel(int chartMonth, int chartYear, 
+    public static void setChartModel(int chartMonth, int chartYear, 
             int[] yMinMax,ChartPlot[] allChartPlots)
     {        
          chart.setModel(chartMonth, chartYear, yMinMax, allChartPlots);
+    }
+
+    public static int[] getCurrentMonthAndYear() 
+    {
+        Calendar cal = Calendar.getInstance();        
+        month = cal.get(Calendar.MONTH) ;
+        year = cal.get(Calendar.YEAR) ;
+        
+        int[] currMonthAndYear = new int[2];
+        return currMonthAndYear ;
     }        
 }

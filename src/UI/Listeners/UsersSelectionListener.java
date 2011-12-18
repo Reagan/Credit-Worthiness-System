@@ -5,16 +5,25 @@
 package UI.Listeners;
 
 import AppActions.MenuBar;
+import DbConnection.TransactionDetails;
 import DbConnection.UsersDetails;
 import UI.BottomCenterPanel;
+import UI.CenterPanel;
+import UI.Charts.ChartPlot;
+import UI.Charts.GraphNode;
+import UI.Charts.GraphPanel;
+import UI.Charts.Node;
 import UI.LeftPanel;
 import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.ItemSelectable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -128,6 +137,9 @@ public class UsersSelectionListener implements
                             // of transactions from the current user's model
                             BottomCenterPanel
                                     .setUserTransactionsModel();
+                            
+                            // load the transactions for the chart model                                                     
+                            updateTransactionsChart();                            
                         } 
                         catch (InterruptedException ex) 
                         {
@@ -142,11 +154,90 @@ public class UsersSelectionListener implements
                             System.out.println("Error: " + ex.toString());
                         }  
                     }
+                    
                 };   
                 
                 // schedule the thread
                 updateLeftPanel.execute();
             }            
         }
+    }
+    
+    private void updateTransactionsChart() 
+    {
+        int numberOfTransForUserForMonth = 0; 
+        
+        // get the current year and month
+        int [] currYearAndMonth = CenterPanel.getCurrentMonthAndYear() ;
+                           
+        // get the number of transactions for the current user
+        // for the current month and year
+        TransactionDetails t = new TransactionDetails();
+        numberOfTransForUserForMonth = t.getUserTransactionsNumberForMonth(CreditWorthinessSystem.getCurrentUserID()
+                                    , currYearAndMonth[0],currYearAndMonth[1]);
+        
+        // get the minimum and maximum value for transactions
+        int [] minMaxTransValues =  t.getMinMaxTransValues(CreditWorthinessSystem.getCurrentUserID(), 
+                currYearAndMonth[0],currYearAndMonth[1]) ;
+        
+        // get the transaction details for the selected user for
+        // the selected month and year. These details should be packaged in Plots   
+        //
+        // create plot instance
+        ChartPlot[] allChartPlots ;
+        allChartPlots = new ChartPlot[1] ;
+        
+        // start with the credit plot
+        // determine the number of nodes in creditplot
+        ChartPlot plot1 = new ChartPlot(ChartPlot.TRANSACTION_PLOT,
+                2);
+        GraphNode[] nodes = new GraphNode[2];
+        
+        // set the transaction IDs
+        int[] transactionsID0 = {1234, 4567 } ;
+        String[] info = {"Rice, Biscuits, Milk", "200"} ;
+        
+        int [] transactionsID1 = {2345};
+        String[] info1 = {"Rice", "200"} ;
+        
+        // set the plot locations for the nodes
+        Point2D.Double plotsLocationA = new Point2D.Double(12,100) ;
+        
+        // get the number of days in a month
+        int noOfDaysInMonth ;
+        Calendar cal = new GregorianCalendar(currYearAndMonth[0], 
+                currYearAndMonth[1],  1) ;
+        noOfDaysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;      
+        
+        // get the translated values
+        Point2D.Double plotsLocation0 = new Point2D.Double(( 72 
+                + (plotsLocationA.x * (minMaxTransValues[1]-minMaxTransValues[0]-2)/noOfDaysInMonth )),
+                ( 200  - 2 - ( plotsLocationA.y * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]-2) ))) ;
+        
+        // actual values for  node
+        Point2D.Double plotsLocationB = new Point2D.Double(18,480) ;
+        
+        // translated values for a node
+        Point2D.Double plotsLocation1 = new Point2D.Double(( 72 
+                + (plotsLocationB.x * (minMaxTransValues[1]-minMaxTransValues[0]-2)/noOfDaysInMonth )),
+                ( 200  - 2 - ( plotsLocationB.y * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]-2) ))) ;
+        
+        // add all the variables into the nodes
+        nodes[0] = new GraphNode(transactionsID0, Node.TRANSACTION_ITEM_NODE, plotsLocation0, info) ;
+        nodes[1] = new GraphNode(transactionsID1, Node.TRANSACTION_ITEM_NODE, plotsLocation1, info1) ;
+        
+        // add the nodes to the plot
+        plot1.addNode(nodes[0]);
+        plot1.addNode(nodes[1]);
+        
+        // add these to the array of plots
+        allChartPlots[0] = plot1 ;
+        
+        // go to the debit plot
+        
+        // get the transactions for the selected user
+        // for the obtained month and year
+        CenterPanel.setChartModel(CenterPanel.month, CenterPanel.year, 
+                minMaxTransValues, allChartPlots);
     }
 }

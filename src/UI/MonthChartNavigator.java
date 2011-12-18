@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.Calendar;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,19 +28,27 @@ public class MonthChartNavigator extends JPanel
     private DepthButton previousMonthButton = null ;
     private DepthButton nextMonthButton = null ;
     private static JLabel monthNameLabel ;
-    private static String monthName ;
+    private static String monthName =  new String() ;
     private Font monthFont ;
     private AppAction monthMoveNextAction ;
     private AppAction monthMovePreviousAction ;
+    private static final String[] months = {"January", "February", "March", "April", "May",
+                "June", "July", "August", "September", "October",
+                "November", "December" } ;
     
     public MonthChartNavigator()
     {                
         // set the monthName and year
         monthFont = new Font("Serif", Font.PLAIN, 17) ;
-        monthName = "November, 2011";
-        monthNameLabel = new JLabel(monthName);   
+               
+        // create the month Label and year
+        monthNameLabel = new JLabel();   
         monthNameLabel.setFont(monthFont);
         monthNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        
+        // set the label for the month and year
+        int[] monthYear = getCurrentMonthAndYear();
+        setMonthAndYear(monthYear[0], monthYear[1]);        
                       
         // add the action for the previous month        
         monthMovePreviousAction = new AppAction(nextMonthButton, "<", 
@@ -68,12 +77,19 @@ public class MonthChartNavigator extends JPanel
     }       
     
     public static void setMonthAndYear(int month, int year)
-    {
-        String[] months = {"January", "February", "March", "April", "May",
-                "June", "July", "August", "September", "October",
-                "November", "December" } ;
-        
+    {        
         monthName = months[month] + ", " +year ;
         monthNameLabel.setText(monthName);
+    }
+    
+    public int[] getCurrentMonthAndYear() 
+    {
+        int [] monthYear = new int[2] ;
+        
+        Calendar cal = Calendar.getInstance();    
+        monthYear[0] = cal.get(Calendar.MONTH) ;
+        monthYear[1] = cal.get(Calendar.YEAR) ;
+                
+        return  monthYear ;
     }
 }
