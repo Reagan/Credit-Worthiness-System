@@ -4,7 +4,10 @@
 package DbConnection;
 
 import UI.LeftPanel;
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +24,8 @@ public class UsersDetails
     private String getUserTransactionsIDsQuery = null ;    
     private final String [] months =  {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
                 "Aug", "Sep", "Oct", "Nov", "Dec" };
+    private String getDetailedTransactionDetails ;
+    private String setNewUserDetailsQuery ;
     
     public UsersDetails(){}
 
@@ -170,7 +175,7 @@ public class UsersDetails
                     + " "
                     + months[Integer.parseInt(currTransaction[3])]
                     + " "
-                    + currTransaction[4]);
+                    + currTransaction[4]);                       
         }                
         
         return userTransactionsRes ;
@@ -196,8 +201,7 @@ public class UsersDetails
         
         userTransIDs = dbConn.fetch(getUserTransactionsIDsQuery);
         
-        // open up the returned IDs and        
-        
+        // open up the returned IDs and               
         for(int transIDsNo = 0, s = userTransIDs.size();
                 transIDsNo < s ; transIDsNo ++)
         {            
@@ -208,5 +212,85 @@ public class UsersDetails
         }                               
         
         return transIDs ;
+    }
+
+    /**
+     * This method populates the transactions list for a
+     * specific user for printing
+     * @param currentUserID
+     * @return 
+     */
+    public Object[][] getDetailedUserTransactions(int currentUserID) 
+    {
+        String [][] detailedTransactionDetails = null ;
+        Vector detailedTransDetails = new Vector() ;
+        
+        getDetailedTransactionDetails = "SELECT s.day,s.month, s.year, (SELECT  "
+                + "items_name FROM items AS i WHERE i.items_id = c.items_id)  "
+                + " AS item_name , items_number, (SELECT "
+                + " items_number*items_cost  FROM items AS k "
+                + " where k.items_id = c.items_id) AS total_items_cost "
+                + " FROM credit_transactions AS c, (SELECT "
+                + " transaction_id,transaction_type, day, month, year FROM "
+                + " transactions where customers_id= "
+                + currentUserID
+                + " ) AS s WHERE "
+                + " c.transaction_id = s.transaction_id ";
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        detailedTransDetails = dbConn.fetch(getDetailedTransactionDetails);
+        
+        // initialise the returned multi dimensional array
+        detailedTransactionDetails = new String[detailedTransDetails.size()][] ;
+        
+        for(int transIDsNo = 0, s = detailedTransDetails.size();
+                transIDsNo < s ; transIDsNo ++)
+        {            
+            // every row returns data in the format 
+            // [ day, month, year, item_name, items_number, total_items_cost ]
+            String [] results  ;
+            results = (String[]) detailedTransDetails.get(transIDsNo) ;
+            detailedTransactionDetails[transIDsNo] = results ;
+        } 
+         
+        return detailedTransactionDetails ;
+    }
+    
+    /**
+     * This method adds a new user's name and 
+     * path to the avatar to the database
+     * @param username
+     * @param avatarPath 
+     */
+    public boolean setNewUserDetails(String username, String avatarPath) throws SQLException
+    {
+        // get the current day, month & year
+        Calendar cal = Calendar.getInstance(); 
+        int day = cal.get(Calendar.DATE);
+        int month = cal.get(Calendar.MONTH) ;
+        int year = cal.get(Calendar.YEAR);
+        
+        setNewUserDetailsQuery = "INSERT into CUSTOMERS (customers_firstname, "
+                + " customers_secondname, images_name, joining_day, "
+                + " joining_month,year) values (\"" 
+                + username
+                + "\", \" \", \""
+                + avatarPath
+                + "\","
+                + day 
+                + ","
+                + month
+                + ","
+                + year
+                + ")";
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        boolean result = dbConn.update(setNewUserDetailsQuery);        
+       
+        return result ;
     }
 }

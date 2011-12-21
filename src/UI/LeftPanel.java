@@ -42,8 +42,8 @@ public class LeftPanel extends JPanel
     private static JLabel joinedDate ;
     
     // add the model and listeners for the JComboBox
-    private Vector<String> usersNames;
-    private UsersModel users ;
+    private static Vector<String> usersNames;
+    private static UsersModel users ;
     private UsersSelectionListener usersSelectionListener ;
     
     private static int currSelectedUserIndex = 0; // indicates the selected users
@@ -179,7 +179,7 @@ public class LeftPanel extends JPanel
         userImage.setLoadingLabel(stateOfLabel);
     }
 
-    private void fetchUserNames() 
+    public static void fetchUserNames() 
     {
         // create a swing worker thread to 
         // fetch the names of the users in the database

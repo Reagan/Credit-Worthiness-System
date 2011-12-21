@@ -1,32 +1,27 @@
-/**
- * Credit Worthiness System Version 1.0
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package AppActions;
 
+import UI.Models.PrintCreditItemsModel;
 import UI.Models.PrintUserTransactionsModel;
 import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.Dimension;
-import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 /**
- * This class extends the JTable print API
- * to print out a log of the user transactions 
- * for the currently selected user
- * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
+ *
+ * @author reagan
  */
-public class PrintUserTransactionLogAction extends AbstractedAction 
+public class PrintCreditItemsAction extends AbstractedAction
 {
     private int currentUserID ;// stores the ID for the current 
                                 // user and for whom the transaction log 
@@ -40,22 +35,34 @@ public class PrintUserTransactionLogAction extends AbstractedAction
     private boolean showPrintDialog = true;
     private boolean interactive = true;             
     
-    public PrintUserTransactionLogAction() 
-    {   System.out.println("Printing user actions called...") ;
-    
+    public PrintCreditItemsAction() 
+    {        
         // automatically display the current user's 
         // transaction log
         currentUserID = credit.worthiness.system.CreditWorthinessSystem.getCurrentUserID() ;
         
-        userTransactionsTable = new JTable() ;
-        
+        // initialise the table and populate its 
+        // model        
+        userTransactionsTable = createTransactionsTable(new PrintCreditItemsModel(currentUserID));
         userTransactionsTable.setFillsViewportHeight(true);
         userTransactionsTable.setRowHeight(USER_TRANS_TABLE_ROW_HEIGHT);
+       
+        userTransactionsTable.setRowHeight(20);
         userTransactionsTable.setSize(userTransactionsTable.getPreferredSize());
         userTransactionsTable
                 .setPreferredScrollableViewportSize(new Dimension(620, 500));        
-        userTransactionsTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);        
-         
+        userTransactionsTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        TableColumn column = userTransactionsTable.getColumnModel().getColumn(0);
+        column.setPreferredWidth(300);
+  
+        // set the header and footer messages
+        // @TODO: automatically get the current user's 
+        // name from the userID
+        headerText = "Credit Items Log for "
+                + CreditWorthinessSystem.getCurrentUser() ;
+        footerText = "Page {0}" ;
+                
     }
     
     // creates a model for the table
@@ -69,28 +76,7 @@ public class PrintUserTransactionLogAction extends AbstractedAction
      */
     @Override
     public void run() 
-    {        
-        // initialise the table and populate its 
-        // model if a user has been selected already
-        System.out.println("Selected user: " + currentUserID) ;
-        userTransactionsTable = createTransactionsTable(new PrintUserTransactionsModel(currentUserID));
-        userTransactionsTable.setFillsViewportHeight(true);
-        userTransactionsTable.setRowHeight(USER_TRANS_TABLE_ROW_HEIGHT);
-        userTransactionsTable.setSize(userTransactionsTable.getPreferredSize());
-        userTransactionsTable
-                .setPreferredScrollableViewportSize(new Dimension(620, 500));        
-        userTransactionsTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);  
-        TableColumn column = userTransactionsTable.getColumnModel().getColumn(0);
-        column.setPreferredWidth(300);
-        
-        System.out.println("Print user transactions run() called...") ;
- 
-        // set the header and footer messages
-        // name from the userID
-        headerText = "User Transaction Log for "
-                + CreditWorthinessSystem.getCurrentUser() ;
-        footerText = "Page {0}" ;                
-        
+    {
         // set the header
         header = new MessageFormat(headerText);
         
@@ -162,5 +148,5 @@ public class PrintUserTransactionLogAction extends AbstractedAction
         };
         
         printUserTransactions.run();         
-    }    
+    }      
 }

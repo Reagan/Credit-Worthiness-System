@@ -4,6 +4,7 @@
 package UI.Models;
 
 import DbConnection.UsersDetails;
+import credit.worthiness.system.CreditWorthinessSystem;
 import java.util.Vector;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -20,14 +21,10 @@ public class PrintUserTransactionsModel implements TableModel
     private Object[][] transactions ;
     
     public PrintUserTransactionsModel(int userID)
-    {
-        // @TODO: This method determines the transactions for a 
+    {System.out.println("PrintUserTransactionsModel called...") ;
+        // This method determines the transactions for a 
         // specific user
-        currentUserID = userID ;  
-        userTransactions = new UsersDetails() ;
-        
-        // get the returned transaction values
-        returnedTransactions = userTransactions.getUserTransactions(userID);
+        currentUserID = userID ;          
         
         // populate the Transactions Array
         populateTransactions() ;
@@ -56,7 +53,7 @@ public class PrintUserTransactionsModel implements TableModel
             case 1:
                 return String.class;
             case 2:
-            case 3:
+            case 3:             
                 return Integer.class;
         }
 
@@ -79,10 +76,10 @@ public class PrintUserTransactionsModel implements TableModel
     {
         switch(col) 
         {
-            case 0: return "Date";
-            case 1: return "Item";
-            case 2: return "Item Worth";
-            case 3: return "Amount Paid";
+            case 0: return "Date" ;
+            case 1: return "Item" ;
+            case 2: return "Items Number" ;
+            case 3: return "Item Worth" ;
         }
 
         throw new AssertionError("invalid column");
@@ -96,7 +93,7 @@ public class PrintUserTransactionsModel implements TableModel
             case 0:
             case 1:
             case 2:
-            case 3:
+            case 3:            
                 return transactions[row][col];            
         }
 
@@ -108,19 +105,55 @@ public class PrintUserTransactionsModel implements TableModel
      * array to format it to fit the model
      */
     private void populateTransactions() 
-    {        
-        transactions = new Object[5][4] ;
+    {System.out.println("populateTransactions.PrintUserTransactionsModel called...") ;        
+        // get the detailed transactions for the user 
+        // from the database
+        String[][] returnedTransactions ; 
         
-        Object [] t0 = {"1st Jan, 2011", "Milk ", 200,100 } ;
-        Object [] t1 = {"1st Jan, 2011", "Milk ", 200,100 } ;
-        Object [] t2 = {"1st Jan, 2011", "Milk ", 200,100 } ;
-        Object [] t3 = {"1st Jan, 2011", "Milk ", 200,100 } ;
-        Object [] t4 = {"1st Jan, 2011", "Milk ", 200,100 } ;
+        UsersDetails usersTransactions = new UsersDetails() ;
+        returnedTransactions = (String[][]) usersTransactions
+                .getDetailedUserTransactions(CreditWorthinessSystem.getCurrentUserID()) ;
+        
+        // loop through the returned data populating 
+        transactions =  new Object[returnedTransactions.length][]; 
+        System.out.println("Current User ID: "+CreditWorthinessSystem.getCurrentUserID()) ;
+        System.out.println("# of returned transactions: " + returnedTransactions.length);
+        
+        /*
+        for (int i = 0;  i < returnedTransactions.length; i ++)
+        {
+            Object [] t = { returnedTransactions[i][0]
+                    + "/"
+                    + returnedTransactions[i][1] // date
+                    +"/"  // month
+                    + returnedTransactions[i][2] ,  // year
+                    returnedTransactions[i][3], // Item
+                    Integer.parseInt(returnedTransactions[i][4]), // Item Number
+                    Integer.parseInt(returnedTransactions[i][5]) }; // Total cost
+            
+                System.out.println(returnedTransactions[i][0]
+                    + "/"
+                    + returnedTransactions[i][1]
+                    +"/"
+                    + returnedTransactions[i][2]
+                    + " ," 
+                    + returnedTransactions[i][3]
+                    + " ,"
+                    + Integer.parseInt(returnedTransactions[i][4])
+                    + ", "
+                    + Integer.parseInt(returnedTransactions[i][5])) ;
+                
+                transactions[i] =  t ;
+        }
+         */
+        Object [] t0 = {"1/9/2011" ,"Cooking Oil" ,1, 326 } ;
+        Object [] t1 = {"1/9/2011" ,"Two kg Maize Flour ",1, 69 } ;
+        Object [] t2 = {"1/9/2011" ," One kg Sugar" ,1, 98 } ;
+        Object [] t3 = {"12/9/2011" ," Quarter Kg Rice ",1, 30 } ;
         
         transactions[0] = t0 ;
         transactions[1] = t1 ;
         transactions[2] = t2 ;
         transactions[3] = t3 ;
-        transactions[4] = t4 ;
     }
 }

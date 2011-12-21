@@ -39,7 +39,7 @@ public class NewUserAction extends AbstractedAction
         new NewUserDialog(new JFrame(), "Create New User");
     }   
     
-    class NewUserDialog extends JDialog implements ActionListener 
+    private class NewUserDialog extends JDialog
     {
         public NewUserDialog(JFrame parent, String title) 
         {
@@ -52,18 +52,17 @@ public class NewUserAction extends AbstractedAction
                 setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);
             }
 
-            NewUserPanel panel = new NewUserPanel();                        
+            NewUserPanel panel = new NewUserPanel(this);                        
             getContentPane().add(panel);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             pack(); 
             setVisible(true);
-        }
-  
-        @Override
-        public void actionPerformed(ActionEvent e) 
+        }        
+        
+        public void closeDialog()
         {
-            setVisible(false); 
-            dispose(); 
+            setVisible(false) ;
+            dispose();
         }
     }   
 }

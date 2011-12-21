@@ -103,4 +103,30 @@ public class DatabaseConnection
         }          
         return retResults ;
     }
+    
+    public boolean update(String SQLStatement) throws SQLException
+    {
+         try 
+        {       
+            // create a statement for connecting to the
+            // database
+            statement = connection.createStatement() ;
+            
+            // update the database
+            statement.executeUpdate(SQLStatement); 
+
+        } 
+        catch(SQLException ex) 
+        {
+             System.out.println("SQLException: " + ex.getMessage());
+             return false; 
+        }
+        finally
+        {
+            statement.close();
+            connection.close();
+        }
+         
+         return true; 
+    }
 }

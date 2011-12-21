@@ -3,13 +3,17 @@
  */
 package UI;
 
+import UI.Listeners.NewUserListener;
+import UI.Listeners.UserPictureListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -26,21 +30,29 @@ public class NewUserPanel extends JPanel
     private JPanel lowerPanel ;
     
     private JLabel nameLabel ;
-    private JTextField nameTextField ;
+    public JTextField nameTextField ;
     private JLabel uploadPictureLabel ;
-    private JPanel pictureArea ;
+    private UserImage pictureArea ;
     
     private DepthButton browseButton ;
     private DepthButton saveButton ;
     private DepthButton cancelButton ;
     
     private JSeparator separator;
+    private UserPictureListener userPicListener ;
+    private NewUserListener newUserListener ;
     
-    public NewUserPanel()
+    public String userPicPath = null ; // stores the URL to the picture 
+    public String userPicName = null ; // stores the name to the picture
+    
+    public JDialog parent ; // stores the containing JDialog
+    
+    public NewUserPanel(JDialog dialog)
     {
         // initialise the variables
         topPanel = new JPanel();
         lowerPanel = new JPanel();
+        parent = dialog ;
     
         nameLabel = new JLabel("Name");
         nameTextField = new JTextField();
@@ -48,17 +60,24 @@ public class NewUserPanel extends JPanel
         nameTextField.setMinimumSize(new Dimension(140, 20));
         nameTextField.setMaximumSize(new Dimension(140, 20));
         
-        uploadPictureLabel = new JLabel("Upload Picture");
-        pictureArea = new JPanel();
-        pictureArea.setPreferredSize(new Dimension(111, 103));
-        pictureArea.setMaximumSize(new Dimension(111, 103));
-        pictureArea.setMinimumSize(new Dimension(111, 103));
-        pictureArea.setBackground(Color.red);
-    
+        uploadPictureLabel = new JLabel("Upload Picture");        
+        pictureArea = new UserImage();    
         browseButton = new DepthButton("Browse");
+        
+        // set the browse button to the action listener
+        userPicListener = new UserPictureListener(NewUserPanel.this, pictureArea) ;
+        browseButton.addActionListener(userPicListener);
+        
+        // add the sava and the cancel buttons
         saveButton = new DepthButton("Save");
         cancelButton = new DepthButton("Cancel");
         
+        // create the listeners and add them
+        newUserListener = new NewUserListener(NewUserPanel.this) ;
+        saveButton.addActionListener(newUserListener);
+        cancelButton.addActionListener(newUserListener);
+        
+        // add a separator
         separator = new JSeparator(SwingConstants.VERTICAL);
         
         //finalise and display panel 
@@ -115,5 +134,5 @@ public class NewUserPanel extends JPanel
         // add everything and finalise the components display
         add(topPanel, BorderLayout.CENTER);
         add(lowerPanel, BorderLayout.SOUTH);
-    }
+    }    
 }

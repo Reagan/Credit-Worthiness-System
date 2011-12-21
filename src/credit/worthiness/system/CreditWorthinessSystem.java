@@ -12,6 +12,8 @@ import UI.AppPanel;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -30,8 +32,25 @@ public class CreditWorthinessSystem
     
     public static void main(String[] args)
     {
-        
-        
+        // set the look and feel
+        try 
+        {
+            // Set System L&F
+            UIManager.setLookAndFeel(
+                UIManager.getSystemLookAndFeelClassName());
+        } 
+    catch (UnsupportedLookAndFeelException e) {
+       // handle exception
+    }
+    catch (ClassNotFoundException e) {
+       // handle exception
+    }
+    catch (InstantiationException e) {
+       // handle exception
+    }
+    catch (IllegalAccessException e) {
+       // handle exception
+    }
        // ensure that everything is done in the EDT
         Runnable mainApp = new Runnable() 
         {

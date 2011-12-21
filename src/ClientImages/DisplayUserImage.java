@@ -22,21 +22,20 @@ import javax.swing.SwingWorker;
  */
 public class DisplayUserImage 
 {
-        private static BufferedImage userImage = null  ;
-        private static String imgDir = "../images/" ;
-        private static String userImageName = null ;
-        private static UserImage imagePanel ;
-    
-       public BufferedImage getUserImage(String fileName, final UserImage imagePanel) throws IOException                
+        private BufferedImage userImage = null  ;
+        private String userImageName = null ;
+        private UserImage imagePanel ;
+
+       public BufferedImage getUserImage(String fileName, final UserImage iPanel) throws IOException                
        {  
-           this.imagePanel = imagePanel ;
+           imagePanel = iPanel ;
            
            // show a messsage that an image is being loaded
-           LeftPanel.showLoadingLabel(true);
+           imagePanel.setLoadingLabel(true);
            
            // set the imageName
            userImageName = fileName ;
-           String path = imgDir + userImageName ;
+           final String path = userImageName ;
                                  
            SwingWorker loadImage = new SwingWorker()
            {
@@ -45,12 +44,12 @@ public class DisplayUserImage
                 {
                     BufferedImage ic ;
                     
-                    ic = createBufferedImage(imgDir + userImageName);      
+                    ic = createBufferedImage(path);      
                     
                     if(null == ic)
                     {
                         System.out.println("Error accessing the image at " +
-                                imgDir + userImageName);
+                                 userImageName);
                     }
                     
                     return ic ;
@@ -60,21 +59,22 @@ public class DisplayUserImage
                 protected void done()
                 {
                     // remove the loading label
-                    LeftPanel.showLoadingLabel(false);
+                    imagePanel.setLoadingLabel(false);
+                    
                     try 
                     {
                         userImage =  (BufferedImage) get();
-                        
+                        System.out.println("Setting the user image") ;
                         // display the image when required
                         imagePanel.setUserImage(userImage);
                     } 
                     catch (InterruptedException ex) 
                     {
-                        Logger.getLogger(DisplayUserImage.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("Error: " + ex.toString());
                     } 
                     catch (ExecutionException ex) 
                     {
-                        Logger.getLogger(DisplayUserImage.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("Error: " + ex.toString());
                     }
                 }
            };

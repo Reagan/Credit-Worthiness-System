@@ -17,6 +17,7 @@ public class TransactionDetails
     private String getTransactionDetailsQuery ;
     private String getMonthTransNumberForUserQuery ;
     private String getMinMaxMonthTransValForUserQuery ;
+    private String getPlottedTransactionDetailsQuery ;
     
     public TransactionDetails(){}
     
@@ -80,7 +81,8 @@ public class TransactionDetails
                 + " AND month = "
                 + month
                 + " AND year = "
-                + year ;
+                + year
+                + " AND transaction_type = 1";
         
         Vector userMonthTransNumber = new Vector() ;
         
@@ -131,10 +133,53 @@ public class TransactionDetails
         
         // get the minimum and maximum values for 
         // the transactions
-        Arrays.sort(vals);
+        Arrays.sort(vals);        
         yMinAndMax[0] = vals[0] ;
-        yMinAndMax[1] = vals[1] ;
+        yMinAndMax[1] = vals[vals.length - 1] ;
         
         return yMinAndMax ;
+    }
+
+    /**
+     * This method returns the details for the transactions
+     * done by a user for specific month for plotting
+     * @param customers_id
+     * @param month
+     * @param year
+     * @return 
+     */
+    public String[][] getPlottedTransactionDetails(int customers_id, int month
+            , int year, int transactionsNumber) 
+    {
+        String[][] transactionDetails = new String[transactionsNumber][] ;
+        
+        getPlottedTransactionDetailsQuery = "SELECT c.transaction_id, s.day, (SELECT "
+                + " items_name FROM items AS i WHERE i.items_id = c.items_id) "
+                + " AS item_name , items_number, (SELECT items_number*items_cost "
+                +" FROM items AS k where k.items_id = c.items_id) AS total_items_cost "
+                + " FROM credit_transactions AS c, (SELECT transaction_id,transaction_type, "
+                + " day FROM transactions where customers_id= "
+                + customers_id
+                + " AND month= "
+                + month
+                + " AND year= "
+                + year
+                + ") AS s WHERE c.transaction_id = s.transaction_id ";
+        
+        Vector plottedTransValues = new Vector() ;
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        plottedTransValues = dbConn.fetch(getPlottedTransactionDetailsQuery);
+        
+        for(int plottedTransDetailsNo = 0, s = plottedTransValues.size();
+                plottedTransDetailsNo < s ; plottedTransDetailsNo ++)
+        {
+            transactionDetails[plottedTransDetailsNo] = 
+                    (String[]) plottedTransValues.get(plottedTransDetailsNo) ;  
+        }
+        
+        return transactionDetails ;
     }
 }

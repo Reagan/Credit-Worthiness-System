@@ -10,6 +10,8 @@ import UI.Models.ItemsModel;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -18,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -43,7 +46,9 @@ public class BottomRightPanel extends JPanel
     private JLabel itemLabel ;
     private JLabel itemNumberLabel ;
     
-    private static JTextField date ;
+    private static JFormattedTextField date ;
+    private final DateFormat dateFomat = new SimpleDateFormat("dd/MM/yyyy");
+    
     private static JTextField numberOfItems ;
     private final static JComboBox items = new JComboBox(); ;
     
@@ -72,7 +77,7 @@ public class BottomRightPanel extends JPanel
         itemNumberLabel.setBorder(BorderFactory.createEmptyBorder(20, 5, 0, 5));
     
         // TextFields
-        date = new JTextField();
+        date = new JFormattedTextField(dateFomat);
         date.setMaximumSize(new Dimension(136, 20));
         
         numberOfItems = new JTextField();

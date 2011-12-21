@@ -126,14 +126,7 @@ public class MenuBar extends JMenuBar
         saveTransactionDetailsAction = new AppAction(saveTransactionDetailsMenuItem,
                                       "Save Transaction Details", false, KeyEvent.VK_S);
         saveTransactionDetailsMenuItem.setAction(saveTransactionDetailsAction);
-        transactionsMenu.add(saveTransactionDetailsMenuItem);
-        
-        deleteTransactionDetailsAction = new AppAction(deleteTransactionDetailsMenuItem,
-                                      "Delete Transaction Details", false, KeyEvent.VK_L);
-        deleteTransactionDetailsAction.addActionClass(new DeleteTransactionDetailsAction());
-        deleteTransactionDetailsMenuItem.setAction(deleteTransactionDetailsAction);
-        transactionsMenu.add(deleteTransactionDetailsMenuItem);
-        
+        transactionsMenu.add(saveTransactionDetailsMenuItem);        
         
         // add the Print JMenuItems
         userTransLogAction = new AppAction(userTransLogMenuItem,
@@ -145,11 +138,13 @@ public class MenuBar extends JMenuBar
         monthlyReportAction = new AppAction(monthlyReportMenuItem,
                                         "Print Monthly Report", true, KeyEvent.VK_R);
         monthlyReportMenuItem.setAction(monthlyReportAction);
+        monthlyReportAction.addActionClass(new PrintMonthlyReportAction()) ;
         printMenu.add(monthlyReportMenuItem);
         
         pendingCreditItemsAction = new AppAction(pendingCreditItemsMenuItem,
                                       "Pending Credit Items", true, KeyEvent.VK_C);
         pendingCreditItemsMenuItem.setAction(pendingCreditItemsAction);
+        pendingCreditItemsAction.addActionClass(new PrintCreditItemsAction()) ;
         printMenu.add(pendingCreditItemsMenuItem);
                 
         // add the About JMenuItems

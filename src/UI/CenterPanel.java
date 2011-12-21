@@ -33,7 +33,7 @@ public class CenterPanel extends JPanel
     private static Chart chart;
     public static int month ;
     public static int year ;
-    private int[] yMinMax = {0, 500};    
+    private int[] yMinMax = {0, 0};    
     private ChartPlot[] allChartPlots = null ;
     
     public CenterPanel()
@@ -211,6 +211,8 @@ public class CenterPanel extends JPanel
         year = cal.get(Calendar.YEAR) ;
         
         int[] currMonthAndYear = new int[2];
+        currMonthAndYear[0] = month ;
+        currMonthAndYear[1] = year ;
         return currMonthAndYear ;
     }        
 }

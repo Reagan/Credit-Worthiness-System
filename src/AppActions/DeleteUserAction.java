@@ -3,6 +3,7 @@
  */
 package AppActions;
 
+import credit.worthiness.system.CreditWorthinessSystem;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,7 +26,15 @@ public class DeleteUserAction extends AbstractedAction
     @Override
     public void run() 
     {
-        JOptionPane.showConfirmDialog(null, appMessage, 
+        int result = JOptionPane.showConfirmDialog(null, appMessage, 
                 aboutDialogTitle, messageType);
+        
+        if(result == JOptionPane.OK_OPTION)
+        {
+            // get the next selected user's index
+            int nextUser =  CreditWorthinessSystem.getCurrentUserID() + 1;
+            // delete the currently selected user's
+            // details
+        }
     }  
 }
