@@ -22,9 +22,11 @@ public class AlertLabel extends JComponent
     private final Color overSpentColor = new Color(255, 102, 0);
     private final Color underSpentColor = new Color(0, 102, 0);
     
-    private String alertStatus ;
-    private final String overspentCondition = "OverSpent"  ;
-    private final String underspentCondition = "UnderSpent"  ;
+    public int alertStatus ;
+    public static final int OVERSPENT_CONDITION = 1  ;
+    public static final int UNDERSPENT_CONDITION = 2  ;
+    private final String OVERSPENT_TEXT = "Overspent" ;
+    private final String UNDERSPENT_TEXT = "Underspent" ;
     
     private Double creditOrDebit ;
     private final int ALERT_WIDTH = 165 ;
@@ -42,18 +44,16 @@ public class AlertLabel extends JComponent
     private Font statusAmountFont ;
     private Font creditOrDebitAmountFont ;
     
-    public AlertLabel()
+    public AlertLabel(double creditOrDebitAmount)
     {
         // initialise the variables
-        // @TODO ensure that the values available here 
-        // are from the model rather than hardcoded
         alertColor = overSpentColor ;
-        alertStatus = overspentCondition ;
+        alertStatus = OVERSPENT_CONDITION ;
         
         statusFont = new Font("Serif", Font.PLAIN, 28);
         statusAmountFont = new Font("Serif", Font.PLAIN, 13) ;
         
-        creditOrDebit = 214.55 ;
+        creditOrDebit = creditOrDebitAmount ;
         
         setPreferredSize(new Dimension(ALERT_WIDTH, ALERT_HEIGHT));
         setMaximumSize(new Dimension(ALERT_WIDTH, ALERT_HEIGHT));
@@ -67,12 +67,12 @@ public class AlertLabel extends JComponent
         Graphics2D graphics = (Graphics2D) g;
         
         // obtain the status of the alerter
-        String currentStatus = (alertStatus == overspentCondition) ?
-                overspentCondition : underspentCondition ;
+        String currentStatus = (alertStatus == OVERSPENT_CONDITION) ?
+                OVERSPENT_TEXT : UNDERSPENT_TEXT ;
         
         
         // obtain the color of the alerter
-        Color alerterColor = (alertStatus == overspentCondition) ?
+        Color alerterColor = (alertStatus == OVERSPENT_CONDITION) ?
                 overSpentColor : underSpentColor;
         
         // create the background
@@ -93,7 +93,7 @@ public class AlertLabel extends JComponent
         // amount by which the user is overspent 
         // or underspent
         graphics.setFont(statusAmountFont) ;
-        String amountOverOrUnderSpent = (currentStatus == overspentCondition) ?
+        String amountOverOrUnderSpent = (alertStatus == OVERSPENT_CONDITION) ?
                 "+" :"-";
         
         amountOverOrUnderSpent += "Kshs "

@@ -26,6 +26,10 @@ public class UsersDetails
                 "Aug", "Sep", "Oct", "Nov", "Dec" };
     private String getDetailedTransactionDetails ;
     private String setNewUserDetailsQuery ;
+    private String [] deleteUserDetailsQuery ;
+    private String getCustCreditOrDebitAmountQuery ; // get the amount by which 
+                                                    // a customer is in credit 
+                                                    // or debit
     
     public UsersDetails(){}
 
@@ -292,5 +296,106 @@ public class UsersDetails
         boolean result = dbConn.update(setNewUserDetailsQuery);        
        
         return result ;
+    }
+    
+    /**
+     * This method deletes a user and all transactions related to
+     * the user from the database
+     * @param userID
+     * @return 
+     */
+    public boolean deleteUserAndDetails(int userID) throws SQLException
+    {
+        deleteUserDetailsQuery = new String[5];
+        
+        // delete data in debit_transactions table
+        deleteUserDetailsQuery[0] = "DELETE FROM debit_transactions WHERE "
+                + "debit_transactions.transaction_id IN (SELECT transaction_id "
+                + " FROM transactions WHERE customers_id = "
+                + userID
+                + ") " ;
+    
+        // delete data in credit transactions table
+        deleteUserDetailsQuery[1] = "DELETE FROM credit_transactions WHERE "
+                + "credit_transactions.transaction_id IN (select "
+                + "transaction_id FROM transactions WHERE customers_id = "
+                + userID
+                + ")" ;
+                
+        // delete data from other tables
+        deleteUserDetailsQuery[2] = "DELETE FROM customers WHERE customers_id = "
+                + userID ;
+        
+        // Delete from the transactions query
+        deleteUserDetailsQuery[3] = "DELETE FROM transactions WHERE customers_id = "
+                + userID ;
+        
+        // delete from the credit query
+        deleteUserDetailsQuery[4] = "DELETE FROM credit WHERE customers_id = "
+                + userID ;
+        
+        
+        // run all the queries
+        for(int i= 0 ; i < deleteUserDetailsQuery.length ; i ++)
+        {
+            dbConn = new DatabaseConnection();
+            dbConn.connect();
+
+            boolean result = dbConn.update(deleteUserDetailsQuery[i]);
+            
+            if(false == result)
+            {
+                return false ;
+            }
+        }
+        
+        // everything OK
+        return true ;
+    }
+    
+    /**
+     * This method queries the database and returns the actual credit limit
+     * by which a customer as specified by the custID is in credit or debt
+     * @param custID
+     * @return 
+     */
+    public double getCustCreditOrDebitAmount(int custID, int month, int year)
+    {
+        double creditOrDebitAmount  = 0 ;
+        
+        getCustCreditOrDebitAmountQuery = "SELECT ((SELECT credit_allowed FROM "
+                + "credit WHERE customers_id = "
+                + custID
+                + ") - SUM(total_items_cost)) AS credit_limit FROM  "
+                + "(SELECT transaction_id, (c.items_number*items_cost) AS "
+                + "total_items_cost FROM items AS k, credit_transactions AS "
+                + "c WHERE k.items_id = c.items_id) AS t, (SELECT "
+                + "transaction_id,transaction_type FROM transactions WHERE "
+                + "customers_id="
+                + custID
+                + "  AND month="
+                + month
+                + " AND year="
+                + year
+                + " ) AS s WHERE t.transaction_id = s.transaction_id " ;
+        
+        Vector amount = null ;
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        amount = dbConn.fetch(getCustCreditOrDebitAmountQuery);
+        
+        // open up the returned values and 
+        // return the user names in the desired 
+        // format [firstname lastname]
+        for(int counter = 0, s = amount.size();
+                counter < s ; counter ++)
+        {
+            String [] currAmount = (String[]) amount.get(counter) ;
+            creditOrDebitAmount = Double.parseDouble(currAmount[0]);
+        }
+        
+        return creditOrDebitAmount ;
     }
 }

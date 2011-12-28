@@ -243,4 +243,15 @@ public class LeftPanel extends JPanel
     {
         return currSelectedUserIndex ;
     }
+    
+    /**
+     * This method automatically triggers the 
+     * JComboBox and sets another user
+     * @param index
+     * @return 
+     */
+    public static void setSelectedIndex(int index)
+    {
+        userSelectCombo.setSelectedIndex(index);                
+    }
 }

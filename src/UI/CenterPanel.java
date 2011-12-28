@@ -26,7 +26,7 @@ import javax.swing.SwingConstants;
  */
 public class CenterPanel extends JPanel
 {
-    private AlertLabel alerter ;
+    private static AlertLabel alerter ;
     private MonthChartNavigator monthNav ;
     private final JLabel title ;
     private final VerticalJLabel yAxisLabel; 
@@ -39,7 +39,7 @@ public class CenterPanel extends JPanel
     public CenterPanel()
     {
         // initialise the components
-        alerter = new AlertLabel();
+        alerter = new AlertLabel(214.55);
         monthNav = new MonthChartNavigator();
         title = new JLabel("Transactions");
         title.setFont(new Font("Serif", Font.PLAIN, 31));
@@ -214,5 +214,25 @@ public class CenterPanel extends JPanel
         currMonthAndYear[0] = month ;
         currMonthAndYear[1] = year ;
         return currMonthAndYear ;
-    }        
+    }    
+    
+    /**
+     * This method displays the alerter with the 
+     * required color and the credit/debit amount 
+     * for the currently selected user
+     * @param amount 
+     */
+    public static void updateAlertLabel(double amount)
+    {
+        alerter = new AlertLabel(amount) ;
+        
+        if(amount < 0 ) 
+        {
+            alerter.alertStatus = AlertLabel.OVERSPENT_CONDITION ;
+        }            
+        else 
+        {
+            alerter.alertStatus = AlertLabel.UNDERSPENT_CONDITION ;
+        }               
+    }
 }

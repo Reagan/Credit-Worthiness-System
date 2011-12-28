@@ -4,6 +4,7 @@
 package UI;
 
 import AppActions.AppAction;
+import AppActions.UpdateTransactionDetailsAction;
 import DbConnection.ItemsDetails;
 import DbConnection.TransactionDetails;
 import UI.Models.ItemsModel;
@@ -38,22 +39,22 @@ import javax.swing.border.BevelBorder;
 public class BottomRightPanel extends JPanel
 {
     private DepthButton settingsButton ;
-    private DepthButton saveButton ;
-    private DepthButton deleteButton ;
+    private DepthButton saveTransactionButton ;
+    private DepthButton deleteTransactionButton ;
     private DepthButton printLogButton ;
     
     private JLabel dateLabel ;
     private JLabel itemLabel ;
     private JLabel itemNumberLabel ;
     
-    private static JFormattedTextField date ;
+    public static JFormattedTextField date ;
     private final DateFormat dateFomat = new SimpleDateFormat("dd/MM/yyyy");
     
-    private static JTextField numberOfItems ;
-    private final static JComboBox items = new JComboBox(); ;
+    public static JTextField numberOfItems ;
+    public final static JComboBox items = new JComboBox(); ;
     
     private JLabel notesLabel ;
-    private static  JTextArea transactionNotes ;
+    public static  JTextArea transactionNotes ;
     
     private JSeparator verticalSeparator ;      
     
@@ -61,20 +62,33 @@ public class BottomRightPanel extends JPanel
     // order as they are in the database
     private Vector list = null ;
     
-    private GroupLayout layout;
+    private GroupLayout layout;    
+    public static boolean dirty = false ; // shows that details in the transaction panel
+                                       // and text fields have changed
+    
+    public static int currTransactionID = -1 ; // marks the current transaction ID 
+    
+    private static AppAction settingsAction ;                
+    private static AppAction saveTransactionAction ;                
+    private static AppAction deleteTransactionAction ;
+    public  Vector itemsObt ;
+    public int transactionType ; // will store the transaction type
     
     public BottomRightPanel()
     {
         // initialise the variablesprivate JLabel dateLabel ;
         // labels
         dateLabel = new JLabel("Date");
-        dateLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        dateLabel.setBorder(BorderFactory
+                .createEmptyBorder(0, 5, 0, 5));
         
         itemLabel = new JLabel("Item");
-        itemLabel.setBorder(BorderFactory.createEmptyBorder(20, 5, 0, 5));
+        itemLabel.setBorder(BorderFactory
+                .createEmptyBorder(20, 5, 0, 5));
         
         itemNumberLabel = new JLabel("Number of Items");
-        itemNumberLabel.setBorder(BorderFactory.createEmptyBorder(20, 5, 0, 5));
+        itemNumberLabel.setBorder(BorderFactory
+                .createEmptyBorder(20, 5, 0, 5));
     
         // TextFields
         date = new JFormattedTextField(dateFomat);
@@ -97,21 +111,18 @@ public class BottomRightPanel extends JPanel
         verticalSeparator = new JSeparator(SwingConstants.VERTICAL);
         
         // buttons
-        AppAction settingsAction = new AppAction(settingsButton, "Settings"
-                                        , false, KeyEvent.VK_S);
+        settingsAction = new AppAction(settingsButton, "Settings"
+                                        , true, KeyEvent.VK_S);
         settingsButton = new DepthButton(settingsAction) ;
         
-        AppAction saveAction = new AppAction(saveButton, "Save"
+        saveTransactionAction = new AppAction(saveTransactionButton, "Save"
                                         , false, KeyEvent.VK_S);
-        saveButton = new DepthButton(saveAction) ;
+        saveTransactionAction.addActionClass(new UpdateTransactionDetailsAction(BottomRightPanel.this));
+        saveTransactionButton = new DepthButton(saveTransactionAction) ;
         
-        AppAction deleteAction = new AppAction(deleteButton, "Delete"
+        deleteTransactionAction = new AppAction(deleteTransactionButton, "Delete"
                                         , false, KeyEvent.VK_S);
-        deleteButton = new DepthButton(deleteAction) ;         
-        
-        AppAction printLogAction = new AppAction(printLogButton, "Print Transactions Log"
-                                        , true, KeyEvent.VK_S);
-        printLogButton = new DepthButton(printLogAction) ;
+        deleteTransactionButton = new DepthButton(deleteTransactionAction) ;                 
         
         // lay out the elements
         layout = new GroupLayout(this);
@@ -135,8 +146,8 @@ public class BottomRightPanel extends JPanel
                     .addComponent(transactionNotes)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(settingsButton)
-                        .addComponent(saveButton)
-                        .addComponent(deleteButton))));
+                        .addComponent(saveTransactionButton)
+                        .addComponent(deleteTransactionButton))));
         
         // lay out vertically
         layout.setVerticalGroup(layout.createSequentialGroup()
@@ -154,8 +165,8 @@ public class BottomRightPanel extends JPanel
                         .addComponent(transactionNotes)))
                 .addGroup(layout.createParallelGroup()
                     .addComponent(settingsButton)
-                    .addComponent(saveButton)
-                    .addComponent(deleteButton)));
+                    .addComponent(saveTransactionButton)
+                    .addComponent(deleteTransactionButton)));
             
         //finalise and display panel   
         setOpaque(false);
@@ -171,7 +182,8 @@ public class BottomRightPanel extends JPanel
             protected Vector doInBackground()
             {
                 ItemsDetails itemNames = new ItemsDetails() ;
-                return itemNames.getItemNames() ;
+                itemsObt = itemNames.getItemNames() ;
+                return itemsObt ;
             }  
             
             @Override
@@ -209,13 +221,17 @@ public class BottomRightPanel extends JPanel
         // things have changed
         if(transactionID != -1)
         {         
+            // mark that a transaction has changed
+            dirty = true ; 
+            currTransactionID = transactionID ;
+            
             // obtain information from the database
             // and update the fields in this section
             TransactionDetails transDetails =  new TransactionDetails() ;
             
             String [] transactionDetails = transDetails
                     .getTransactionDetails(transactionID) ;
-            JOptionPane.showMessageDialog(null, transactionDetails.toString(), 
+            JOptionPane.showMessageDialog(null, transactionDetails, 
                     "Transaction Details", JOptionPane.PLAIN_MESSAGE);
             
             String concatDate = transactionDetails[2] + "/" + transactionDetails[3]
@@ -228,7 +244,11 @@ public class BottomRightPanel extends JPanel
             items.setSelectedIndex(Integer.parseInt(transactionDetails[0]) - 1 );
             items.repaint();
             
-            transactionNotes.setText("Info");   
+            transactionNotes.setText("Info");  
+            
+            // enable the save and delete transaction buttons
+            saveTransactionAction.enableAction(true);
+            deleteTransactionAction.enableAction(true);
         }                
     }
 }

@@ -4,8 +4,10 @@
  */
 package DbConnection;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +20,7 @@ public class TransactionDetails
     private String getMonthTransNumberForUserQuery ;
     private String getMinMaxMonthTransValForUserQuery ;
     private String getPlottedTransactionDetailsQuery ;
+    private String [] updateTransactionQuery = new String[2] ;
     
     public TransactionDetails(){}
     
@@ -43,7 +46,7 @@ public class TransactionDetails
                 + "WHERE transaction_id = "
                 + transactionID
                 + ") AS s ";    
-        
+        System.out.println(getTransactionDetailsQuery) ;
         Vector transactionDetails = new Vector() ;
         
         dbConn = new DatabaseConnection();
@@ -181,5 +184,77 @@ public class TransactionDetails
         }
         
         return transactionDetails ;
+    }
+    
+    public boolean updateTransactionDetails(int transType, int transID, int itemsNo, 
+            String notes, String selectedItem, int day
+            , int month, int year ) throws SQLException
+    {
+        if(transID == 0 || selectedItem.length() < 0 )
+        {
+            // Error with the selected item             
+            // alert error
+            JOptionPane.showMessageDialog(null, "There was an error with the supplied transaction details",
+                    "Error!", JOptionPane.WARNING_MESSAGE);
+            
+            return false ;
+        }
+        
+        // insert the information into the database
+        /// start with the credit transactions
+        if(1 == transType)
+        {
+            updateTransactionQuery[0] = "UPDATE credit_transactions SET "
+                    + "items_number = "
+                    + itemsNo
+                    + ", items_id = (SELECT items_id FROM items "
+                    + "WHERE items_name=\" "
+                    + selectedItem
+                    + " \"), info = \" "
+                    +  notes
+                    + " \" WHERE "
+                    + "transaction_id = "
+                    + transID;                                
+        }
+        else if(2 == transType)
+        {
+            updateTransactionQuery[0] = "UPDATE debit_transactions SET "
+                    + " amount = "
+                    + itemsNo
+                    + ", info = \" "
+                    + notes
+                    + "\" where transaction_id = "
+                    + transID ;
+        }
+        
+        // create the second part of the query
+        updateTransactionQuery[1] = "UPDATE transactions SET day =  "
+                    + day
+                    + ","
+                    + " month = "
+                    + month
+                    + ", "
+                    + "year = "
+                    + year
+                    + " WHERE transaction_id = "
+                    + transID ;
+        
+        // run the queries
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        for (int queryCounter = 0 ; 
+                queryCounter < updateTransactionQuery.length ; queryCounter++)
+        {
+            boolean result = dbConn.update(
+                    updateTransactionQuery[queryCounter]); 
+            
+            if(false == result)
+            {
+                return result ; 
+            }
+        }        
+        
+        return true ;
     }
 }

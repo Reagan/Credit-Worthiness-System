@@ -139,6 +139,13 @@ public class UsersSelectionListener implements
                             BottomCenterPanel
                                     .setUserTransactionsModel();
                             
+                            // set the credit limit status for user
+                            // in the prominent right hand panel
+                           CenterPanel.updateAlertLabel(
+                                   getUserCreditOrDebitAmount(
+                                        CreditWorthinessSystem.getCurrentUserID()
+                                   )); 
+                           
                             // load the transactions for the chart model                                                     
                             updateTransactionsChart();                            
                         } 
@@ -154,8 +161,7 @@ public class UsersSelectionListener implements
                         {
                             System.out.println("Error: " + ex.toString());
                         }  
-                    }
-                    
+                    }                                       
                 };   
                 
                 // schedule the thread
@@ -164,6 +170,26 @@ public class UsersSelectionListener implements
         }
     }
     
+    /**
+     * This method obtains the amount by which a customer
+     * is in debt or credit and returns this value
+     * @param currentUserID
+     * @return 
+     */
+    private double getUserCreditOrDebitAmount(int currentUserID) 
+    {
+        double creditOrDebitAmount = 0 ;
+        
+        // get the current month and year
+        int [] currYearAndMonth = CenterPanel.getCurrentMonthAndYear() ;
+        
+        UsersDetails user = new UsersDetails() ;
+        creditOrDebitAmount = user.getCustCreditOrDebitAmount(currentUserID, 
+                currYearAndMonth[0], currYearAndMonth[1]) ;
+        
+        return creditOrDebitAmount ;
+    }
+     
     private void updateTransactionsChart() 
     {        
         int numberOfTransForUserForMonth = 0; 

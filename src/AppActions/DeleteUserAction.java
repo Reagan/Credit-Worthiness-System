@@ -3,7 +3,12 @@
  */
 package AppActions;
 
+import DbConnection.UsersDetails;
+import UI.LeftPanel;
 import credit.worthiness.system.CreditWorthinessSystem;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -33,8 +38,44 @@ public class DeleteUserAction extends AbstractedAction
         {
             // get the next selected user's index
             int nextUser =  CreditWorthinessSystem.getCurrentUserID() + 1;
+            
             // delete the currently selected user's
-            // details
+            // details (transactions & credit limit)
+            System.out.println("Deleting Current User: " + CreditWorthinessSystem.getCurrentUser()
+                    + ", "
+                    + " User ID: " + CreditWorthinessSystem.getCurrentUserID()
+                    + " details") ;
+            
+            UsersDetails usersInfo = new UsersDetails() ;
+            try 
+            {
+                boolean res = usersInfo.deleteUserAndDetails(
+                        CreditWorthinessSystem.getCurrentUserID());
+                
+                if(false == res)
+                {
+                    JOptionPane.showMessageDialog(null, "There was an error deleting the user. "
+                            + " Please try again", "Error", JOptionPane.PLAIN_MESSAGE);
+                }
+                else
+                {
+                    // change the models to the first user
+                    // in the JComboBox
+                    // to the first person on the model
+                    JOptionPane.showMessageDialog(null, "Deleting user " 
+                            + CreditWorthinessSystem.getCurrentUser()
+                            + " Completed.", "Success", JOptionPane.PLAIN_MESSAGE);
+                    
+                    LeftPanel.setSelectedIndex(1);
+                }
+            } 
+            catch (SQLException ex) 
+            {
+                System.out.println("Error: " + ex.toString()) ;
+            }
+            
+            // trigger the action listener to the next user
+            
         }
     }  
 }
