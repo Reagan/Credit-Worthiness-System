@@ -63,7 +63,7 @@ public class UsersSelectionListener implements
             if(resp==JOptionPane.YES_OPTION)
             {
                 // disable the user options for the
-                // previsously selected user while querying
+                // previously selected user while querying
                 // for the new user details
                 MenuBar.enableUserMenuOptions(false);
                 LeftPanel.deleteUserAction.setEnabled(false);

@@ -32,21 +32,23 @@ public class TransactionDetails
      */
     public String[] getTransactionDetails(int transactionID)
     {  
-        String [] results = new String[1] ;
-                
-        getTransactionDetailsQuery = "SELECT IF(transaction_type=1,(SELECT items_id FROM items WHERE "
-                + "items.items_id = (SELECT items_id FROM credit_transactions WHERE "
-                + "credit_transactions.transaction_id = s.transaction_id)),(SELECT CONCAT (\"Kshs \", amount) "
-                + "FROM debit_transactions WHERE "
-                + "debit_transactions.transaction_id = s.transaction_id)) "
-                + "AS item_name, if(transaction_type=1,(SELECT items_number "
-                + "FROM credit_transactions WHERE "
+        String [] results = new String[1] ;          
+        
+        getTransactionDetailsQuery = "SELECT IF(transaction_type=1,(SELECT items_id "
+                + " FROM items WHERE items.items_id = (SELECT items_id FROM "
+                + "credit_transactions WHERE credit_transactions.transaction_id "
+                + "= s.transaction_id)),(SELECT CONCAT (\"Kshs \", amount) "
+                + "FROM debit_transactions WHERE debit_transactions.transaction_id "
+                + "= s.transaction_id)) AS item_name, if(transaction_type=1,"
+                + "(SELECT items_number FROM credit_transactions WHERE "
                 + "credit_transactions.transaction_id = s.transaction_id),\"Loan\") "
-                + "AS item_number, day, month, year FROM (SELECT * FROM transactions "
-                + "WHERE transaction_id = "
+                + "AS item_number, day, month, year,(SELECT info FROM credit_transactions "
+                + "WHERE credit_transactions.transaction_id = "
+                + "s.transaction_id) as information, transaction_type FROM "
+                + "(SELECT * FROM transactions WHERE transaction_id = "
                 + transactionID
-                + ") AS s ";    
-        System.out.println(getTransactionDetailsQuery) ;
+                + ") AS s ";
+        
         Vector transactionDetails = new Vector() ;
         
         dbConn = new DatabaseConnection();
@@ -208,11 +210,11 @@ public class TransactionDetails
                     + "items_number = "
                     + itemsNo
                     + ", items_id = (SELECT items_id FROM items "
-                    + "WHERE items_name=\" "
+                    + "WHERE items_name=\""
                     + selectedItem
-                    + " \"), info = \" "
+                    + "\"), info = \""
                     +  notes
-                    + " \" WHERE "
+                    + "\" WHERE "
                     + "transaction_id = "
                     + transID;                                
         }
@@ -221,7 +223,7 @@ public class TransactionDetails
             updateTransactionQuery[0] = "UPDATE debit_transactions SET "
                     + " amount = "
                     + itemsNo
-                    + ", info = \" "
+                    + ", info = \""
                     + notes
                     + "\" where transaction_id = "
                     + transID ;
@@ -237,18 +239,18 @@ public class TransactionDetails
                     + "year = "
                     + year
                     + " WHERE transaction_id = "
-                    + transID ;
-        
-        // run the queries
-        dbConn = new DatabaseConnection();
-        dbConn.connect();
+                    + transID ;                
         
         for (int queryCounter = 0 ; 
                 queryCounter < updateTransactionQuery.length ; queryCounter++)
         {
+            // run the queries
+            dbConn = new DatabaseConnection();
+            dbConn.connect();
+        
             boolean result = dbConn.update(
                     updateTransactionQuery[queryCounter]); 
-            
+            System.out.println("\n" + updateTransactionQuery[queryCounter] + "\n" ) ;
             if(false == result)
             {
                 return result ; 

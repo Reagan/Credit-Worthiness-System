@@ -71,13 +71,15 @@ public class DatabaseConnection
             while(result.next())
             {       
                 String [] innerRes = new String[noOfColumns] ;
-                
+                System.out.println("\n Created String: # [" + noOfColumns + "]\n");
                 
                 for(int resCounter = 1; resCounter <= noOfColumns; 
                         resCounter ++)
                 {                      
-                    innerRes[resCounter-1] = result.getObject(resCounter).toString() ;                    
+                    innerRes[resCounter-1] = result.getObject(resCounter).toString() ; 
+                    System.out.print(innerRes[resCounter-1] + "\t") ;
                 }
+                 System.out.println("\n") ;
                  
                 retResults.add(innerRes) ;
             }                                

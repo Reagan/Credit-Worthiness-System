@@ -95,10 +95,10 @@ public class LeftPanel extends JPanel
         deleteUserButton = new DepthButton(deleteUserAction);
         
         userName = new JLabel(" ");
-        userName.setFont(new Font("Serif", Font.PLAIN, 18));
+        userName.setFont(new Font("sanserif", Font.PLAIN, 18));
         
         joinedDate = new JLabel(" ");
-        joinedDate.setFont(new Font("Serif", Font.PLAIN, 11));
+        joinedDate.setFont(new Font("sanserif", Font.PLAIN, 11));
         
         // lay out the components        
         add(Box.createRigidArea(new Dimension(0,35)));

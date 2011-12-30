@@ -99,9 +99,6 @@ public class BottomCenterPanel extends JPanel
         // get the currently selected user
         final int userID = CreditWorthinessSystem.getCurrentUserID() ;
         
-        JOptionPane.showMessageDialog(null, " Getting transactions for user : "
-                + userID, "User Transaction Details", JOptionPane.PLAIN_MESSAGE);
-        
         // Indicate on status bar that fetching for
         // user's transactions
         StatusBar.updateStatusMessage("Obtaining user's transactions");

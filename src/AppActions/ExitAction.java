@@ -16,6 +16,7 @@ public class ExitAction extends AbstractedAction
     private String appMessage ;
     private String aboutDialogTitle ;
     private int messageType ;
+    public static boolean closeWindow = false ;
     
     public ExitAction()
     {

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.41, for debian-linux-gnu (i486)
+-- MySQL dump 10.13  Distrib 5.5.17, for Win32 (x86)
 --
 -- Host: localhost    Database: cws
 -- ------------------------------------------------------
--- Server version	5.1.41-3ubuntu12.10
+-- Server version	5.5.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -50,6 +50,7 @@ CREATE TABLE `credit_transactions` (
   `transaction_id` int(11) DEFAULT NULL,
   `items_id` int(11) DEFAULT NULL,
   `items_number` int(11) DEFAULT NULL,
+  `info` blob,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -60,7 +61,7 @@ CREATE TABLE `credit_transactions` (
 
 LOCK TABLES `credit_transactions` WRITE;
 /*!40000 ALTER TABLE `credit_transactions` DISABLE KEYS */;
-INSERT INTO `credit_transactions` VALUES (1,1,1,1),(2,2,3,1),(3,3,5,1),(4,4,9,5),(5,5,10,1),(6,6,11,1),(7,7,14,1),(8,8,4,1),(9,9,10,2),(10,10,6,1),(11,11,12,1),(12,12,15,1),(13,13,16,2),(14,14,10,7),(15,15,10,2),(16,16,8,1),(17,17,2,1),(18,18,10,5),(19,19,13,1),(20,20,17,3);
+INSERT INTO `credit_transactions` VALUES (1,1,1,1,'data1'),(2,2,3,1,'data2'),(3,3,5,1,'data3'),(4,4,9,5,'data4'),(5,5,10,1,'data5'),(6,6,11,1,'data6'),(7,7,14,1,'data7'),(8,8,4,1,'data8'),(9,9,10,2,'data9'),(10,10,6,1,'data10'),(11,11,12,1,'data11'),(12,12,15,1,'data12'),(13,13,16,2,'data13'),(14,14,10,7,'data14'),(15,15,10,2,'data15'),(16,16,8,1,'data16'),(17,17,2,1,'data17'),(18,18,10,5,'data18'),(19,19,13,1,'data19'),(20,20,17,3,'data20');
 /*!40000 ALTER TABLE `credit_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,7 +118,7 @@ CREATE TABLE `debit_transactions` (
 
 LOCK TABLES `debit_transactions` WRITE;
 /*!40000 ALTER TABLE `debit_transactions` DISABLE KEYS */;
-INSERT INTO `debit_transactions` VALUES (1,24,300,''),(2,25,200,''),(3,26,69,''),(4,27,200,''),(5,28,200,''),(6,29,100,''),(7,30,20,''),(8,31,200,''),(9,32,50,''),(10,33,500,'');
+INSERT INTO `debit_transactions` VALUES (1,24,300,'data1'),(2,25,200,'data2'),(3,26,69,'data3'),(4,27,200,'data4'),(5,28,200,'data5'),(6,29,100,'data6'),(7,30,20,'data7'),(8,31,200,'data8'),(9,32,50,'data9'),(10,33,500,'data10');
 /*!40000 ALTER TABLE `debit_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,4 +210,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-12-21  3:42:41
+-- Dump completed on 2011-12-30  3:12:44

@@ -39,7 +39,7 @@ public class MonthChartNavigator extends JPanel
     public MonthChartNavigator()
     {                
         // set the monthName and year
-        monthFont = new Font("Serif", Font.PLAIN, 17) ;
+        monthFont = new Font("sanSerif", Font.PLAIN, 17) ;
                
         // create the month Label and year
         monthNameLabel = new JLabel();   

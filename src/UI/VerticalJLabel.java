@@ -27,7 +27,7 @@ public class VerticalJLabel extends JPanel
     {
         labelFontColor = new Color(0, 0, 0);
         this.text = text;
-        stringFont = new Font("Serif", Font.PLAIN, 17) ;
+        stringFont = new Font("sanSerif", Font.PLAIN, 17) ;
        
         // lay out the components and display them
         setOpaque(false);

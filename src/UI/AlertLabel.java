@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import javax.swing.JComponent;
@@ -50,8 +51,8 @@ public class AlertLabel extends JComponent
         alertColor = overSpentColor ;
         alertStatus = OVERSPENT_CONDITION ;
         
-        statusFont = new Font("Serif", Font.PLAIN, 28);
-        statusAmountFont = new Font("Serif", Font.PLAIN, 13) ;
+        statusFont = new Font("sanSerif", Font.PLAIN, 28);
+        statusAmountFont = new Font("sanSerif", Font.PLAIN, 13) ;
         
         creditOrDebit = creditOrDebitAmount ;
         
@@ -65,6 +66,10 @@ public class AlertLabel extends JComponent
     {        
         // make a copy of the graphics Object
         Graphics2D graphics = (Graphics2D) g;
+        
+        // set the displayed font to be antialiased
+        graphics.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         
         // obtain the status of the alerter
         String currentStatus = (alertStatus == OVERSPENT_CONDITION) ?

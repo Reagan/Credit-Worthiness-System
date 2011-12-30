@@ -34,8 +34,6 @@ public class UserTransactionsModel extends AbstractListModel
         userTransactions = new UsersDetails() ;
                 
         // populate the transactions list
-        // @TODO: this should be populated from 
-        // the database
         transactions = populateTransactionsList() ;
         
         // populate the transactionIDs         

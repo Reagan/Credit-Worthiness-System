@@ -4,8 +4,12 @@
 package UI;
 
 import AppActions.MenuBar;
+import UI.Listeners.CWSWindowAdapter;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 
 /**
@@ -20,6 +24,7 @@ public class AppPanel extends JFrame
     private String applicationName = "Credit Worthiness System";
     private Dimension d = null; 
     private Toolkit toolKit = null; 
+    private CWSWindowAdapter exitAction = new CWSWindowAdapter();
     
     public AppPanel()
     {
@@ -32,7 +37,8 @@ public class AppPanel extends JFrame
         d = new Dimension(appWidth,appHeight);
         setTitle(applicationName);
         setSize(d);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(exitAction);
         
         // center the main window
         toolKit = Toolkit.getDefaultToolkit(); 
@@ -63,5 +69,5 @@ public class AppPanel extends JFrame
         // add a JmenuBar
         MenuBar menu = new MenuBar();
         setJMenuBar(menu);
-    }
+    }    
 }

@@ -3,6 +3,7 @@
  */
 package AppActions;
 
+import UI.BottomRightPanel;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -40,9 +41,8 @@ public class MenuBar extends JMenuBar
     private static AppAction changeSettingsAction ;
     private static AppAction exitAction ;
     private static AppAction newTransactionAction ;
-    private static AppAction deleteTransactionAction ;
-    private static AppAction saveTransactionDetailsAction ;
-    private static AppAction deleteTransactionDetailsAction ;
+    public static AppAction deleteTransactionAction ;
+    public static AppAction saveTransactionDetailsAction ;
     private static AppAction userTransLogAction ;
     private static AppAction monthlyReportAction ;
     private static AppAction pendingCreditItemsAction ;
@@ -124,7 +124,7 @@ public class MenuBar extends JMenuBar
         transactionsMenu.add(deleteTransactionMenuItem);
         
         saveTransactionDetailsAction = new AppAction(saveTransactionDetailsMenuItem,
-                                      "Save Transaction Details", false, KeyEvent.VK_S);
+                                      "Save Transaction Details", false, KeyEvent.VK_S);        
         saveTransactionDetailsMenuItem.setAction(saveTransactionDetailsAction);
         transactionsMenu.add(saveTransactionDetailsMenuItem);        
         
@@ -164,5 +164,28 @@ public class MenuBar extends JMenuBar
         deleteCurrentUserAction.enableAction(true);
         newTransactionAction.enableAction(true);
         userTransLogAction.enableAction(true);
+    }
+    
+    /**
+     * This method enable the save & delete transactions
+     * options
+     * @param state
+     * @param brp  
+     */
+    public static void enableTransactionOptions(boolean state)
+    {
+        // enable/disable the transactions options
+        if(true == state)
+        {
+            // only attach the bottomRightPanel instance
+            // when enabling a transaction
+            saveTransactionDetailsAction.addActionClass(new 
+                    UpdateTransactionDetailsAction());
+        }
+        
+        saveTransactionDetailsAction.setEnabled(state);
+        
+        // enable/disable the delete transaction option
+        deleteTransactionAction.setEnabled(state);
     }
 }

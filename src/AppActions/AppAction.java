@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -26,7 +27,9 @@ public class AppAction extends AbstractAction
         action = new AbstractedAction();
         
         this.parentComponent = parentComponent ;
-        putValue(Action.MNEMONIC_KEY, new Integer(keyEvent));
+        putValue(MNEMONIC_KEY, new Integer(keyEvent));
+        putValue(ACCELERATOR_KEY, 
+                KeyStroke.getKeyStroke(keyEvent, ActionEvent.CTRL_MASK));
         enableAction(enabledStatus);
     }
     

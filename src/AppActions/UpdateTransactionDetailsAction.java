@@ -5,6 +5,7 @@
 package AppActions;
 
 import DbConnection.TransactionDetails;
+import UI.BottomCenterPanel;
 import UI.BottomRightPanel;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -29,55 +30,54 @@ public class UpdateTransactionDetailsAction extends AbstractedAction
     private int transactionID ; 
     private BottomRightPanel transPanel ;
 
-    public UpdateTransactionDetailsAction(BottomRightPanel panel)
+    public UpdateTransactionDetailsAction()
     {
         aboutDialogTitle = "Alert!";
         appMessage = "Please fill missing information?";
         messageType = JOptionPane.YES_NO_OPTION;
-        transPanel = panel ;
         //transactionID = transID ;
     }
 
     @Override
     public void run() 
-    {
-        JOptionPane.showMessageDialog(null, "Saving details for transaction # " 
-                + transPanel.currTransactionID, 
-                "Editing details", JOptionPane.PLAIN_MESSAGE);
-        
+    {            
         // check if any changes made
         if(true == transPanel.dirty)
-        {
+        {System.out.println("Transaction Panel Dirty") ;
             // get the transaction type
-            int transType = transPanel.transactionType ;
+            int transType = BottomRightPanel.transactionType ;
             
             // get the current transaction ID
-            int transID = transPanel.currTransactionID ;
-            
+            int transID = BottomRightPanel.currTransactionID ;
+            System.out.println("TransID: " + transID + " TransType: " + transType);
             // get the date
-            String date = transPanel.date.getText() ;
-            
+            String date = BottomRightPanel.date.getText() ;
+            System.out.println("Date: " + date) ;
             // get the number of items
             int itemsNo = Integer.parseInt(BottomRightPanel.numberOfItems.getText()) ;
-            
+            System.out.println("Items #: " + itemsNo) ;
             // get the notes
-            String notes = transPanel.transactionNotes.getText() ;
-            
+            String notes = BottomRightPanel.transactionNotes.getText() ;
+            System.out.println("Notes: " + notes) ;
             // get selected item
             // get the selected index
-            int selectedIndexItem = transPanel.items.getSelectedIndex() ;
-            
+            int selectedIndexItem = BottomRightPanel.items.getSelectedIndex() ;
+            System.out.println("Selected Index Item: " + selectedIndexItem) ;
             // get the selected item
-            String selectedItem = (String) transPanel.itemsObt.get(selectedIndexItem) ;
-                        
+            String selectedItem = (String) BottomRightPanel.itemsObt.get(selectedIndexItem) ;
+            System.out.println("Selected Item: " + selectedItem) ;
             // insert the updated information to the database
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy") ;
             Date d = null;
-            try {
+            try 
+            {
                 d = df.parse(date);
-            } catch (ParseException ex) {
-                Logger.getLogger(UpdateTransactionDetailsAction.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            catch (ParseException ex) 
+            {
+                System.out.println("Error: " + ex.toString()) ;
             }
+            
             Calendar cal = Calendar.getInstance() ;
             cal.setTime(d);                        
             
@@ -88,11 +88,11 @@ public class UpdateTransactionDetailsAction extends AbstractedAction
             {
                 result = tDetails.updateTransactionDetails(transType, transID,
                 itemsNo, notes, selectedItem, cal.get(Calendar.DATE), 
-                cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+                cal.get(Calendar.MONTH)+1, cal.get(Calendar.YEAR));
             } 
             catch (SQLException ex) 
             {
-                Logger.getLogger(UpdateTransactionDetailsAction.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Error: " + ex.toString()) ;
             }
             
             if( false==result )
@@ -101,13 +101,27 @@ public class UpdateTransactionDetailsAction extends AbstractedAction
                         + "transaction details. Please try again", "Alert", 
                         JOptionPane.ERROR_MESSAGE);
             }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Saved details for transaction" 
+                + transPanel.currTransactionID
+                + " successfully",
+                "Editing details", JOptionPane.PLAIN_MESSAGE);
+                
+                // update the list of transactions to reflect the change
+                // in that transaction
+                BottomCenterPanel.setUserTransactionsModel();
+            }
             // set the dirty tag to false
             transPanel.dirty = false ;
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "No changes made to the transaction"
-                    , "Alert", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "You have not made any changes "
+                    + "for this transaction # [" 
+                    + transPanel.currTransactionID
+                    + "] ", 
+                    "Alert", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

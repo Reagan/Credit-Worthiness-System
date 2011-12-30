@@ -154,8 +154,8 @@ public class UsersDetails
                 + "AS item_number, day, month, year FROM (SELECT * FROM transactions "
                 + "WHERE customers_id = "
                 + userID
-                + ") AS s ";        
-        
+                + ") AS s ORDER BY year, month, day";        
+        System.out.println(getUserTransactionsQuery) ;
         dbConn = new DatabaseConnection();
         dbConn.connect();
         
@@ -179,7 +179,19 @@ public class UsersDetails
                     + " "
                     + months[Integer.parseInt(currTransaction[3])]
                     + " "
-                    + currTransaction[4]);                       
+                    + currTransaction[4]);  
+            
+            System.out.println("\n Transaction Details \n "
+                    + currTransaction[0].toString() 
+                    + " [" 
+                    + currTransaction[1].toString()
+                    + "], "
+                    + currTransaction[2]
+                    + " "
+                    + months[Integer.parseInt(currTransaction[3])]
+                    + " "
+                    + currTransaction[4]
+                    + "\n");
         }                
         
         return userTransactionsRes ;
@@ -198,7 +210,8 @@ public class UsersDetails
         
         getUserTransactionsIDsQuery = "SELECT transaction_id FROM transactions "
                 + "WHERE customers_id = "
-                + userID ;        
+                + userID 
+                + "  ORDER BY year, month, day";        
                 
         dbConn = new DatabaseConnection();
         dbConn.connect();

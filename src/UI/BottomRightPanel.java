@@ -4,6 +4,7 @@
 package UI;
 
 import AppActions.AppAction;
+import AppActions.MenuBar;
 import AppActions.UpdateTransactionDetailsAction;
 import DbConnection.ItemsDetails;
 import DbConnection.TransactionDetails;
@@ -54,7 +55,7 @@ public class BottomRightPanel extends JPanel
     public final static JComboBox items = new JComboBox(); ;
     
     private JLabel notesLabel ;
-    public static  JTextArea transactionNotes ;
+    public static JTextArea transactionNotes ;
     
     private JSeparator verticalSeparator ;      
     
@@ -71,14 +72,14 @@ public class BottomRightPanel extends JPanel
     private static AppAction settingsAction ;                
     private static AppAction saveTransactionAction ;                
     private static AppAction deleteTransactionAction ;
-    public  Vector itemsObt ;
-    public int transactionType ; // will store the transaction type
+    public static Vector itemsObt ;
+    public static int transactionType ; // will store the transaction type
     
     public BottomRightPanel()
     {
         // initialise the variablesprivate JLabel dateLabel ;
         // labels
-        dateLabel = new JLabel("Date");
+        dateLabel = new JLabel("Date (dd/MM/YYYY)");
         dateLabel.setBorder(BorderFactory
                 .createEmptyBorder(0, 5, 0, 5));
         
@@ -117,7 +118,7 @@ public class BottomRightPanel extends JPanel
         
         saveTransactionAction = new AppAction(saveTransactionButton, "Save"
                                         , false, KeyEvent.VK_S);
-        saveTransactionAction.addActionClass(new UpdateTransactionDetailsAction(BottomRightPanel.this));
+        saveTransactionAction.addActionClass(new UpdateTransactionDetailsAction());
         saveTransactionButton = new DepthButton(saveTransactionAction) ;
         
         deleteTransactionAction = new AppAction(deleteTransactionButton, "Delete"
@@ -231,11 +232,9 @@ public class BottomRightPanel extends JPanel
             
             String [] transactionDetails = transDetails
                     .getTransactionDetails(transactionID) ;
-            JOptionPane.showMessageDialog(null, transactionDetails, 
-                    "Transaction Details", JOptionPane.PLAIN_MESSAGE);
             
             String concatDate = transactionDetails[2] + "/" + transactionDetails[3]
-                    + "/ " + transactionDetails[4] ;
+                    + "/" + transactionDetails[4] ;
             
             date.setText(concatDate) ;
             numberOfItems.setText(transactionDetails[1]);
@@ -244,11 +243,17 @@ public class BottomRightPanel extends JPanel
             items.setSelectedIndex(Integer.parseInt(transactionDetails[0]) - 1 );
             items.repaint();
             
-            transactionNotes.setText("Info");  
+            transactionNotes.setText(transactionDetails[5]);  
+            
+            // set the transaction type
+            transactionType = Integer.parseInt(transactionDetails[6]) ;
             
             // enable the save and delete transaction buttons
             saveTransactionAction.enableAction(true);
             deleteTransactionAction.enableAction(true);
+            
+            // also enable the same option in the menubar
+            MenuBar.enableTransactionOptions(true);
         }                
     }
 }
