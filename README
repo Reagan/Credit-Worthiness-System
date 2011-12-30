@@ -1,0 +1,32 @@
+CREDIT WORTHINESS SYSTEM (vs 0.1)
+
+Objective
+#########
+This system will ensure that shopkeepers do not give out more stuff on credit than the credit limit for a particular user should be. It thus reduces the likelihood that a shopkeeper selling on credit does not make a loss.
+
+Features
+#########
+The system includes a number of features including: 
+
+	1. User Inventory and Management system that allows the creation of new user details and the editing of those user details
+	2. Transactions Management for users/customers allowing the shop keeper to view the dates, items, worth and other details of the transactions made by a user
+	3. Custom chart component that allows the shopkeeper to easily see if he/she is making a loss or a profit
+	4. Printing modules to allow the shop keeper to print out the pending transaction item logs and all transactions for all users
+
+Development
+############
+The system is developed in Java SE and runs on a MySQL db. Installation instructions are available in the INSTALLATION file
+
+Bugs
+####
+In case of bugs, please post them at https://bitbucket.org/reayn3/credit-worthiness-system-cws/issues?status=new&status=open or contact reayn3 at <reayn3@gmail.com>
+
+License
+#######
+
+This software is provided under the LGPL license
+
+
+
+Reayn3 30.12.2011
+

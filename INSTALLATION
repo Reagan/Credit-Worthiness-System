@@ -1,0 +1,24 @@
+CREDIT WORTHINESS SYSTEM (vs 0.1)
+
+Installation Instructions
+#########################
+
+To run the Credit Worthiness System, kindly do the following
+
+1. Install MySQL server on your machine (or on a network device)
+2. Create the database cws on the MySQL server using the following SQL command
+
+	CREATE DATABASE cws
+
+3. Create the tables and populate these tables using the file cws.sql as supplied with 
+the source code using the following MySQL command
+
+	mysql -u <username> -p cws < cws.sql
+
+and insert the MySQL password when prompted
+
+4. Create a folder called "images" in a directory one level above where the jar file for the application will be
+
+5. Run the jar file using the command 
+
+	java -jar Credit\ Worthiness\ System.jar
