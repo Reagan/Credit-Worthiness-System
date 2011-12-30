@@ -29,7 +29,7 @@ public class AlertLabel extends JComponent
     private final String OVERSPENT_TEXT = "Overspent" ;
     private final String UNDERSPENT_TEXT = "Underspent" ;
     
-    private Double creditOrDebit ;
+    private double creditOrDebit ;
     private final int ALERT_WIDTH = 165 ;
     private final int ALERT_HEIGHT = 60 ;
     private final int ARC_WIDTH = 20 ;
@@ -37,9 +37,9 @@ public class AlertLabel extends JComponent
     private final Color textColor = new Color(255, 255, 255);
     
     private final Point2D.Double alertConditionPosition 
-                = new Point2D.Double(5, 30);
+                = new Point2D.Double(11, 30);
     private final Point2D.Double amountOverOrUnderAmountPostion 
-            = new Point2D.Double(5, 50);
+            = new Point2D.Double(14, 50);
     
     private Font statusFont ;
     private Font statusAmountFont ;
@@ -115,4 +115,14 @@ public class AlertLabel extends JComponent
         DecimalFormat twoDForm = new DecimalFormat("#.##");
         return Double.valueOf(twoDForm.format(d));
     } 
+    
+    /**
+     * This method sets the amount by which the alerter
+     * should display
+     * @param amount 
+     */
+    public void setAlerterAmount(double amount)
+    {
+        creditOrDebit = amount ;
+    }
 }

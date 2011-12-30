@@ -142,12 +142,12 @@ public class UsersSelectionListener implements
                             
                             // set the credit limit status for user
                             // in the prominent right hand panel
-                            /*
+                            
                            CenterPanel.updateAlertLabel(
                                    getUserCreditOrDebitAmount(
                                         CreditWorthinessSystem.getCurrentUserID()
                                    )); 
-                           */
+                           
                             // load the transactions for the chart model                                                     
                             updateTransactionsChart();  
                             
@@ -188,9 +188,8 @@ public class UsersSelectionListener implements
         int [] currYearAndMonth = CenterPanel.getCurrentMonthAndYear() ;
         
         UsersDetails user = new UsersDetails() ;
-        creditOrDebitAmount = user.getCustCreditOrDebitAmount(currentUserID, 
-                currYearAndMonth[0], currYearAndMonth[1]) ;
-        
+        creditOrDebitAmount = user.getCustCreditOrDebitAmount(currentUserID) ;
+        System.out.println("->" + creditOrDebitAmount +"<-");
         return creditOrDebitAmount ;
     }
      

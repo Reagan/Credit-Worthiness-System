@@ -39,7 +39,7 @@ public class CenterPanel extends JPanel
     public CenterPanel()
     {
         // initialise the components
-        alerter = new AlertLabel(214.55);
+        alerter = new AlertLabel(0.00);
         monthNav = new MonthChartNavigator();
         title = new JLabel("Transactions");
         title.setFont(new Font("sanSerif", Font.PLAIN, 31));
@@ -127,7 +127,8 @@ public class CenterPanel extends JPanel
      */
     public static void updateAlertLabel(double amount)
     {
-        alerter = new AlertLabel(amount) ;
+        //alerter = new AlertLabel(amount) ;
+        alerter.setAlerterAmount(amount);
         
         if(amount < 0 ) 
         {
@@ -136,6 +137,9 @@ public class CenterPanel extends JPanel
         else 
         {
             alerter.alertStatus = AlertLabel.UNDERSPENT_CONDITION ;
-        }               
+        }       
+        
+        // repaint the alerter
+        alerter.repaint();
     }
 }

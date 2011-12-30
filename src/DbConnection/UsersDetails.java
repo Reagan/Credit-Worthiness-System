@@ -30,6 +30,8 @@ public class UsersDetails
     private String getCustCreditOrDebitAmountQuery ; // get the amount by which 
                                                     // a customer is in credit 
                                                     // or debit
+    private String getTotalExpenditureQuery ;
+    private String getCreditAmountQuery ;
     
     public UsersDetails(){}
 
@@ -372,43 +374,80 @@ public class UsersDetails
      * @param custID
      * @return 
      */
-    public double getCustCreditOrDebitAmount(int custID, int month, int year)
+    public double getCustCreditOrDebitAmount(int custID)
     {
+        double totalExpenditure = 0 ;
         double creditOrDebitAmount  = 0 ;
         
-        getCustCreditOrDebitAmountQuery = "SELECT ((SELECT credit_allowed FROM "
-                + "credit WHERE customers_id = "
+        // get the user's total expenditure
+        getTotalExpenditureQuery = "SELECT total_items_cost FROM (SELECT transaction_id, "
+                + "(c.items_number*items_cost) AS total_items_cost FROM items AS "
+                + "k, credit_transactions AS c WHERE k.items_id = c.items_id) AS t"
+                + ", (SELECT transaction_id,transaction_type FROM transactions "
+                + "WHERE customers_id="
                 + custID
-                + ") - SUM(total_items_cost)) AS credit_limit FROM  "
-                + "(SELECT transaction_id, (c.items_number*items_cost) AS "
-                + "total_items_cost FROM items AS k, credit_transactions AS "
-                + "c WHERE k.items_id = c.items_id) AS t, (SELECT "
-                + "transaction_id,transaction_type FROM transactions WHERE "
-                + "customers_id="
-                + custID
-                + "  AND month="
-                + month
-                + " AND year="
-                + year
-                + " ) AS s WHERE t.transaction_id = s.transaction_id " ;
+                + ") AS s WHERE "
+                + "t.transaction_id = s.trans"
+                + "action_id " ;
         
-        Vector amount = null ;
+        // get the total expenditure        
+        Vector expenditureAmount = null ;
         
         dbConn = new DatabaseConnection();
         dbConn.connect();
         
-        amount = dbConn.fetch(getCustCreditOrDebitAmountQuery);
+        expenditureAmount = dbConn.fetch(getTotalExpenditureQuery);
         
         // open up the returned values and 
         // return the user names in the desired 
         // format [firstname lastname]
-        for(int counter = 0, s = amount.size();
+        for(int counter = 0, s = expenditureAmount.size();
                 counter < s ; counter ++)
         {
-            String [] currAmount = (String[]) amount.get(counter) ;
-            creditOrDebitAmount = Double.parseDouble(currAmount[0]);
+            
+            String [] results = new String[1] ;
+            results = (String[]) expenditureAmount.get(counter) ;
+            totalExpenditure = Double.parseDouble(results[0]) ;
+                                      
+            System.out.println("\nTotal Expenditure\n"  
+                     + totalExpenditure
+                     + "\nYYYYYYYYYYYYYYYYYY\n");
+           
         }
         
-        return creditOrDebitAmount ;
-    }
+        // get the user's credit limit
+        getCreditAmountQuery = "SELECT credit_allowed FROM credit "
+                + "WHERE customers_id = "
+                + custID;
+        
+        // get the total Credit limit        
+        Vector creditAmount = null ;
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        creditAmount = dbConn.fetch(getCreditAmountQuery);
+        
+        // open up the returned values and 
+        // return the user names in the desired 
+        // format [firstname lastname]
+        for(int counter = 0, s = creditAmount.size();
+                counter < s ; counter ++)
+        {
+            
+            String [] results = new String[1] ;
+            results = (String[]) creditAmount.get(counter) ;
+            creditOrDebitAmount = Double.parseDouble(results[0]) ;
+                                      
+            System.out.println("\nCredit or Debit Amount\n"  
+                     + creditOrDebitAmount
+                     + "\nYYYYYYYYYYYYYYYYYY\n");
+           
+        }
+        
+        // get the difference to see if the customer is 
+        // underspending or overspending      
+        System.out.println("Difference: " + (creditOrDebitAmount - totalExpenditure)) ;
+        return creditOrDebitAmount - totalExpenditure ;
+    }        
 }
