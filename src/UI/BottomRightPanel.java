@@ -4,6 +4,7 @@
 package UI;
 
 import AppActions.AppAction;
+import AppActions.DeleteTransactionAction;
 import AppActions.MenuBar;
 import AppActions.UpdateTransactionDetailsAction;
 import DbConnection.ItemsDetails;
@@ -123,7 +124,8 @@ public class BottomRightPanel extends JPanel
         
         deleteTransactionAction = new AppAction(deleteTransactionButton, "Delete"
                                         , false, KeyEvent.VK_S);
-        deleteTransactionButton = new DepthButton(deleteTransactionAction) ;                 
+        deleteTransactionButton = new DepthButton(deleteTransactionAction) ; 
+        deleteTransactionAction.addActionClass(new DeleteTransactionAction());
         
         // lay out the elements
         layout = new GroupLayout(this);
@@ -254,6 +256,17 @@ public class BottomRightPanel extends JPanel
             
             // also enable the same option in the menubar
             MenuBar.enableTransactionOptions(true);
-        }                
+        }  
+        else
+        {
+            // in this case, the user wants all the fields 
+            // for transactions cleared
+            date.setText("") ;
+            numberOfItems.setText("");
+            items.setSelectedIndex(0);
+            transactionNotes.setText("");
+            
+        }
+            
     }
 }

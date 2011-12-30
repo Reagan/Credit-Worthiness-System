@@ -21,6 +21,7 @@ public class TransactionDetails
     private String getMinMaxMonthTransValForUserQuery ;
     private String getPlottedTransactionDetailsQuery ;
     private String [] updateTransactionQuery = new String[2] ;
+    private String [] deleteTransactionDetails = new String[2] ;
     
     public TransactionDetails(){}
     
@@ -188,6 +189,64 @@ public class TransactionDetails
         return transactionDetails ;
     }
     
+    /**
+     * This method deletes all information related to a specific
+     * transaction in the database
+     * @param transID
+     * @return 
+     */
+    public boolean deleteTransactionDetails(int transID, int transType) throws SQLException
+    {                        
+        if(1 == transType)
+        {
+            deleteTransactionDetails[0] = "DELETE FROM credit_transactions  "
+                    + " WHERE transaction_id = "
+                    + transID;                                
+        }
+        else if(2 == transType)
+        {
+            deleteTransactionDetails[0] = "DELETE FROM debit_transactions  "
+                    + " WHERE transaction_id = "
+                    + transID;    
+        }
+        
+        deleteTransactionDetails[1] = "DELETE FROM transactions  "
+                    + " WHERE transaction_id = "
+                    + transID;   
+        
+        // now run the queries
+         for (int queryCounter = 0 ; 
+                queryCounter < deleteTransactionDetails.length ; queryCounter++)
+        {
+            // run the queries
+            dbConn = new DatabaseConnection();
+            dbConn.connect();
+        
+            boolean result = dbConn.update(
+                    deleteTransactionDetails[queryCounter]); 
+            
+            if(false == result)
+            {
+                return result ; 
+            }
+        }        
+        
+        return true; 
+    }
+    
+    /**
+     * This method updates the details on a specific transaction
+     * @param transType
+     * @param transID
+     * @param itemsNo
+     * @param notes
+     * @param selectedItem
+     * @param day
+     * @param month
+     * @param year
+     * @return
+     * @throws SQLException 
+     */
     public boolean updateTransactionDetails(int transType, int transID, int itemsNo, 
             String notes, String selectedItem, int day
             , int month, int year ) throws SQLException
@@ -203,7 +262,7 @@ public class TransactionDetails
         }
         
         // insert the information into the database
-        /// start with the credit transactions
+        // start with the credit transactions
         if(1 == transType)
         {
             updateTransactionQuery[0] = "UPDATE credit_transactions SET "
@@ -250,7 +309,7 @@ public class TransactionDetails
         
             boolean result = dbConn.update(
                     updateTransactionQuery[queryCounter]); 
-            System.out.println("\n" + updateTransactionQuery[queryCounter] + "\n" ) ;
+            
             if(false == result)
             {
                 return result ; 

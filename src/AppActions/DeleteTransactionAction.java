@@ -3,6 +3,10 @@
  */
 package AppActions;
 
+import DbConnection.TransactionDetails;
+import UI.BottomCenterPanel;
+import UI.BottomRightPanel;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,7 +29,50 @@ public class DeleteTransactionAction extends AbstractedAction
     @Override
     public void run() 
     {
-        JOptionPane.showConfirmDialog(null, appMessage, 
+        int res = JOptionPane.showConfirmDialog(null, appMessage, 
                 aboutDialogTitle, messageType);
+        
+        if( res == JOptionPane.YES_OPTION )
+        {
+            // delete the currently selected transaction from 
+            // from the database and refresh the list of transactions
+            TransactionDetails tDetails = new TransactionDetails();
+            boolean result = false ;
+            
+            try 
+            {
+                result = tDetails.deleteTransactionDetails(
+                        BottomRightPanel.currTransactionID, BottomRightPanel.transactionType) ;
+            }
+            catch (SQLException ex) 
+            {
+                System.out.println("Error: " + ex.toString()) ;
+            }
+            
+            // inform the user if necessary
+            if( false==result )
+            {
+                JOptionPane.showMessageDialog(null, "There was an error deleting the "
+                        + "transaction details. Please try again", "Alert", 
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Deleted transaction details successfully",
+                "Deleted", JOptionPane.PLAIN_MESSAGE);
+                
+                // update the list of transactions to reflect the change
+                // in that transaction
+                BottomCenterPanel.setUserTransactionsModel();
+                
+                // set all the fields in the bottom right panel 
+                // as null
+                BottomRightPanel.setTransactionDetails(-1) ;
+                
+                // set the current transaction as -1
+                BottomRightPanel.currTransactionID = -1 ;
+            }
+                        
+        }
     }  
 }

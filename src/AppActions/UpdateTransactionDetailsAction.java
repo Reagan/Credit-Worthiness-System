@@ -43,29 +43,29 @@ public class UpdateTransactionDetailsAction extends AbstractedAction
     {            
         // check if any changes made
         if(true == transPanel.dirty)
-        {System.out.println("Transaction Panel Dirty") ;
+        {
             // get the transaction type
             int transType = BottomRightPanel.transactionType ;
             
             // get the current transaction ID
             int transID = BottomRightPanel.currTransactionID ;
-            System.out.println("TransID: " + transID + " TransType: " + transType);
+            
             // get the date
             String date = BottomRightPanel.date.getText() ;
-            System.out.println("Date: " + date) ;
+            
             // get the number of items
             int itemsNo = Integer.parseInt(BottomRightPanel.numberOfItems.getText()) ;
-            System.out.println("Items #: " + itemsNo) ;
+            
             // get the notes
             String notes = BottomRightPanel.transactionNotes.getText() ;
-            System.out.println("Notes: " + notes) ;
+            
             // get selected item
             // get the selected index
             int selectedIndexItem = BottomRightPanel.items.getSelectedIndex() ;
-            System.out.println("Selected Index Item: " + selectedIndexItem) ;
+            
             // get the selected item
             String selectedItem = (String) BottomRightPanel.itemsObt.get(selectedIndexItem) ;
-            System.out.println("Selected Item: " + selectedItem) ;
+            
             // insert the updated information to the database
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy") ;
             Date d = null;
@@ -81,6 +81,8 @@ public class UpdateTransactionDetailsAction extends AbstractedAction
             Calendar cal = Calendar.getInstance() ;
             cal.setTime(d);                        
             
+            // get the transaction details for the currently
+            // selected transaction
             TransactionDetails tDetails = new TransactionDetails();
             boolean result = false ;
             
