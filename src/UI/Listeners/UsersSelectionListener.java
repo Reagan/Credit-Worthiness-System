@@ -14,6 +14,7 @@ import UI.Charts.GraphNode;
 import UI.Charts.GraphPanel;
 import UI.Charts.Node;
 import UI.LeftPanel;
+import UI.MonthChartNavigator;
 import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.ItemSelectable;
 import java.awt.event.ActionEvent;
@@ -141,13 +142,16 @@ public class UsersSelectionListener implements
                             
                             // set the credit limit status for user
                             // in the prominent right hand panel
+                            /*
                            CenterPanel.updateAlertLabel(
                                    getUserCreditOrDebitAmount(
                                         CreditWorthinessSystem.getCurrentUserID()
                                    )); 
-                           
+                           */
                             // load the transactions for the chart model                                                     
-                            updateTransactionsChart();                            
+                            updateTransactionsChart();  
+                            
+                            MonthChartNavigator.activateMonthChartButtonNavigateButtons(true);
                         } 
                         catch (InterruptedException ex) 
                         {
