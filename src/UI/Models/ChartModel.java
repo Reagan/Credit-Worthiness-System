@@ -121,4 +121,14 @@ public class ChartModel
     {
         return yMinMaxValues ;
     }
+    
+    public void setMonth(int month)
+    {
+        currMonth = month;
+    }
+    
+    public void setYear(int year)
+    {
+        currYear = year;
+    }
 }

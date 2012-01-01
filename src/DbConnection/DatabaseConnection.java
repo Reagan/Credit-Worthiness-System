@@ -67,7 +67,7 @@ public class DatabaseConnection
             // return the query results
             ResultSetMetaData metaData = result.getMetaData();
             int noOfColumns = metaData.getColumnCount() ;
-            System.out.println("\nXXXXXXXX\n" + SQLStatement + "\nXXXXXXXXXXX\n") ;
+            
             while(result.next())
             {       
                 String [] innerRes = new String[noOfColumns] ;                
@@ -75,8 +75,7 @@ public class DatabaseConnection
                 for(int resCounter = 1; resCounter <= noOfColumns; 
                         resCounter ++)
                 {                      
-                    innerRes[resCounter-1] = (String) result.getObject(resCounter).toString() ; 
-                    System.out.println("tttttttttt: " + innerRes[resCounter-1].toString()) ;
+                    innerRes[resCounter-1] = (String) result.getObject(resCounter).toString() ;                     
                 }
                  
                 retResults.add(innerRes) ;

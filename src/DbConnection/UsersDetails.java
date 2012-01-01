@@ -157,7 +157,7 @@ public class UsersDetails
                 + "WHERE customers_id = "
                 + userID
                 + ") AS s ORDER BY year, month, day";        
-        System.out.println(getUserTransactionsQuery) ;
+        
         dbConn = new DatabaseConnection();
         dbConn.connect();
         
@@ -181,19 +181,7 @@ public class UsersDetails
                     + " "
                     + months[Integer.parseInt(currTransaction[3])]
                     + " "
-                    + currTransaction[4]);  
-            
-            System.out.println("\n Transaction Details \n "
-                    + currTransaction[0].toString() 
-                    + " [" 
-                    + currTransaction[1].toString()
-                    + "], "
-                    + currTransaction[2]
-                    + " "
-                    + months[Integer.parseInt(currTransaction[3])]
-                    + " "
-                    + currTransaction[4]
-                    + "\n");
+                    + currTransaction[4]);                         
         }                
         
         return userTransactionsRes ;
@@ -407,12 +395,7 @@ public class UsersDetails
             
             String [] results = new String[1] ;
             results = (String[]) expenditureAmount.get(counter) ;
-            totalExpenditure = Double.parseDouble(results[0]) ;
-                                      
-            System.out.println("\nTotal Expenditure\n"  
-                     + totalExpenditure
-                     + "\nYYYYYYYYYYYYYYYYYY\n");
-           
+            totalExpenditure = Double.parseDouble(results[0]) ;                                                             
         }
         
         // get the user's credit limit
@@ -438,16 +421,11 @@ public class UsersDetails
             String [] results = new String[1] ;
             results = (String[]) creditAmount.get(counter) ;
             creditOrDebitAmount = Double.parseDouble(results[0]) ;
-                                      
-            System.out.println("\nCredit or Debit Amount\n"  
-                     + creditOrDebitAmount
-                     + "\nYYYYYYYYYYYYYYYYYY\n");
-           
+ 
         }
         
         // get the difference to see if the customer is 
-        // underspending or overspending      
-        System.out.println("Difference: " + (creditOrDebitAmount - totalExpenditure)) ;
+        // underspending or overspending              
         return creditOrDebitAmount - totalExpenditure ;
     }        
 }

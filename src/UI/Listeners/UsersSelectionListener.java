@@ -11,7 +11,6 @@ import UI.BottomCenterPanel;
 import UI.CenterPanel;
 import UI.Charts.ChartPlot;
 import UI.Charts.GraphNode;
-import UI.Charts.GraphPanel;
 import UI.Charts.Node;
 import UI.LeftPanel;
 import UI.MonthChartNavigator;
@@ -20,16 +19,11 @@ import java.awt.ItemSelectable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -151,6 +145,7 @@ public class UsersSelectionListener implements
                             // load the transactions for the chart model                                                     
                             updateTransactionsChart();  
                             
+                            // activate the chart navigator buttons
                             MonthChartNavigator.activateMonthChartButtonNavigateButtons(true);
                         } 
                         catch (InterruptedException ex) 
@@ -189,7 +184,7 @@ public class UsersSelectionListener implements
         
         UsersDetails user = new UsersDetails() ;
         creditOrDebitAmount = user.getCustCreditOrDebitAmount(currentUserID) ;
-        System.out.println("->" + creditOrDebitAmount +"<-");
+        
         return creditOrDebitAmount ;
     }
      
@@ -255,36 +250,23 @@ public class UsersSelectionListener implements
         // unpack the transaction details for plotting
         for(int i = 0 ; i < transactionDetails.length ; i++)
         {                    
-                // get the current transaction day
-                int currTransDay = Integer.parseInt(transactionDetails[i][1]);                 
-                
-                /*
-                if(i > 0)
-                {
-                    int previousTransDay = Integer.parseInt(transactionDetails[i-1][1]);
-                    if(currTransDay == previousTransDay)
-                    {
-                        // if the two transactiosn were done on the same day
-                        //  then concatenate the results
-                        
-                    }
-                }                 
-                 */
+            // get the current transaction day
+            int currTransDay = Integer.parseInt(transactionDetails[i][1]);                                 
 
-                // get the transaction ID
-                transactionIDs.add(transactionDetails[i][0]);
+            // get the transaction ID
+            transactionIDs.add(transactionDetails[i][0]);
 
-                // get the day
-                transactionDays.add(transactionDetails[i][1]);
+            // get the day
+            transactionDays.add(transactionDetails[i][1]);
 
-                // get the item name
-                itemNames.add(transactionDetails[i][2]);
+            // get the item name
+            itemNames.add(transactionDetails[i][2]);
 
-                // get the items number
-                itemsNumber.add(transactionDetails[i][3]);
+            // get the items number
+            itemsNumber.add(transactionDetails[i][3]);
 
-                // get the total items cost
-                totalItemsCost.add(transactionDetails[i][4]);                    
+            // get the total items cost
+            totalItemsCost.add(transactionDetails[i][4]);                    
                                       
             
             // set the plot locations for the node
@@ -378,7 +360,8 @@ public class UsersSelectionListener implements
         allChartPlots[0] = plot1 ;
         
         // go to the debit plot
-        System.out.println("Setting the model for the chart");   
+        System.out.println("Setting the model for the chart"); 
+        
         // get the transactions for the selected user
         // for the obtained month and year
         CenterPanel.setChartModel(CenterPanel.month, CenterPanel.year, 

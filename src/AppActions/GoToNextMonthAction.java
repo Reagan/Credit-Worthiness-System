@@ -20,6 +20,7 @@ public class GoToNextMonthAction extends AbstractedAction
     public void run() 
     {
         currentMonthAndYear = Chart.goToNextMonth();
+                
         MonthChartNavigator.setMonthAndYear(currentMonthAndYear[0],
                 currentMonthAndYear[1]);
     }  

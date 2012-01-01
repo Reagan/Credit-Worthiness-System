@@ -55,17 +55,15 @@ public class MonthChartNavigator extends JPanel
                       
         // add the action for the previous month        
         monthMovePreviousAction = new AppAction(nextMonthButton, "<", 
-                                false, KeyEvent.VK_RIGHT);
+                                false, KeyEvent.VK_LEFT);
         monthMovePreviousAction.addActionClass(new GoToPreviousMonthAction());
         previousMonthButton = new DepthButton(monthMovePreviousAction);
-        previousMonthButton.addActionListener(monthMovePreviousAction);
         
         // add the action for the next month        
         monthMoveNextAction = new AppAction(nextMonthButton, ">", 
                                 false, KeyEvent.VK_RIGHT);
         monthMoveNextAction.addActionClass(new GoToNextMonthAction());
         nextMonthButton = new DepthButton(monthMoveNextAction);
-        nextMonthButton.addActionListener(monthMoveNextAction);
               
         
         // lay out the components
@@ -97,14 +95,13 @@ public class MonthChartNavigator extends JPanel
     }
     
     /**
-     * This method activates the buttons that allow a 
+     * This method activates/disables the buttons that allow a 
      * user to scroll from month to month
      * @param state 
      */
     public static void activateMonthChartButtonNavigateButtons(boolean state)
-    {        
-        monthMovePreviousAction.setEnabled(state);
-        
+    {                
+        monthMovePreviousAction.setEnabled(state);        
         monthMoveNextAction.setEnabled(state);
     }
 }

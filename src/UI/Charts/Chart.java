@@ -104,21 +104,24 @@ public class Chart extends JPanel
      */
     public static int[] goToNextMonth()
     {
+        // initialise the time variables
         int currTime[] = new int[2] ;
         int DAY_OF_MONTH = 1 ;
-        int month ; 
-        int year ;
         
+        // get the current date and time
+        // and move one month forward
         cal = new GregorianCalendar(cModel.getYear(), 
                 cModel.getMonth(), DAY_OF_MONTH) ;
         cal.add(Calendar.MONTH, 1);
         
-        month = cal.get(Calendar.MONTH) ;
-        year = cal.get(Calendar.YEAR) ;
+        // set the model to the next month
+        cModel.setMonth(cal.get(Calendar.MONTH)) ;
+        cModel.setYear(cal.get(Calendar.YEAR)) ;
         
-        grid.goToMonth(month, year, cModel.getYMinMax()); 
-        currTime[0] = month ;
-        currTime[1] = year ;
+        // ask the grid to month one month forward
+        grid.goToMonth(cModel.getMonth(), cModel.getYear(), cModel.getYMinMax()); 
+        currTime[0] = cModel.getMonth() ;
+        currTime[1] = cModel.getYear() ;
         
         return currTime;
     }
@@ -130,21 +133,23 @@ public class Chart extends JPanel
      */
     public static int[] goToPreviousMonth()
     {
+        // initialise the time variables
         int currTime[] = new int[2] ;
         int DAY_OF_MONTH = 1 ;
-        int month ; 
-        int year ;
         
+        // get the current date and time
+        // and move one month behind
         cal = new GregorianCalendar(cModel.getYear(), 
                 cModel.getMonth(), DAY_OF_MONTH);
         cal.add(Calendar.MONTH, -1);
         
-        month = cal.get(Calendar.MONTH) ;
-        year = cal.get(Calendar.YEAR) ;                
+        cModel.setMonth(cal.get(Calendar.MONTH)) ;
+        cModel.setYear(cal.get(Calendar.YEAR)) ;               
         
-        grid.goToMonth(month, year, cModel.getYMinMax());   
-        currTime[0] = month ;
-        currTime[1] = year ;
+        // ask the grid to month one month behind
+        grid.goToMonth(cModel.getMonth(), cModel.getYear(), cModel.getYMinMax());   
+        currTime[0] = cModel.getMonth() ;
+        currTime[1] = cModel.getYear() ;
         
         return currTime;
     }
