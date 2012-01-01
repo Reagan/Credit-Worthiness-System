@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.nio.DoubleBuffer;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -63,12 +64,9 @@ public class Grid extends JComponent
             calendarMonth = cModel.getMonth() ;
             calendarYear = cModel.getYear() ;
             this.yMinAndMaxValues = cModel.getYMinMax() ;
-            
+           
             // set layout properties
-            setOpaque(true);
-            
-            // setPreferredSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
-            setBackground(bgColor);
+            setOpaque(false);            
             setLayout(new BorderLayout());
     }
 
@@ -79,14 +77,14 @@ public class Grid extends JComponent
         calendarYear = year ;
         this.yMinAndMaxValues = yMinAndMaxValues ;
         
-        repaint();
+       repaint();
     }
     
     @Override
     protected void paintComponent(Graphics g) 
     {
         // get the graphics object
-        Graphics2D graphics  = (Graphics2D) g ;        
+        Graphics2D graphics  = (Graphics2D) g ;
         
         // add the antialis to make sure that the 
         // displayed text and images all look 
@@ -104,8 +102,7 @@ public class Grid extends JComponent
                 CHART_WIDTH, CHART_HEIGHT);
         
         // draw the gridLines depending on the
-        // month that the grid is for
-        
+        // month that the grid is for        
         graphics.setColor(gridLinesColor);
         int noOfDaysInMonth = getNumberOfDays(calendarMonth ,calendarYear) ;
         
@@ -154,6 +151,7 @@ public class Grid extends JComponent
         
         int monthDate = 1;
         
+        // draw the days in each month
         for(float  i = 1 , plottedXValue = X_POS
                     ; i<= noOfDaysInMonth
                         ; i++, plottedXValue += xSeparationValue
@@ -161,7 +159,7 @@ public class Grid extends JComponent
         {
             if((i==1 || i%((int)noOfDaysInMonth/NO_OF_VERTICAL_LINES) == 0 ) &&
                     i != noOfDaysInMonth)
-            {                    
+            {     
                 graphics.drawString( Integer.toString(monthDate)
                         , plottedXValue 
                             , Y_POS + CHART_HEIGHT + 17);                                                            
@@ -171,22 +169,26 @@ public class Grid extends JComponent
         // draw the values (y-axis)
         graphics.setColor(gridAxisValues);
         
-        for(int i = 0, plottedYValue = Y_POS, yValue = yMinAndMaxValues[yMinAndMaxValues.length-1]
-                ; i <= 5
-                    ; i++, plottedYValue += ySeparation, yValue -= ySeparationValue )
+        // make sure that the maximum value for the x-axis 
+        // is not 0
+        // this is the default condition when no user data has been loaded
+        if( 0 != yMinAndMaxValues[yMinAndMaxValues.length-1] )
         {
-            graphics.drawString( Integer.toString(yValue) , X_POS -30, 
-                    plottedYValue + 5);             
+            for(int i = 0, plottedYValue = Y_POS, 
+                    yValue = yMinAndMaxValues[yMinAndMaxValues.length-1]
+                    ; i <= 5
+                    ; i++, plottedYValue += ySeparation, yValue -= ySeparationValue )
+            {
+                graphics.drawString( Integer.toString(yValue) , X_POS -30, 
+                        plottedYValue + 5);             
+            }
         }
         
         // add the legend
-        drawLegend(graphics, legendItems, legendColors);
-        
-        // draw the nodes
-        // drawNode(graphics, TRANSACTION_ITEM_NODE, new Point2D.Double(100, 100));        
+        drawLegend(graphics, legendItems, legendColors);                       
         
         // finally get rid of the graphics object        
-        graphics.dispose();     
+        graphics = null ;            
     }
 
     /**
