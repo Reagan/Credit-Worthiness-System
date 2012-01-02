@@ -3,6 +3,7 @@
  */
 package AppActions;
 
+import UI.CenterPanel;
 import UI.Charts.Chart;
 import UI.MonthChartNavigator;
 
@@ -20,7 +21,7 @@ public class GoToPreviousMonthAction extends AbstractedAction
     public void run() 
     {
         currentMonthAndYear = Chart.goToPreviousMonth();
-                
+               
         MonthChartNavigator.setMonthAndYear(currentMonthAndYear[0],
                 currentMonthAndYear[1]);
     } 

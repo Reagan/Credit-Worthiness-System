@@ -3,6 +3,7 @@
  */
 package UI.Charts;
 
+import UI.CenterPanel;
 import UI.StackLayout;
 import UI.Models.ChartModel;
 import java.awt.BorderLayout;
@@ -33,7 +34,10 @@ public class Chart extends JPanel
     private static Color[] legendColors = { new Color(255, 0, 0), new Color(0, 97, 0)} ;
             
     private static Calendar cal ;        
-    private static ChartModel cModel ;       
+    private static ChartModel cModel ;   
+    
+    
+    public static int currTime[] = { 0,0 } ;
     
     public Chart()
     {
@@ -81,10 +85,10 @@ public class Chart extends JPanel
         // add the model to the grid and graph
         grid = new Grid(cModel) ;
         
-        if(null != chartPlots)
-        {
+       // if(null != chartPlots)
+       // {
             graph = new GraphPanel(cModel) ; 
-        }
+      //  }
         
         // Lay out the visual components
         setComponents();                 
@@ -97,7 +101,6 @@ public class Chart extends JPanel
     public static int[] goToNextMonth()
     {     
         // initialise the time variables
-        int currTime[] = new int[2] ;
         int DAY_OF_MONTH = 1 ;
         
         // get the current date and time
@@ -106,16 +109,20 @@ public class Chart extends JPanel
                 cModel.getMonth(), DAY_OF_MONTH) ;
         cal.add(Calendar.MONTH, 1);
         
+        // set the new times to the time variable
+        currTime[0] = cal.get(Calendar.MONTH);
+        currTime[1] = cal.get(Calendar.YEAR);
+        
+        // update the transactions list 
+        CenterPanel.updateTransactionsChart();  
+        
         // set the model to the next month
-        cModel.setMonth(cal.get(Calendar.MONTH)) ;
-        cModel.setYear(cal.get(Calendar.YEAR)) ;
+        // get the new max & min values for model        
+        cModel.setData(cal.get(Calendar.MONTH), cal.get(Calendar.YEAR), 
+                CenterPanel.minMaxTransValues,CenterPanel.allChartPlots);
         
         // ask the grid to month one month forward
-        grid.goToMonth(cModel.getMonth(), cModel.getYear(), cModel.getYMinMax());      
-        
-        // get the current variables
-        currTime[0] = cModel.getMonth() ;
-        currTime[1] = cModel.getYear() ;
+        updateChartUI();              
         
         return currTime;
     }
@@ -128,7 +135,6 @@ public class Chart extends JPanel
     public static int[] goToPreviousMonth()
     {        
         // initialise the time variables
-        int currTime[] = new int[2] ;
         int DAY_OF_MONTH = 1 ;
         
         // get the current date and time
@@ -137,16 +143,30 @@ public class Chart extends JPanel
                 cModel.getMonth(), DAY_OF_MONTH);
         cal.add(Calendar.MONTH, -1);
         
-        cModel.setMonth(cal.get(Calendar.MONTH)) ;
-        cModel.setYear(cal.get(Calendar.YEAR)) ;               
+        // set the new times to the time variable
+        currTime[0] = cal.get(Calendar.MONTH);
+        currTime[1] = cal.get(Calendar.YEAR);
+        
+        // update the transactions plot
+        CenterPanel.updateTransactionsChart();  
+        
+        // set the model to the previous month
+        // get the new max & min values for model        
+        cModel.setData(cal.get(Calendar.MONTH), cal.get(Calendar.YEAR), 
+                CenterPanel.minMaxTransValues,CenterPanel.allChartPlots);              
         
         // ask the grid to month one month behind
-        grid.goToMonth(cModel.getMonth(), cModel.getYear(), cModel.getYMinMax());   
-        
-        // get the current variables
-        currTime[0] = cModel.getMonth() ;
-        currTime[1] = cModel.getYear() ;
+        updateChartUI();        
         
         return currTime;
-    }             
+    }          
+    
+    public static void updateChartUI()
+    {
+        // update the grid
+        grid.goToMonth(cModel.getMonth(), cModel.getYear(), cModel.getYMinMax()); 
+        
+        // update the graph nodes      
+        graph.redrawPlots(cModel.getPlotsData());
+    }
 }

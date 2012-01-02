@@ -50,17 +50,29 @@ public class GraphPanel extends JPanel
         chartPlots =  (ChartPlot[]) cModel.getPlotsData() ;        
     }
 
+    public void redrawPlots(ChartPlot[] plots)
+    {System.out.println("redraw plots called");
+        chartPlots = plots ;        
+        repaint(0);
+    }
+    
     @Override
     protected void paintComponent(Graphics g) 
-    {
-        super.paintComponent(g);
-        
+    {            System.out.println("paint component called (for plots) ")     ;
         // convert the graphics object to
         // obtain the required nodes
         Graphics2D graphics = (Graphics2D) g ;
+        
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);                                        
 
+        if( null==chartPlots)
+        {
+            System.out.println("chartPlots are null") ;
+            return ;
+            
+        }
+        
         // extract the plots from the ChartPlot[]
         // and then extract the nodes and then
         // draw the nodes and the interconnecting 
@@ -103,7 +115,12 @@ public class GraphPanel extends JPanel
             // determine if a node is contained 
             // below the mouse position and display 
             // a pop up
-            Point p = e.getPoint();
+            if( chartPlots.length < 1 )
+            {
+                return ;
+            }
+            
+            Point p = e.getPoint(); 
             AbstractNode hoveredNode = getNodeAt(p);
             
             // display the popup with details about the 
@@ -133,7 +150,12 @@ public class GraphPanel extends JPanel
         
         @Override
         public void mousePressed(MouseEvent e)
-        {
+        {            
+            if( chartPlots.length < 1 )
+            {
+                return ;
+            }
+            
             Point p = e.getPoint();
             AbstractNode hoveredNode = getNodeAt(p);
             
@@ -184,8 +206,8 @@ public class GraphPanel extends JPanel
         
         private AbstractNode getNodeAt(Point p)
         {
-            AbstractNode hoveredNode = null;
-
+            AbstractNode hoveredNode = null;          
+            
             for(int plotsCounter = 0 , plots = chartPlots.length;
                 plotsCounter < plots ; plotsCounter ++ )
             {
