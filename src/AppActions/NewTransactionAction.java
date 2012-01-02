@@ -4,6 +4,7 @@
 package AppActions;
 
 import UI.BottomRightPanel;
+import UI.NewTransactionPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -26,6 +27,7 @@ public class NewTransactionAction extends AbstractedAction
     private String appMessage ;
     private String aboutDialogTitle ;
     private int messageType ;
+    private static NewTansactionDialog nDialog ;
     
     // Main panel options
     
@@ -40,15 +42,19 @@ public class NewTransactionAction extends AbstractedAction
     @Override
     public void run() 
     {
-        new NewTansactionDialog(new JFrame(), "Create New Transaction", 
+        nDialog  = new NewTansactionDialog(new JFrame(), "Create New Transaction", 
                 "Dialog to create New Transaction Details");
     }      
     
+    public static void closeFrame()
+    {
+        nDialog.dispose();
+    }
     
     // the inner class will display the
     // JFrame with the main ciomponents for the
     // transaction details
-    class NewTansactionDialog extends JDialog implements ActionListener 
+    private class NewTansactionDialog extends JDialog 
     {
         public NewTansactionDialog(JFrame parent, String title, String message) 
         {
@@ -61,19 +67,18 @@ public class NewTransactionAction extends AbstractedAction
                 setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);
             }
 
-            BottomRightPanel panel = new BottomRightPanel();   
-            BottomRightPanel.setTransactionDetails(1) ;
+            NewTransactionPanel panel = new NewTransactionPanel(NewTansactionDialog.this);   
+            
             getContentPane().add(panel);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             pack(); 
             setVisible(true);
         }
-  
-        @Override
-        public void actionPerformed(ActionEvent e) 
+        
+        public void closeDialog()
         {
-            setVisible(false); 
-            dispose(); 
+            setVisible(false) ;
+            dispose();
         }
     }
 }
