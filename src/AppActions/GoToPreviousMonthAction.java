@@ -20,7 +20,7 @@ public class GoToPreviousMonthAction extends AbstractedAction
     @Override
     public void run() 
     {
-        currentMonthAndYear = Chart.goToPreviousMonth();
+        currentMonthAndYear = Chart.goToMonth(-1);
                
         MonthChartNavigator.setMonthAndYear(currentMonthAndYear[0],
                 currentMonthAndYear[1]);

@@ -166,7 +166,8 @@ public class CenterPanel extends JPanel
                 
         // get the current year and month
         int [] currYearAndMonth = getChartMonthAndYear() ;  
-         
+        
+        // initialise the chart plots and max and min transaction values to null
         allChartPlots = null ;
         minMaxTransValues[0] = 0 ;
         minMaxTransValues[1] = 0 ;
@@ -176,10 +177,11 @@ public class CenterPanel extends JPanel
         TransactionDetails t = new TransactionDetails();
         numberOfTransForUserForMonth = t.getUserTransactionsNumberForMonth(CreditWorthinessSystem.getCurrentUserID()
                                     , currYearAndMonth[0],currYearAndMonth[1]);
-        System.out.println("\n\n" + currYearAndMonth[0] + "- " + currYearAndMonth[1]);
+        System.out.println("\n\n" + currYearAndMonth[0] + "- " + currYearAndMonth[1]
+                + " [" + CreditWorthinessSystem.getCurrentUserID()+ "]");
         if(numberOfTransForUserForMonth > 0)
         {           
-            System.out.println("Getting plots for model");
+            System.out.println("Getting plots for model, trans #: " + numberOfTransForUserForMonth);
             // get the minimum and maximum value for transactions
             minMaxTransValues =  t.getMinMaxTransValues(CreditWorthinessSystem.getCurrentUserID(), 
                     currYearAndMonth[0],currYearAndMonth[1]) ;

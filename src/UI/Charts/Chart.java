@@ -98,7 +98,7 @@ public class Chart extends JPanel
      * This method moves to the next month from 
      * that currently displayed on the chart
      */
-    public static int[] goToNextMonth()
+    public static int[] goToMonth(int additionalNumberOfMonths)
     {     
         // initialise the time variables
         int DAY_OF_MONTH = 1 ;
@@ -107,7 +107,7 @@ public class Chart extends JPanel
         // and move one month forward
         cal = new GregorianCalendar(cModel.getYear(), 
                 cModel.getMonth(), DAY_OF_MONTH) ;
-        cal.add(Calendar.MONTH, 1);
+        cal.add(Calendar.MONTH, additionalNumberOfMonths);
         
         // set the new times to the time variable
         currTime[0] = cal.get(Calendar.MONTH);
@@ -126,40 +126,6 @@ public class Chart extends JPanel
         
         return currTime;
     }
-    
-    /** 
-     * This method moves to the previous month from
-     * that displayed on the chart
-     * @return 
-     */
-    public static int[] goToPreviousMonth()
-    {        
-        // initialise the time variables
-        int DAY_OF_MONTH = 1 ;
-        
-        // get the current date and time
-        // and move one month behind
-        cal = new GregorianCalendar(cModel.getYear(), 
-                cModel.getMonth(), DAY_OF_MONTH);
-        cal.add(Calendar.MONTH, -1);
-        
-        // set the new times to the time variable
-        currTime[0] = cal.get(Calendar.MONTH);
-        currTime[1] = cal.get(Calendar.YEAR);
-        
-        // update the transactions plot
-        CenterPanel.updateTransactionsChart();  
-        
-        // set the model to the previous month
-        // get the new max & min values for model        
-        cModel.setData(cal.get(Calendar.MONTH), cal.get(Calendar.YEAR), 
-                CenterPanel.minMaxTransValues,CenterPanel.allChartPlots);              
-        
-        // ask the grid to month one month behind
-        updateChartUI();        
-        
-        return currTime;
-    }          
     
     public static void updateChartUI()
     {

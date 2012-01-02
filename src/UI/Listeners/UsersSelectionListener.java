@@ -138,7 +138,6 @@ public class UsersSelectionListener implements
                             
                             // set the credit limit status for user
                             // in the prominent right hand panel
-                            
                            CenterPanel.updateAlertLabel(
                                    getUserCreditOrDebitAmount(
                                         CreditWorthinessSystem.getCurrentUserID()
@@ -148,7 +147,7 @@ public class UsersSelectionListener implements
                             CenterPanel.updateTransactionsChart();  
                             
                             // update the chart component
-                            Chart.updateChartUI();
+                            Chart.goToMonth(0);
                                     
                             // activate the chart navigator buttons
                             MonthChartNavigator.activateMonthChartButtonNavigateButtons(true);
