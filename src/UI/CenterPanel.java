@@ -186,6 +186,13 @@ public class CenterPanel extends JPanel
             minMaxTransValues =  t.getMinMaxTransValues(CreditWorthinessSystem.getCurrentUserID(), 
                     currYearAndMonth[0],currYearAndMonth[1]) ;
 
+            // correct for similar values of minimum and maximum to
+            // ensure that a NAN is not obtained
+            if( minMaxTransValues[0] == minMaxTransValues[1] )
+            {
+                minMaxTransValues[0] = 0 ;
+            }
+            
             // get the number of days in a month
             int noOfDaysInMonth ;
             Calendar cal = new GregorianCalendar(currYearAndMonth[0], 
@@ -248,7 +255,7 @@ public class CenterPanel extends JPanel
                 Point2D.Double plotsLocationA = new Point2D.Double(Double.parseDouble(transactionDetails[i][1])
                         ,Double.parseDouble(transactionDetails[i][4])) ;
 
-                System.out.println("[" + plotsLocationA.x + "," + plotsLocationA.y + "] \n" ) ;
+                System.out.println("A[" + plotsLocationA.x + "," + plotsLocationA.y + "] \n" ) ;
 
                 // scale the node
                 // get the translated values
@@ -256,7 +263,8 @@ public class CenterPanel extends JPanel
                     + ( (plotsLocationA.x - 1)* (570-72)/(noOfDaysInMonth-1) )),
                     ( 200  - 2 - ( (plotsLocationA.y - minMaxTransValues[0]) * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]) ))) ;
 
-                System.out.println("[" + plotsLocation0.x + "," + plotsLocation0.y + "] \n" ) ;
+                System.out.println("B[" + plotsLocation0.x + "," + plotsLocation0.y + "] \n"
+                        + minMaxTransValues[0] + " - " + minMaxTransValues[1]) ;
 
                 String[] infor = {transactionDetails[i][2], 
                                 transactionDetails[i][4]}; 
