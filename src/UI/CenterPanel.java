@@ -4,6 +4,7 @@
 package UI;
 
 import DbConnection.TransactionDetails;
+import DbConnection.UsersDetails;
 import UI.Charts.Chart;
 import UI.Charts.ChartPlot;
 import UI.Charts.GraphNode;
@@ -13,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
@@ -125,13 +127,11 @@ public class CenterPanel extends JPanel
     public static int[] getChartMonthAndYear()
     {
         if( Chart.currTime[0] == 0 )
-        {
-            System.out.println("Chart Time empty, using current date & time") ;
+        {            
             return getCurrentMonthAndYear() ;
         }
         else
-        {
-            System.out.println("Using Chart time: ");
+        {            
             return Chart.currTime ;
         }
     }
@@ -163,7 +163,9 @@ public class CenterPanel extends JPanel
     public static void updateTransactionsChart() 
     {        
         int numberOfTransForUserForMonth = 0; 
-                
+        double creditLimit = 0 ; // stores the credit limit
+        double[] transactionCredits ; // stores the credit items for the transactions
+        
         // get the current year and month
         int [] currYearAndMonth = getChartMonthAndYear() ;  
         
@@ -177,11 +179,15 @@ public class CenterPanel extends JPanel
         TransactionDetails t = new TransactionDetails();
         numberOfTransForUserForMonth = t.getUserTransactionsNumberForMonth(CreditWorthinessSystem.getCurrentUserID()
                                     , currYearAndMonth[0],currYearAndMonth[1]);
-        System.out.println("\n\n" + currYearAndMonth[0] + "- " + currYearAndMonth[1]
-                + " [" + CreditWorthinessSystem.getCurrentUserID()+ "]");
+                        
         if(numberOfTransForUserForMonth > 0)
-        {           
-            System.out.println("Getting plots for model, trans #: " + numberOfTransForUserForMonth);
+        {                                  
+            // get the credit limit for a user
+             UsersDetails userDetails = new UsersDetails();
+             creditLimit = Double.parseDouble(
+                     userDetails.getUserCreditLimit(CreditWorthinessSystem
+                        .getCurrentUserID(), currYearAndMonth[0],currYearAndMonth[1])) ;
+                        
             // get the minimum and maximum value for transactions
             minMaxTransValues =  t.getMinMaxTransValues(CreditWorthinessSystem.getCurrentUserID(), 
                     currYearAndMonth[0],currYearAndMonth[1]) ;
@@ -205,11 +211,14 @@ public class CenterPanel extends JPanel
             // create plot instance
             // ChartPlots should be 2 to have one for credit transactions
             // and another for debit transactions
-            allChartPlots = new ChartPlot[1] ;
+            allChartPlots = new ChartPlot[2] ;
 
             // start with the credit plot
             // determine the number of nodes in creditplot
             ChartPlot plot1 = new ChartPlot(ChartPlot.TRANSACTION_PLOT,
+                    numberOfTransForUserForMonth);
+            
+            ChartPlot plot2 = new ChartPlot(ChartPlot.CREDIT_PLOT,
                     numberOfTransForUserForMonth);
 
              // get the transactions details
@@ -221,6 +230,7 @@ public class CenterPanel extends JPanel
 
             // set the number of nodes for the transanction details
             GraphNode[] nodes = new GraphNode[numberOfTransForUserForMonth];
+            GraphNode[] creditNodes = new GraphNode[numberOfTransForUserForMonth];
 
             // initialise the variables to store the results
             Vector<String> transactionIDs = new Vector<String>() ; 
@@ -229,6 +239,50 @@ public class CenterPanel extends JPanel
             Vector<String> itemsNumber = new Vector<String>() ;
             Vector<String> totalItemsCost = new Vector<String>() ;
 
+            // initialise the credit transactions limit
+            transactionCredits = new double[transactionDetails.length];
+            
+            // get the minimum transaction amounts
+            for(int i = 0 ; i < transactionDetails.length ; i++)
+            { 
+                Point2D.Double plotsLocationA = new Point2D.Double(
+                        Double.parseDouble(transactionDetails[i][1])
+                        ,Double.parseDouble(transactionDetails[i][4])) ;
+                
+                // get the credit transactions items for each transaction
+                transactionCredits[i] = creditLimit ;
+                creditLimit = transactionCredits[i] - plotsLocationA.y ;                   
+            }
+            
+            // compare the transaction details to the minimum 
+            // value for the transactions and use this to 
+            // scale the plotted transactions
+            double[] storedCoords = new double[transactionDetails.length] ;
+           
+            // copy each of the variables from one array to
+            // another to prevent copying arrays by reference
+            for (int i=0; i<transactionCredits.length;i++)
+            {
+                storedCoords[i] = transactionCredits[i];
+            }
+            
+            Arrays.sort(storedCoords);
+            
+            // set the max value
+            if( minMaxTransValues[minMaxTransValues.length-1]
+                    < storedCoords[storedCoords.length-1]) 
+            {
+                minMaxTransValues[minMaxTransValues.length-1] =
+                       (int) storedCoords[storedCoords.length-1];
+            }
+            
+            // set the minimum value
+             if( storedCoords[0] < minMaxTransValues[0] ) 
+            {
+                minMaxTransValues[0] =
+                       (int) storedCoords[0];
+            }
+            
             // unpack the transaction details for plotting
             for(int i = 0 ; i < transactionDetails.length ; i++)
             {                    
@@ -253,19 +307,20 @@ public class CenterPanel extends JPanel
 
                 // set the plot locations for the node
                 Point2D.Double plotsLocationA = new Point2D.Double(Double.parseDouble(transactionDetails[i][1])
-                        ,Double.parseDouble(transactionDetails[i][4])) ;
-
-                System.out.println("A[" + plotsLocationA.x + "," + plotsLocationA.y + "] \n" ) ;
+                        ,Double.parseDouble(transactionDetails[i][4])) ;              
 
                 // scale the node
                 // get the translated values
                 Point2D.Double plotsLocation0 = new Point2D.Double(( 72 
                     + ( (plotsLocationA.x - 1)* (570-72)/(noOfDaysInMonth-1) )),
                     ( 200  - 2 - ( (plotsLocationA.y - minMaxTransValues[0]) * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]) ))) ;
-
-                System.out.println("B[" + plotsLocation0.x + "," + plotsLocation0.y + "] \n"
-                        + minMaxTransValues[0] + " - " + minMaxTransValues[1]) ;
-
+                
+                // scale the credits plot
+                // get the credit plot translated
+                Point2D.Double plotsLocationC = new Point2D.Double(( 72 
+                    + ( (plotsLocationA.x - 1)* (570-72)/(noOfDaysInMonth-1) )),
+                    ( 200  - 2 - ( (transactionCredits[i] - minMaxTransValues[0]) * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]) ))) ;                
+                
                 String[] infor = {transactionDetails[i][2], 
                                 transactionDetails[i][4]}; 
 
@@ -273,82 +328,18 @@ public class CenterPanel extends JPanel
                 int[] transIDs = {Integer.parseInt(transactionDetails[i][0])};
                 nodes[i] = new GraphNode(transIDs , 
                         Node.TRANSACTION_ITEM_NODE, plotsLocation0, infor) ;
+                
+                creditNodes[i] = new GraphNode(transIDs , 
+                        Node.CREDIT_ITEM_NODE, plotsLocationC, infor) ;
 
                 // add the node to the plot
                 plot1.addNode(nodes[i]);
-            }
-
-            /*
-
-            // set the transaction IDs
-            int[] transactionsID0 = {1234, 4567 } ;
-            String[] info = {"Rice, Biscuits, Milk", "200"} ;
-
-            int [] transactionsID1 = {2345};
-            String[] info1 = {"Rice", "200"} ;
-
-            int[] transactionsID2 = {1234, 4567 } ;
-            String[] info2 = {"Rice, Biscuits, Milk", "200"} ;
-
-            int [] transactionsID3 = {2345};
-            String[] info3 = {"Rice", "200"} ;                                    
-
-             // set the plot locations for the nodes
-            Point2D.Double plotsLocationA = new Point2D.Double(12,100) ;
-
-            // get the translated values
-            Point2D.Double plotsLocation0 = new Point2D.Double(( 72 
-                    + (plotsLocationA.x * (minMaxTransValues[1]-minMaxTransValues[0]-2)/noOfDaysInMonth )),
-                    ( 200  - 2 - ( plotsLocationA.y * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]-2) ))) ;
-
-            // actual values for  node
-            Point2D.Double plotsLocationB = new Point2D.Double(18,280) ;
-
-            // translated values for a node
-            Point2D.Double plotsLocation1 = new Point2D.Double(( 72 
-                    + (plotsLocationB.x * (minMaxTransValues[1]-minMaxTransValues[0]-2)/noOfDaysInMonth )),
-                    ( 200  - 2 - ( plotsLocationB.y * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]-2) ))) ;
-
-            // actual values for  node
-            Point2D.Double plotsLocationC = new Point2D.Double(20,280) ;
-
-            // translated values for a node
-            Point2D.Double plotsLocation2 = new Point2D.Double(( 72 
-                    + (plotsLocationC.x * (minMaxTransValues[1]-minMaxTransValues[0]-2)/noOfDaysInMonth )),
-                    ( 200  - 2 - ( plotsLocationC.y * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]-2) ))) ;
-
-            // actual values for  node
-            Point2D.Double plotsLocationD = new Point2D.Double(23,200) ;
-
-            // translated values for a node
-            Point2D.Double plotsLocation3 = new Point2D.Double(( 72 
-                    + (plotsLocationD.x * (minMaxTransValues[1]-minMaxTransValues[0]-2)/noOfDaysInMonth )),
-                    ( 200  - 2 - ( plotsLocationD.y * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]-2) ))) ;
-
-            // add all the variables into the nodes
-            nodes[0] = new GraphNode(transactionsID0, Node.TRANSACTION_ITEM_NODE, plotsLocation0, info) ;
-            nodes[1] = new GraphNode(transactionsID1, Node.TRANSACTION_ITEM_NODE, plotsLocation1, info1) ;
-            nodes[2] = new GraphNode(transactionsID2, Node.TRANSACTION_ITEM_NODE, plotsLocation2, info1) ;
-            nodes[3] = new GraphNode(transactionsID3, Node.TRANSACTION_ITEM_NODE, plotsLocation3, info1) ;
-
-            // add the nodes to the plot
-            plot1.addNode(nodes[0]);
-            plot1.addNode(nodes[1]);
-            plot1.addNode(nodes[2]);
-            plot1.addNode(nodes[3]);
-
-            */
-
+                plot2.addNode(creditNodes[i]);
+            }          
+            
             // add these to the array of plots
             allChartPlots[0] = plot1 ;
-
-            // go to the debit plot
-            System.out.println("Finished setting the model for the chart"); 
-
-            // get the transactions for the selected user
-            // for the obtained month and year
-           // CenterPanel.setChartModel(currYearAndMonth[0], currYearAndMonth[1], 
-            //        minMaxTransValues, allChartPlots);
+            allChartPlots[1] = plot2 ;           
         }        
     }
 }

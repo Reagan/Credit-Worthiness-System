@@ -51,14 +51,14 @@ public class GraphPanel extends JPanel
     }
 
     public void redrawPlots(ChartPlot[] plots)
-    {System.out.println("redraw plots called");
+    {
         chartPlots = plots ;        
         repaint(0);
     }
     
     @Override
     protected void paintComponent(Graphics g) 
-    {            System.out.println("paint component called (for plots) ")     ;
+    {            
         // convert the graphics object to
         // obtain the required nodes
         Graphics2D graphics = (Graphics2D) g ;
@@ -67,8 +67,7 @@ public class GraphPanel extends JPanel
                 RenderingHints.VALUE_ANTIALIAS_ON);                                        
 
         if( null==chartPlots)
-        {
-            System.out.println("chartPlots are null") ;
+        {            
             return ;
             
         }

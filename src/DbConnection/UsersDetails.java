@@ -32,6 +32,7 @@ public class UsersDetails
                                                     // or debit
     private String getTotalExpenditureQuery ;
     private String getCreditAmountQuery ;
+    private String [] getCustomerCreditLimit ;
     
     public UsersDetails(){}
 
@@ -109,6 +110,77 @@ public class UsersDetails
         // return the [ day, month & year ]
         return  results[0] + "," + months[Integer.parseInt(results[1])] + " "
                 + results[2] ;
+    }
+    
+    public String getUserCreditLimit(int userID, int month, int year)
+    { 
+        double totalExpenditure = 0 ;
+        double creditOrDebitAmount  = 0 ;
+        
+        // get the user's total expenditure
+        getTotalExpenditureQuery = "SELECT total_items_cost FROM (SELECT transaction_id, "
+                + "(c.items_number*items_cost) AS total_items_cost FROM items AS "
+                + "k, credit_transactions AS c WHERE k.items_id = c.items_id) AS t"
+                + ", (SELECT transaction_id,transaction_type FROM transactions "
+                + "WHERE customers_id="
+                + userID
+                + " AND month < "
+                + month
+                + " AND year= "
+                + year
+                + ") AS s WHERE "
+                + "t.transaction_id = s.trans"
+                + "action_id " ;
+        
+        // get the total expenditure        
+        Vector expenditureAmount = null ;
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        expenditureAmount = dbConn.fetch(getTotalExpenditureQuery);
+        
+        // open up the returned values and 
+        // return the user names in the desired 
+        // format [firstname lastname]
+        for(int counter = 0, s = expenditureAmount.size();
+                counter < s ; counter ++)
+        {
+            
+            String [] results = new String[1] ;
+            results = (String[]) expenditureAmount.get(counter) ;
+            totalExpenditure = totalExpenditure + Double.parseDouble(results[0]) ;                                                             
+        }
+        
+        // get the user's credit limit
+        getCreditAmountQuery = "SELECT credit_allowed FROM credit "
+                + "WHERE customers_id = "
+                + userID;
+        
+        // get the total Credit limit        
+        Vector creditAmount = null ;
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        creditAmount = dbConn.fetch(getCreditAmountQuery);
+        
+        // open up the returned values and 
+        // return the user names in the desired 
+        // format [firstname lastname]
+        for(int counter = 0, s = creditAmount.size();
+                counter < s ; counter ++)
+        {
+            
+            String [] results = new String[1] ;
+            results = (String[]) creditAmount.get(counter) ;
+            creditOrDebitAmount = Double.parseDouble(results[0]) ;
+ 
+        }
+        
+        // get the difference to see if the customer is 
+        // underspending or overspending              
+        return Double.toString(creditOrDebitAmount - totalExpenditure) ;
     }
     
     public String getUserAvatarName(String userName)
@@ -395,7 +467,7 @@ public class UsersDetails
             
             String [] results = new String[1] ;
             results = (String[]) expenditureAmount.get(counter) ;
-            totalExpenditure = Double.parseDouble(results[0]) ;                                                             
+            totalExpenditure = totalExpenditure + Double.parseDouble(results[0]) ;                                                             
         }
         
         // get the user's credit limit
