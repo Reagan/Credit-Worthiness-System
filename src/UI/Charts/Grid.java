@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -35,14 +36,16 @@ import javax.swing.JComponent;
  * 
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
-public class Grid extends JComponent
+public final class Grid extends JComponent
 {
-    private final int CHART_WIDTH = 500 ;
-    private final int CHART_HEIGHT = 200 ;
-    private final int Y_POS = 7 ;
-    private final int X_POS = 79 ;
+    public static int GRID_WIDTH  ;
+    public static int GRID_HEIGHT  ;
+    public static int Y_POS = 7 ;
+    public static int X_POS = 30 ;
     private final int NO_OF_HORIZONTAL_LINES = 5 ;
     private final int NO_OF_VERTICAL_LINES = 10 ;
+    private final int BUFFER_HEIGHT = 17 ;
+    private final int BUFFER_WIDTH = 30 ;
    
     private final Color bgColor  = Color.WHITE ;
     private final Color gridBorderColor = new Color(51, 51, 51) ;
@@ -59,15 +62,23 @@ public class Grid extends JComponent
     private Legend legend = new Legend();
     
     public Grid(ChartModel cModel)
-    {   
-            // initialise variables
-            calendarMonth = cModel.getMonth() ;
-            calendarYear = cModel.getYear() ;
-            this.yMinAndMaxValues = cModel.getYMinMax() ;
-           
-            // set layout properties
-            setOpaque(false);            
-            setLayout(new BorderLayout());
+    {           
+        // obtain the dimensions for the grid and its axis data    
+        X_POS += Chart.insets.left ;
+        Y_POS += Chart.insets.top ;
+        
+        // use this data to set the grid data information
+        GRID_WIDTH = getWidth() -  ( X_POS  + BUFFER_WIDTH ) ;
+        GRID_HEIGHT = getHeight() - ( Y_POS  + BUFFER_HEIGHT );               
+        
+        // initialise variables
+        calendarMonth = cModel.getMonth() ;
+        calendarYear = cModel.getYear() ;
+        this.yMinAndMaxValues = cModel.getYMinMax() ;
+
+        // set layout properties
+        setOpaque(false);            
+        setLayout(new BorderLayout());
     }
 
     public void goToMonth(int month, int year, 
@@ -94,12 +105,12 @@ public class Grid extends JComponent
            
         // fill the background 
         graphics.setColor(bgColor);
-        graphics.fillRect(X_POS , Y_POS, CHART_WIDTH, CHART_HEIGHT);
+        graphics.fillRect(X_POS , Y_POS, GRID_WIDTH, GRID_HEIGHT);
         
         // draw the grid 
         graphics.setColor(gridBorderColor);
         graphics.drawRect(X_POS, Y_POS , 
-                CHART_WIDTH, CHART_HEIGHT);
+                GRID_WIDTH, GRID_HEIGHT);
         
         // draw the gridLines depending on the
         // month that the grid is for        
@@ -108,8 +119,8 @@ public class Grid extends JComponent
         
         // get the separation values for the
         // lines and the values plotted
-        int xSeparation = CHART_WIDTH / NO_OF_VERTICAL_LINES ;
-        int ySeparation = CHART_HEIGHT / NO_OF_HORIZONTAL_LINES ;
+        int xSeparation = GRID_WIDTH / NO_OF_VERTICAL_LINES ;
+        int ySeparation = GRID_HEIGHT / NO_OF_HORIZONTAL_LINES ;
         
         // y-values separation values
         Arrays.sort(yMinAndMaxValues);
@@ -117,14 +128,14 @@ public class Grid extends JComponent
                                     - yMinAndMaxValues[0] ) / NO_OF_HORIZONTAL_LINES ;
          
         // x-values separation values
-        float xSeparationValue = (float) ( (float) CHART_WIDTH / (noOfDaysInMonth - 1 ))  ;
+        float xSeparationValue = (float) ( (float) GRID_WIDTH / (noOfDaysInMonth - 1 ))  ;
         
         // plot the horizontal lines
         for(int i = 1, plottedYValue = Y_POS + ySeparation
                 ; i < 5
                     ; i++, plottedYValue += ySeparation)
         {
-            graphics.drawLine( X_POS + 1, plottedYValue, X_POS + CHART_WIDTH -1, 
+            graphics.drawLine( X_POS + 1, plottedYValue, X_POS + GRID_WIDTH -1, 
                         plottedYValue);             
         }
         
@@ -134,7 +145,7 @@ public class Grid extends JComponent
                         ; i++, plottedXValue += xSeparation)
         {
             graphics.drawLine( plottedXValue, Y_POS + 1, plottedXValue, 
-                        Y_POS + CHART_HEIGHT - 1);             
+                        Y_POS + GRID_HEIGHT - 1);             
         }
         
         // draw the days of the month (x-axis)
@@ -146,8 +157,8 @@ public class Grid extends JComponent
         
         // draw the last point on the x-axis
         graphics.drawString( Integer.toString(noOfDaysInMonth)
-                        , X_POS + CHART_WIDTH 
-                            , Y_POS + CHART_HEIGHT + 17);
+                        , X_POS + GRID_WIDTH 
+                            , Y_POS + GRID_HEIGHT + BUFFER_HEIGHT);
         
         int monthDate = 1;
         
@@ -162,7 +173,7 @@ public class Grid extends JComponent
             {     
                 graphics.drawString( Integer.toString(monthDate)
                         , plottedXValue 
-                            , Y_POS + CHART_HEIGHT + 17);                                                            
+                            , Y_POS + GRID_HEIGHT + BUFFER_HEIGHT);                                                            
             }
         }
         
@@ -179,7 +190,7 @@ public class Grid extends JComponent
                     ; i <= 5
                     ; i++, plottedYValue += ySeparation, yValue -= ySeparationValue )
             {
-                graphics.drawString( Integer.toString(yValue) , X_POS -30, 
+                graphics.drawString( Integer.toString(yValue) , X_POS - BUFFER_WIDTH, 
                         plottedYValue + 5);             
             }
         }
@@ -215,6 +226,8 @@ public class Grid extends JComponent
         if(legendColors == null || legendItems.length < 1)
             return;
         
+        // these are the dimensions of the little 
+        // squares drawn to represent the legend items
         int boxWidth = 9 ;
         int boxHeight = 9 ;
         String creditLimitText = "Credit Limit" ;
@@ -223,15 +236,34 @@ public class Grid extends JComponent
         // draw each of the rects with the 
         // various color types for the drawn items
         graphics.setColor(new Color(255, 0, 0));
-        graphics.fillRect(468, 22, boxWidth, boxHeight);
+        graphics.fillRect(( GRID_WIDTH - 82 ), ( 22 + Y_POS ), boxWidth, boxHeight);
         
         graphics.setColor(new Color(0, 97, 0));
-        graphics.fillRect(468, 37, boxWidth, boxHeight);
+        graphics.fillRect(( GRID_WIDTH - 82 ), ( 37 + Y_POS ), boxWidth, boxHeight);
         
         // draw the strings for the legend items
         graphics.setColor(new Color(51, 51, 51)) ;
-        graphics.drawString(creditLimitText, 479, 30);
-        graphics.drawString(transactions, 479, 47);
+        graphics.drawString(creditLimitText, ( GRID_WIDTH - 71 ), ( 30 + Y_POS ) );
+        graphics.drawString(transactions, ( GRID_WIDTH - 71 ), ( 47 + Y_POS ) );
         
-    }       
+    }  
+    
+    // provide the dimensions for the grid 
+    // relative to the chart container
+    @Override
+    public int getHeight()
+    {
+        // difference betwee the chart and grid height
+        // is 33 pixels
+        return Chart.CHART_HEIGHT - Chart.insets.top - Chart.insets.bottom;
+    }
+    
+    @Override
+    public final int getWidth()
+    {
+        // difference in the width of the contained
+        // grid and the chart is 140 pixels
+        return Chart.CHART_WIDTH - Chart.insets.left - Chart.insets.right ;
+    }
+    
 }

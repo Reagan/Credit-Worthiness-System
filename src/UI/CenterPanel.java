@@ -8,6 +8,7 @@ import DbConnection.UsersDetails;
 import UI.Charts.Chart;
 import UI.Charts.ChartPlot;
 import UI.Charts.GraphNode;
+import UI.Charts.Grid;
 import UI.Charts.Node;
 import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.Dimension;
@@ -18,12 +19,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 /**
  *
@@ -54,7 +57,15 @@ public class CenterPanel extends JPanel
         getCurrentMonthAndYear();
         
         // create a new Chart instance
-        chart = new Chart();       
+        chart = new Chart();    
+        
+        // add a test border
+        /**
+        Border outterBorder = BorderFactory.createEmptyBorder(10,10,10,10);
+        Border innerBorder = BorderFactory.createTitledBorder("Chart");
+        Border compoundBorder = BorderFactory.createCompoundBorder(outterBorder, innerBorder);
+        chart.setBorder(compoundBorder);
+        **/
         
         // set the model to null since no user has been selected
         allChartPlots = null ;
@@ -162,6 +173,7 @@ public class CenterPanel extends JPanel
     
     public static void updateTransactionsChart() 
     {        
+        // set the initial variables
         int numberOfTransForUserForMonth = 0; 
         double creditLimit = 0 ; // stores the credit limit
         double[] transactionCredits ; // stores the credit items for the transactions
@@ -311,15 +323,20 @@ public class CenterPanel extends JPanel
 
                 // scale the node
                 // get the translated values
-                Point2D.Double plotsLocation0 = new Point2D.Double(( 72 
-                    + ( (plotsLocationA.x - 1)* (570-72)/(noOfDaysInMonth-1) )),
-                    ( 200  - 2 - ( (plotsLocationA.y - minMaxTransValues[0]) * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]) ))) ;
+                // use the values from the grid to scale
+                Point2D.Double plotsLocation0 = new Point2D.Double(( Grid.X_POS - 4 
+                    + ( (plotsLocationA.x - 1)* Grid.GRID_WIDTH/(noOfDaysInMonth-1) )),
+                    ( Grid.GRID_HEIGHT - ( (plotsLocationA.y - 
+                        minMaxTransValues[0]) * Grid.GRID_HEIGHT/
+                        (minMaxTransValues[1]-minMaxTransValues[0]) ))) ;
                 
                 // scale the credits plot
                 // get the credit plot translated
-                Point2D.Double plotsLocationC = new Point2D.Double(( 72 
-                    + ( (plotsLocationA.x - 1)* (570-72)/(noOfDaysInMonth-1) )),
-                    ( 200  - 2 - ( (transactionCredits[i] - minMaxTransValues[0]) * 198.0/(minMaxTransValues[1]-minMaxTransValues[0]) ))) ;                
+                Point2D.Double plotsLocationC = new Point2D.Double(( Grid.X_POS - 4
+                    + ( (plotsLocationA.x - 1)* Grid.GRID_WIDTH/(noOfDaysInMonth-1) )),
+                    ( Grid.GRID_HEIGHT - ( (transactionCredits[i] - 
+                        minMaxTransValues[0]) * Grid.GRID_HEIGHT/
+                        (minMaxTransValues[1]-minMaxTransValues[0]) ))) ;                
                 
                 String[] infor = {transactionDetails[i][2], 
                                 transactionDetails[i][4]}; 

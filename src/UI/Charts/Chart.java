@@ -11,10 +11,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -24,8 +26,8 @@ import javax.swing.JPanel;
  */
 public class Chart extends JPanel 
 {
-    private final int CHART_WIDTH = 640 ;
-    private final int CHART_HEIGHT = 233 ;
+    public static int CHART_WIDTH = 640 ;
+    public static int CHART_HEIGHT = 233 ;
     private static Grid grid; // the grid object store separately for 
                         // further customization
     private static GraphPanel graph ; // will store the nodes and the chart lines   
@@ -38,16 +40,20 @@ public class Chart extends JPanel
     
     
     public static int currTime[] = { 0,0 } ;
+    public static Insets insets ;
     
     public Chart()
     {
+        CHART_WIDTH = getWidth()  ;
+        CHART_HEIGHT = getHeight() ;
+        
         // set the display properties       
         setPreferredSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
         setMinimumSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
         setOpaque(false);     
         setLayout(new StackLayout());
     }
-
+      
     /**
      * lays out the components of the
      * Chart
@@ -76,19 +82,27 @@ public class Chart extends JPanel
      * @param chartPlots  
      */
     public void setModel(int month, int year, 
-                int[] yMinAndMaxValues, ChartPlot[] chartPlots)
-    {                       
+               int[] yMinAndMaxValues, ChartPlot[] chartPlots)
+    {      
+        // check if a border has been applied around the 
+        // component for scaling  the component within
+        if(getBorder() != null )
+        {
+            // get the border insets
+            insets = getBorder().getBorderInsets(this);
+        }
+        else
+        {
+            insets = new Insets(0, 0, 0, 0) ;
+        }
+        
         // initialise the model
         cModel = new ChartModel(month, year, 
                 yMinAndMaxValues, chartPlots) ;        
                 
         // add the model to the grid and graph
         grid = new Grid(cModel) ;
-        
-       // if(null != chartPlots)
-       // {
-            graph = new GraphPanel(cModel) ; 
-      //  }
+        graph = new GraphPanel(cModel) ; 
         
         // Lay out the visual components
         setComponents();                 
@@ -135,4 +149,30 @@ public class Chart extends JPanel
         // update the graph nodes      
         graph.redrawPlots(cModel.getPlotsData());
     }
+    
+    // set the dimensions for the layout managers
+    @Override
+    public Dimension getPreferredSize()
+    {
+        return new Dimension(CHART_WIDTH, CHART_HEIGHT) ;
+    }
+    
+    @Override
+    public Dimension getMinimumSize()
+    {
+        return new Dimension(CHART_WIDTH, CHART_HEIGHT) ;
+    }
+    
+    // set the dimensions for the correct drawing of the element
+    @Override
+    public int getWidth()
+    {
+        return CHART_WIDTH ;
+    }
+    
+    @Override
+    public int getHeight()
+    {
+        return CHART_HEIGHT ;
+    }   
 }
