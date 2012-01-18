@@ -33,21 +33,14 @@ import javax.swing.event.MouseInputAdapter;
  */
 public class GraphPanel extends JPanel 
 {
-    private ChartPlot[] chartPlots ;
-    private GraphEdge graphEdge ;
-    private MouseHandler mh ;    
+    public ChartPlot[] chartPlots ;
+    private GraphEdge graphEdge ;   
        
     public GraphPanel(ChartModel cModel)
     {       
+        // set the layout variables
         setLayout(new BorderLayout());
-        setOpaque(false);
-       
-        mh = new MouseHandler();
-        addMouseListener(mh);
-        addMouseMotionListener(mh); 
-                
-        // assign the nodes from the chart Model
-        chartPlots =  (ChartPlot[]) cModel.getPlotsData() ;        
+        setOpaque(false);                             
     }
 
     public void redrawPlots(ChartPlot[] plots)
@@ -104,130 +97,5 @@ public class GraphPanel extends JPanel
             }
             
         }
-    }        
-    
-    final class MouseHandler extends MouseInputAdapter
-    {
-        @Override
-        public void mouseMoved(MouseEvent e)
-        {
-            // determine if a node is contained 
-            // below the mouse position and display 
-            // a pop up
-            if( chartPlots.length < 1 )
-            {
-                return ;
-            }
-            
-            Point p = e.getPoint(); 
-            AbstractNode hoveredNode = getNodeAt(p);
-            
-            // display the popup with details about the 
-            // node
-            if(hoveredNode != null)
-            {
-                // make sure that no popup for any node 
-                // is displayed
-                for(int plotsCounter = 0 , plots = chartPlots.length;
-                plotsCounter < plots ; plotsCounter ++ )
-                {
-                    ChartPlot plot = chartPlots[plotsCounter] ;
-                    AbstractNode[] plotNodes = plot.getPlot() ;
-
-                    // for each of the plots get the nodes
-                    for(int nodesCounter = 0, n = plotNodes.length ;
-                            nodesCounter < n; nodesCounter ++)
-                    {
-                        plotNodes[nodesCounter].popUpEnabled = false ;
-                    }
-                }                
-                
-                hoveredNode.popUpEnabled = true ;
-                repaint();
-            }
-        }
-        
-        @Override
-        public void mousePressed(MouseEvent e)
-        {            
-            if( chartPlots.length < 1 )
-            {
-                return ;
-            }
-            
-            Point p = e.getPoint();
-            AbstractNode hoveredNode = getNodeAt(p);
-            
-            if(hoveredNode != null  && e.getClickCount() == 2)
-            {
-                // select the node
-                // make sure first that no node has a border
-                // around it
-                for(int plotsCounter = 0 , plots = chartPlots.length;
-                plotsCounter < plots ; plotsCounter ++ )
-                {
-                    ChartPlot plot = chartPlots[plotsCounter] ;
-                    AbstractNode[] plotNodes = plot.getPlot() ;
-
-                    // for each of the plots get the nodes
-                    for(int nodesCounter = 0, n = plotNodes.length ;
-                            nodesCounter < n; nodesCounter ++)
-                    {
-                        plotNodes[nodesCounter].selected = false ;
-                    }
-                }                  
-             
-                hoveredNode.selected = true ;                
-                
-                // add the border around the node
-                repaint();               
-                 
-                // check if the transaction IDs are more than 1
-                // if more than 1, ask user to select from below panel
-                // if 1 then display transaction dialog
-                int[] transIDs = hoveredNode.getNodeTransactionIDs() ;
-                
-                if(transIDs.length > 1)
-                {
-                    JOptionPane.showMessageDialog(null, "More than 1 transaction is included here. Please use Transactions List below "                         
-                        ,"Multiple Transactions!", JOptionPane.PLAIN_MESSAGE);
-                }
-                else
-                {
-                    // display the update transactions dialog 
-                    // to display the transaction details
-                    UpdateTransactionAction updateAction = 
-                            new UpdateTransactionAction(0);
-                    updateAction.run();
-                }              
-            }
-        }
-        
-        private AbstractNode getNodeAt(Point p)
-        {
-            AbstractNode hoveredNode = null;          
-            
-            for(int plotsCounter = 0 , plots = chartPlots.length;
-                plotsCounter < plots ; plotsCounter ++ )
-            {
-                ChartPlot plot = chartPlots[plotsCounter] ;
-                AbstractNode[] plotNodes = plot.getPlot() ;
-
-                // for each of the plots get the nodes
-                for(int nodesCounter = 0, n = plotNodes.length ;
-                        nodesCounter < n; nodesCounter ++)
-                {
-                    hoveredNode = (AbstractNode)plotNodes[nodesCounter];
-                    if (hoveredNode.contains(p))
-                    {
-                        return(hoveredNode);
-                    }
-                }                
-            }
-            
-            // non of the nodes falls under the mouse
-            // ignore
-            return null;
-        }            
     }
 }

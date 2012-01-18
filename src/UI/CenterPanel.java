@@ -10,6 +10,8 @@ import UI.Charts.ChartPlot;
 import UI.Charts.GraphNode;
 import UI.Charts.Grid;
 import UI.Charts.Node;
+import UI.Charts.NodeSelected;
+import UI.Charts.NodeSelectedListener;
 import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -57,8 +59,20 @@ public class CenterPanel extends JPanel
         getCurrentMonthAndYear();
         
         // create a new Chart instance
-        chart = new Chart();    
+        chart = new Chart();
         
+        //~---------------------------------------------------------
+        // Attach a custom event listener to the chart
+        chart.addNodeSelectedListener(new NodeSelectedListener() {
+            @Override
+            public void nodeSelected(NodeSelected evt)
+            {
+                System.out.println("A Node was selected : trans # " + evt.getComponentNumber()) ;
+            }
+        });
+        //~---------------------------------------------------------
+        
+        //~---------------------------------------------------------
         // add a test border
         /**
         Border outterBorder = BorderFactory.createEmptyBorder(10,10,10,10);
@@ -66,6 +80,7 @@ public class CenterPanel extends JPanel
         Border compoundBorder = BorderFactory.createCompoundBorder(outterBorder, innerBorder);
         chart.setBorder(compoundBorder);
         **/
+        //~----------------------------------------------------------
         
         // set the model to null since no user has been selected
         allChartPlots = null ;

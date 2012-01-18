@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.event.EventListenerList;
 
 /**
  *
@@ -41,11 +42,16 @@ public class Chart extends JPanel
     
     public static int currTime[] = { 0,0 } ;
     public static Insets insets ;
+        
+    private MouseHandler mh ; 
+    
+    protected EventListenerList listenerList = new EventListenerList() ;
     
     public Chart()
     {
+        // initialise the dimensions to the chart component
         CHART_WIDTH = getWidth()  ;
-        CHART_HEIGHT = getHeight() ;
+        CHART_HEIGHT = getHeight() ;               
         
         // set the display properties       
         setPreferredSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
@@ -67,9 +73,15 @@ public class Chart extends JPanel
         // add the grid
         add(grid, StackLayout.TOP) ;
         
+        // and the graph
         if(null != graph)
         {
-            add(graph, StackLayout.TOP) ;        
+            add(graph, StackLayout.TOP) ;  
+            
+            // initialise and add the mouse listener to the graph
+            mh = new MouseHandler(graph, this);
+            addMouseListener(mh);
+            addMouseMotionListener(mh);
         }
     }     
     
@@ -175,4 +187,30 @@ public class Chart extends JPanel
     {
         return CHART_HEIGHT ;
     }   
+    
+    // Add the methods reposnsible for triggering the events
+    // method for adding the listener
+    public void addNodeSelectedListener(NodeSelectedListener listener) 
+    {
+            listenerList.add(NodeSelectedListener.class, listener);
+    }
+
+    // method for removing the listener
+    public void removeNodeSelectedListener(NodeSelectedListener listener) 
+    {
+            listenerList.remove(NodeSelectedListener.class, listener);
+    }
+
+    // method that should be run to trigger the node selected events
+    void fireNodeSelected(NodeSelected evt) 
+    {
+            Object[] listeners = listenerList.getListenerList();
+            for (int i = 0; i < listeners.length; i = i+2) 
+            {
+                    if (listeners[i] == NodeSelectedListener.class) 
+                    {
+                            ((NodeSelectedListener) listeners[i+1]).nodeSelected(evt);
+                    }
+            }
+    }
 }

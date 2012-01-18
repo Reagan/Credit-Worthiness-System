@@ -1,0 +1,13 @@
+appName
+appVersion
+dbName
+dbHost
+dbPort
+dbUser
+dbPass
+AboutInfo
+CreditPlotDisplayed
+HoverTransactionPopupDefaultOn
+ChartInitialDisplayMonthYear
+ImagesLocation
+DefaultUserImageIcon
