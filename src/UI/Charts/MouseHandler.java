@@ -95,15 +95,7 @@ public class MouseHandler extends MouseInputAdapter
                 {
                     plotNodes[nodesCounter].selected = false ;
                 }
-            }                  
-
-            //~-------------------------------------------
-            // Add code to fire the Node Selected Event
-            int dummyTransactionID = 3 ;
-            NodeSelected n = new NodeSelected(chart, dummyTransactionID) ;
-            
-            chart.fireNodeSelected(n);            
-            //~-------------------------------------------
+            }                   
            
             hoveredNode.selected = true ;                
 
@@ -122,11 +114,13 @@ public class MouseHandler extends MouseInputAdapter
             }
             else
             {
-                // display the update transactions dialog 
-                // to display the transaction details
-                UpdateTransactionAction updateAction = 
-                        new UpdateTransactionAction(0);
-                updateAction.run();
+                // obtain the transaction id for the selected 
+                // node
+                int selectedNodeID = transIDs[0] ;
+                
+                // fire custom event
+                NodeSelected n = new NodeSelected(chart, selectedNodeID) ;
+                chart.fireNodeSelected(n);                                           
             }              
         }
     }
@@ -157,4 +151,4 @@ public class MouseHandler extends MouseInputAdapter
         // ignore
         return null;
     }            
-}
+}	

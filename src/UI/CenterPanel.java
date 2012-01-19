@@ -3,6 +3,7 @@
  */
 package UI;
 
+import AppActions.UpdateTransactionAction;
 import DbConnection.TransactionDetails;
 import DbConnection.UsersDetails;
 import UI.Charts.Chart;
@@ -60,17 +61,21 @@ public class CenterPanel extends JPanel
         
         // create a new Chart instance
         chart = new Chart();
-        
-        //~---------------------------------------------------------
+
         // Attach a custom event listener to the chart
         chart.addNodeSelectedListener(new NodeSelectedListener() {
             @Override
             public void nodeSelected(NodeSelected evt)
             {
-                System.out.println("A Node was selected : trans # " + evt.getComponentNumber()) ;
+                // display the update transaction dialog with 
+                // details of the currently selected node
+                int selectedNode = evt.getComponentNumber() ;
+                
+                UpdateTransactionAction updateAction = 
+                        new UpdateTransactionAction(selectedNode);
+                updateAction.run();
             }
         });
-        //~---------------------------------------------------------
         
         //~---------------------------------------------------------
         // add a test border
