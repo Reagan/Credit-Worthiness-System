@@ -146,23 +146,24 @@ public abstract class AbstractNode
             graphics.setColor(Color.BLACK.RED) ;
             
             // draw the bigger rect
-            graphics.drawRect((int) plotLocation.x, (int) plotLocation.y, 
-                    nodeRadius, nodeRadius);
+            graphics.drawRect((int) plotLocation.x-3, (int) plotLocation.y, 
+                    nodeRadius + 1, nodeRadius);
             
             // draw the smaller rects at the 4 corners
             // top left
-            graphics.fillRect((int) plotLocation.x - 2, (int) plotLocation.y - 2,
+            graphics.fillRect((int) plotLocation.x - 5, (int) plotLocation.y - 2,
                     smallerWidthNodes, smallerWidthNodes);
             
             // top right
-            graphics.fillRect((int) plotLocation.x + nodeRadius - 2, (int) plotLocation.y - 2,
+            graphics.fillRect((int) plotLocation.x + nodeRadius - 3, (int) plotLocation.y - 2,
                     smallerWidthNodes, smallerWidthNodes);
             
             // bottom right
-            graphics.fillRect((int) plotLocation.x + nodeRadius - 2, 
+            graphics.fillRect((int) plotLocation.x + nodeRadius - 3, 
                     (int) plotLocation.y + nodeRadius - 2, smallerWidthNodes, smallerWidthNodes);
             
-            graphics.fillRect((int) plotLocation.x - 2, (int) plotLocation.y + nodeRadius - 2,
+            // bottom left
+            graphics.fillRect((int) plotLocation.x - 5, (int) plotLocation.y + nodeRadius - 2,
                     smallerWidthNodes, smallerWidthNodes);
             
             graphics.setColor(initialColor);
