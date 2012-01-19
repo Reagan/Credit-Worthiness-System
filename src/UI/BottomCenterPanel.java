@@ -31,7 +31,7 @@ public class BottomCenterPanel extends JPanel
 {
     private DepthButton createNewButton ;
     private DepthButton deleteButton ;
-    private static JList transactionsList ;    
+    public static JList transactionsList ;    
     
     private static UserTransactionsModel userTransactions ;
     private TransactionListener transactionListener ;
@@ -130,5 +130,10 @@ public class BottomCenterPanel extends JPanel
         
         // schedule the thread
         worker.execute();               
+    }
+    
+    public static UserTransactionsModel getUserTransactionsModel()
+    {
+        return userTransactions ;
     }
 }

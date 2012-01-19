@@ -47,8 +47,7 @@ public class TransactionListener implements ListSelectionListener
                 // now obtain the transaction ID for 
                 // the selected item
                 currentlySelectedTransactionID = 
-                        UserTransactionsModel.transIDs[selection] ;
-                System.out.println("\n Selected Transaction ID: " + currentlySelectedTransactionID) ;
+                        UserTransactionsModel.transIDs[selection] ;                
                 BottomRightPanel
                         .setTransactionDetails(UserTransactionsModel.transIDs[selection]);
             }                       
