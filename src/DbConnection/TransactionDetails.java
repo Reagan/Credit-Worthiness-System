@@ -318,4 +318,19 @@ public class TransactionDetails
         
         return true ;
     }
+    
+    /**
+     * This method inserts details for a new transaction into the database
+     * 
+     * @param date
+     * @param noOfItems
+     * @param selectedItem
+     * @param transactionNotes 
+     * @return  
+     */
+    public boolean insertTransactionDetails(String[] date, int noOfItems, 
+            int selectedItem, String transactionNotes)
+    {
+        return false ;
+    }
 }

@@ -12,8 +12,11 @@ import DbConnection.ItemsDetails;
 import DbConnection.TransactionDetails;
 import UI.Listeners.NewTransactionListener;
 import UI.Models.ItemsModel;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,10 +30,12 @@ import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -79,13 +84,40 @@ public class NewTransactionPanel extends JPanel
     public static Vector itemsObt ;
     public static int transactionType ; // will store the transaction type
     
-    public JDialog parent ; // stores the containing JDialog
+    public JFrame parent ; // stores the containing JDialog
+    public JTabbedPane transactionsPane ;
+    public JPanel debitPane ; // store details for debit transactions
+    public JPanel creditPane ; // store details for credit transactions
+    private final String creditPaneTitle = "Credit Transaction" ; 
+    private final String debitPaneTitle = "Debit Transaction" ;
+    private JPanel lowerPanel ; // will store all the button options
     
-    public NewTransactionPanel(JDialog dialog)
+    private JLabel debitDateLabel;
+    private JLabel debitAmountLabel ;
+    private JFormattedTextField debitDate ;
+    private JTextField debitAmount ;
+    private JLabel debitNotesLabel ;
+    private JTextArea debitTransactionNotes ;
+    private JSeparator debitVerticalSeparator ;
+    private GroupLayout debitPaneLayout ;
+    
+    public NewTransactionPanel(JFrame dialog)
     {
-        // initialise the variablesprivate JLabel dateLabel ;
+        // initialise the variables
         // labels
-        parent = dialog ;
+        parent = dialog ;                
+        
+        setLayout(new BorderLayout());      
+
+        // initialise the JTabbedPane to hold the panels
+        transactionsPane = new JTabbedPane();
+        
+        creditPane = new JPanel();
+        creditPane.setPreferredSize(new Dimension(430, 235));                     
+        creditPane.setBorder(BorderFactory.createTitledBorder("Credit Transaction Details"));
+        
+        // create & add options for the credit pane   
+        // Labels
         dateLabel = new JLabel("Date (dd/MM/YYYY)");
         dateLabel.setBorder(BorderFactory
                 .createEmptyBorder(0, 5, 0, 5));
@@ -114,7 +146,8 @@ public class NewTransactionPanel extends JPanel
         notesLabel = new JLabel("Notes");
         
         transactionNotes = new JTextArea();
-        transactionNotes.setMaximumSize(new Dimension(343, 198));
+        transactionNotes.setPreferredSize(new Dimension(215,150));
+        transactionNotes.setMinimumSize(new Dimension(215,150));
         
         verticalSeparator = new JSeparator(SwingConstants.VERTICAL);
         
@@ -136,8 +169,8 @@ public class NewTransactionPanel extends JPanel
                             new NewTransactionListener(NewTransactionPanel.this));
         
         // lay out the elements
-        layout = new GroupLayout(this);
-        setLayout(layout);
+        layout = new GroupLayout(creditPane);
+        creditPane.setLayout(layout);
         
         layout.setAutoCreateContainerGaps(true);
         layout.setAutoCreateGaps(true);
@@ -154,15 +187,10 @@ public class NewTransactionPanel extends JPanel
                 .addComponent(verticalSeparator)
                 .addGroup(layout.createParallelGroup()
                     .addComponent(notesLabel)
-                    .addComponent(transactionNotes)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(settingsButton)
-                        .addComponent(saveTransactionButton)
-                        .addComponent(cancelTransactionButton))));
+                    .addComponent(transactionNotes)));
         
         // lay out vertically
-        layout.setVerticalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup()
+        layout.setVerticalGroup(layout.createParallelGroup()
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(dateLabel)
                         .addComponent(date)
@@ -173,16 +201,89 @@ public class NewTransactionPanel extends JPanel
                     .addComponent(verticalSeparator)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(notesLabel)
-                        .addComponent(transactionNotes)))
-                .addGroup(layout.createParallelGroup()
-                    .addComponent(settingsButton)
-                    .addComponent(saveTransactionButton)
-                    .addComponent(cancelTransactionButton)));
-            
-        //finalise and display panel   
-        setOpaque(false);
-        setPreferredSize(new Dimension(430, 305));                     
-        setBorder(BorderFactory.createTitledBorder("Transaction Details"));
+                        .addComponent(transactionNotes)));
+        
+        // create debitPane options        
+        debitPane = new JPanel();      
+        debitPane.setPreferredSize(new Dimension(430, 235));   
+        debitPane.setBorder(BorderFactory.createTitledBorder("Debit Transaction Details"));
+        
+        debitDateLabel = new JLabel("Date (dd/MM/YYYY)");
+        debitDateLabel.setBorder(BorderFactory
+                .createEmptyBorder(0, 5, 0, 5));
+        
+        debitAmountLabel = new JLabel("Amount");
+        debitAmountLabel.setBorder(BorderFactory
+                .createEmptyBorder(20, 5, 0, 5));
+               
+    
+        // TextFields
+        debitDate = new JFormattedTextField(dateFomat);
+        debitDate.setMaximumSize(new Dimension(136, 20));
+        
+        debitAmount = new JTextField();
+        debitAmount.setMaximumSize(new Dimension(136, 20));
+        
+        debitNotesLabel = new JLabel("Notes");
+        
+        debitTransactionNotes = new JTextArea();
+        debitTransactionNotes.setPreferredSize(new Dimension(215,150));
+        debitTransactionNotes.setMinimumSize(new Dimension(215,150));
+        
+        debitVerticalSeparator = new JSeparator(SwingConstants.VERTICAL);
+               
+        
+        // lay out the elements
+        debitPaneLayout = new GroupLayout(debitPane);
+        debitPane.setLayout(debitPaneLayout);
+        
+        debitPaneLayout.setAutoCreateContainerGaps(true);
+        debitPaneLayout.setAutoCreateGaps(true);
+        
+        // lay out the horizontally
+        debitPaneLayout.setHorizontalGroup(debitPaneLayout.createSequentialGroup()
+                .addGroup(debitPaneLayout.createParallelGroup()
+                    .addComponent(debitDateLabel)
+                    .addComponent(debitDate)
+                    .addComponent(debitAmountLabel)
+                    .addComponent(debitAmount))
+                .addComponent(debitVerticalSeparator)
+                .addGroup(debitPaneLayout.createParallelGroup()
+                    .addComponent(debitNotesLabel)
+                    .addComponent(debitTransactionNotes)));
+        
+        // lay out vertically
+        debitPaneLayout.setVerticalGroup(debitPaneLayout.createParallelGroup()
+                    .addGroup(debitPaneLayout.createSequentialGroup()
+                        .addComponent(debitDateLabel)
+                        .addComponent(debitDate)
+                        .addComponent(debitAmountLabel)
+                        .addComponent(debitAmount))
+                    .addComponent(debitVerticalSeparator)
+                    .addGroup(debitPaneLayout.createSequentialGroup()
+                        .addComponent(debitNotesLabel)
+                        .addComponent(debitTransactionNotes)));
+
+        // add them to tabbed pane
+        transactionsPane.addTab(creditPaneTitle, creditPane);
+        transactionsPane.addTab(debitPaneTitle, debitPane);  
+        
+        // add the transactions pane to the main panel
+        add(transactionsPane, BorderLayout.CENTER);
+        
+        // add the buttons to the lower panel 
+        lowerPanel = new JPanel();
+        lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        lowerPanel.setPreferredSize(new Dimension(430, 40));
+
+        lowerPanel.add(settingsButton);
+        lowerPanel.add(saveTransactionButton);
+        lowerPanel.add(cancelTransactionButton);         
+        
+        add(lowerPanel, BorderLayout.SOUTH);
+        
+        //finalise and display panel           
+        setOpaque(false);             
     }
     
     private void getItems()
@@ -226,6 +327,8 @@ public class NewTransactionPanel extends JPanel
      * for a selected transaction for editing
      * @param transactionID 
      */
+    
+    /**
     public static void setTransactionDetails(int transactionID)
     {      
         // ensure that the main application knows that 
@@ -276,4 +379,5 @@ public class NewTransactionPanel extends JPanel
         }
             
     }
+    **/
 }

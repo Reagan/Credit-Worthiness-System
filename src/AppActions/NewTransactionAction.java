@@ -42,8 +42,7 @@ public class NewTransactionAction extends AbstractedAction
     @Override
     public void run() 
     {
-        nDialog  = new NewTansactionDialog(new JFrame(), "Create New Transaction", 
-                "Dialog to create New Transaction Details");
+        nDialog  = new NewTansactionDialog("Create New Transaction");
     }      
     
     public static void closeFrame()
@@ -54,20 +53,17 @@ public class NewTransactionAction extends AbstractedAction
     // the inner class will display the
     // JFrame with the main ciomponents for the
     // transaction details
-    private class NewTansactionDialog extends JDialog 
+    private class NewTansactionDialog extends JFrame 
     {
-        public NewTansactionDialog(JFrame parent, String title, String message) 
+        public NewTansactionDialog(String title) 
         {
-            super(parent, title, true);
-            
-            if (parent != null) 
-            {
-                Dimension parentSize = parent.getSize(); 
-                Point p = parent.getLocation(); 
-                setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);
-            }
+            super(title);
 
-            NewTransactionPanel panel = new NewTransactionPanel(NewTansactionDialog.this);   
+            Dimension parentSize = getSize(); 
+            Point p = getLocation(); 
+            setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);            
+
+            NewTransactionPanel panel = new NewTransactionPanel(this);   
             
             getContentPane().add(panel);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
