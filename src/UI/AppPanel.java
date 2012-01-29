@@ -6,17 +6,21 @@ package UI;
 import AppActions.MenuBar;
 import UI.Listeners.CWSWindowAdapter;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.net.URL;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
  *
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
-public class AppPanel extends JFrame
+public final class AppPanel extends JFrame
 {
     // Application dimensions
     private int appWidth = 911 ;
@@ -25,6 +29,7 @@ public class AppPanel extends JFrame
     private Dimension d = null; 
     private Toolkit toolKit = null; 
     private CWSWindowAdapter exitAction = new CWSWindowAdapter();
+    private String appPathIcon = "/AppImages/AppIcon.png" ;
     
     public AppPanel()
     {
@@ -39,6 +44,7 @@ public class AppPanel extends JFrame
         setSize(d);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(exitAction);
+        setApplicationIcon();
         
         // center the main window
         toolKit = Toolkit.getDefaultToolkit(); 
@@ -70,4 +76,15 @@ public class AppPanel extends JFrame
         MenuBar menu = new MenuBar();
         setJMenuBar(menu);
     }    
+    
+    /**
+     * This application sets the application icon
+     * for the credit worthiness system
+     */
+    public void setApplicationIcon()
+    {    
+        URL url = AppPanel.class.getResource(appPathIcon) ;
+        Image appIcon = Toolkit.getDefaultToolkit().getImage(url); 
+        setIconImage(appIcon);        
+    }
 }
