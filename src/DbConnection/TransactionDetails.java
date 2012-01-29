@@ -4,9 +4,13 @@
  */
 package DbConnection;
 
+import UI.NewTransactionPanel;
+import credit.worthiness.system.CreditWorthinessSystem;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,6 +26,9 @@ public class TransactionDetails
     private String getPlottedTransactionDetailsQuery ;
     private String [] updateTransactionQuery = new String[2] ;
     private String [] deleteTransactionDetails = new String[2] ;
+    private String [] insertCreditTransactionQuery = new String[2] ;
+    private String [] insertDebitTransactionQuery = new String[2] ;
+    private String mostRecentTransactionIDQuery = null ;
     
     public TransactionDetails(){}
     
@@ -321,16 +328,192 @@ public class TransactionDetails
     
     /**
      * This method inserts details for a new transaction into the database
-     * 
+     * inserts credit transactions
      * @param date
      * @param noOfItems
      * @param selectedItem
      * @param transactionNotes 
      * @return  
      */
-    public boolean insertTransactionDetails(String[] date, int noOfItems, 
-            int selectedItem, String transactionNotes)
+    public boolean insertCreditTransactionDetails(String[] date, int noOfItems, 
+            int selectedItem, String transactionNotes) throws SQLException
+    {       
+        int transactionType = 1 ;
+        int day = Integer.parseInt(date[0]); 
+        int month = Integer.parseInt(date[1]) - 1;
+        int year = Integer.parseInt(date[2]);
+        
+        // insert the information into the database
+        // start with the credit transactions
+        // insert into transactions table
+        insertCreditTransactionQuery[0] = "INSERT INTO transactions "
+                + "(transaction_type, customers_id, day, month, year) "
+                + " VALUES ("
+                + transactionType
+                + ","
+                + CreditWorthinessSystem.getCurrentUserID()
+                + ","
+                + day
+                + ","
+                + month
+                + ","
+                + year 
+                + ")";
+        
+        // insert into the debit transactions table  
+        createDatabaseObject();
+        boolean result = dbConn.insert(
+                insertCreditTransactionQuery[0]);   // insert into the transactions 
+                                                    // table        
+        if(false == result)
+        {
+            closeDatabaseConnection();
+            System.out.println("Result was null") ;
+            return result ; 
+        }
+        
+        // get the most recent transaction ID
+        int mostRecentTransID = getMostRecentTransactionID();
+        System.out.println("x - mostRecentTransID : " + mostRecentTransID) ;
+        
+        // insert into credit transactions table
+        insertCreditTransactionQuery[1] = "INSERT INTO credit_transactions "
+                + "( transaction_id, items_id, items_number, info )"
+                + " VALUES ("
+                + mostRecentTransID
+                + ","
+                + selectedItem
+                + ","
+                + noOfItems
+                + ", '"
+                + transactionNotes
+                + "')";
+                
+        // run the queries and insert the details into the database             
+        boolean result2 = dbConn.insert(
+                insertCreditTransactionQuery[1]); 
+
+        if(false == result2)
+        {
+            closeDatabaseConnection();
+            return result ; 
+        }              
+        
+        closeDatabaseConnection();
+        return true ;
+    }
+    
+    /** 
+     * This method inserts the details for debit transactions 
+     * into the database
+     * @param date
+     * @param selectedItem
+     * @param transactionNotes
+     * @return 
+     */
+    public boolean insertDebitTransactionDetails(String[] date, int debitAmount, 
+            String transactionNotes) throws SQLException
     {
-        return false ;
+        int transactionType = 2 ;
+        int day = Integer.parseInt(date[0]); 
+        int month = Integer.parseInt(date[1]) - 1;
+        int year = Integer.parseInt(date[2]);
+        
+        // insert the information into the database
+        // start with the debit transactions
+        //
+        // insert into transactions table
+        insertDebitTransactionQuery[0] = "INSERT INTO transactions "
+                + "(transaction_type, customers_id, day, month, year) "
+                + " VALUES ("
+                + transactionType
+                + ","
+                + CreditWorthinessSystem.getCurrentUserID()
+                + ","
+                + day
+                + ","
+                + month
+                + ","
+                + year 
+                + ")";                                                       
+                
+        // run the queries and insert the details into the database         
+        // insert into the debit transactions table  
+        createDatabaseObject();
+        boolean result = dbConn.insert(
+                insertDebitTransactionQuery[0]);   // insert into the transactions 
+                                                    // table        
+        if(false == result)
+        {
+            closeDatabaseConnection();
+            System.out.println("Result was null") ;
+            return result ; 
+        }
+               
+        // get the most recent transactions ID
+        int mostRecentTransID = getMostRecentTransactionID();
+        System.out.println("y - mostRecentTransID : " + mostRecentTransID) ; 
+        
+        // insert the details into the debit_transactions table
+        insertDebitTransactionQuery[1] = "INSERT INTO debit_transactions "
+                + "( transaction_id, amount, info )"
+                + " VALUES ("
+                + mostRecentTransID
+                + ","
+                + debitAmount
+                + ",'"
+                + transactionNotes
+                + "')";
+        
+        boolean result2 = dbConn.insert(
+                insertDebitTransactionQuery[1]);   // insert into the transactions 
+                                                   // table       
+        if(false == result2)
+        {
+            closeDatabaseConnection();
+            System.out.println("Result was null") ;
+            return result ; 
+        }
+        
+        closeDatabaseConnection();
+        return true ;
+    }
+
+    /**
+     * This method returns the ID of the most recent transaction ID
+     * @return 
+     */
+    private int getMostRecentTransactionID() 
+    {
+        // this method returns the ID for the most 
+        // recent transaction inserted/updated        
+        return dbConn.getMostRecentTransactionID() ;
+    }
+
+    /**
+     * This method creates a database object for use in connecting
+     * to the database for the various transactions
+     */
+    private void createDatabaseObject() 
+    {
+        // run the queries
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+    }
+    
+    /**
+     * This method closes the database connection and destroys the 
+     * database connection object
+     */
+    private void closeDatabaseConnection()
+    {
+        try 
+        {
+            dbConn.closeDatabaseConnection();
+        } 
+        catch (SQLException ex) 
+        {
+            System.out.println("Error with a database transaction : " + ex);
+        }
     }
 }

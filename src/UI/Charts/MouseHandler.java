@@ -70,7 +70,7 @@ public class MouseHandler extends MouseInputAdapter
     @Override
     public void mousePressed(MouseEvent e)
     {            
-        if( chartPlots.length < 1 )
+        if( null == chartPlots || 1 > chartPlots.length  )
         {
             return ;
         }

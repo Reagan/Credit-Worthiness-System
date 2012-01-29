@@ -4,17 +4,11 @@
 package UI;
 
 import AppActions.AppAction;
-import AppActions.CancelTransactionAction;
-import AppActions.DeleteTransactionAction;
-import AppActions.MenuBar;
-import AppActions.UpdateTransactionDetailsAction;
 import DbConnection.ItemsDetails;
-import DbConnection.TransactionDetails;
 import UI.Listeners.NewTransactionListener;
+import UI.Listeners.TransactionTypeListener;
 import UI.Models.ItemsModel;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
@@ -22,17 +16,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
@@ -40,7 +29,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
-import javax.swing.border.BevelBorder;
 
 /**
  *
@@ -51,7 +39,6 @@ public class NewTransactionPanel extends JPanel
     private DepthButton settingsButton ;
     private DepthButton saveTransactionButton ;
     private DepthButton cancelTransactionButton ;
-    private DepthButton printLogButton ;
     
     private JLabel dateLabel ;
     private JLabel itemLabel ;
@@ -94,12 +81,19 @@ public class NewTransactionPanel extends JPanel
     
     private JLabel debitDateLabel;
     private JLabel debitAmountLabel ;
-    private JFormattedTextField debitDate ;
-    private JTextField debitAmount ;
+    public static JFormattedTextField debitDate ;
+    public static JTextField debitAmount ;
     private JLabel debitNotesLabel ;
-    private JTextArea debitTransactionNotes ;
+    public static JTextArea debitTransactionNotes ;
     private JSeparator debitVerticalSeparator ;
     private GroupLayout debitPaneLayout ;
+    
+    public static final int CREDIT_TRANSACTION = 0 ;
+    public static final int DEBIT_TRANSACTION = 1 ;
+    
+    // set the default transaction
+    public static int currSelectedTransactionType = CREDIT_TRANSACTION ;
+    
     
     public NewTransactionPanel(JFrame dialog)
     {
@@ -111,6 +105,7 @@ public class NewTransactionPanel extends JPanel
 
         // initialise the JTabbedPane to hold the panels
         transactionsPane = new JTabbedPane();
+        transactionsPane.addChangeListener(new TransactionTypeListener());
         
         creditPane = new JPanel();
         creditPane.setPreferredSize(new Dimension(430, 235));                     
@@ -320,7 +315,9 @@ public class NewTransactionPanel extends JPanel
         
         // schedule the thread
         getItems.run();
-    }        
+    }  
+    
+    
     
     /**
      * This method displays the transaction details 

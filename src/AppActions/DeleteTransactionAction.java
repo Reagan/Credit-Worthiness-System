@@ -6,6 +6,7 @@ package AppActions;
 import DbConnection.TransactionDetails;
 import UI.BottomCenterPanel;
 import UI.BottomRightPanel;
+import UI.Charts.Chart;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
@@ -71,6 +72,9 @@ public class DeleteTransactionAction extends AbstractedAction
                 
                 // set the current transaction as -1
                 BottomRightPanel.currTransactionID = -1 ;
+                
+                // update the chart to show that the transaction has been deleted
+                Chart.goToMonth(0) ;
             }
                         
         }

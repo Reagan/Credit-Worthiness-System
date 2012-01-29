@@ -10,8 +10,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,6 +26,8 @@ public class DatabaseConnection
     private Statement statement = null ;
     private DatabaseConnection dbConn = null ;
     private ResultSet result = null ;
+    
+    private int mostRecentTransactionID = -1 ;
     
     public DatabaseConnection(){}
     
@@ -86,23 +86,16 @@ public class DatabaseConnection
             System.out.println("Error: [SQL Statement " + SQLStatement + "] " 
                     + ex.toString());
         }
-        finally
-        {
-            try 
-            {
-                // clean up everything
-                result.close();
-                statement.close(); 
-                connection.close();
-            } 
-            catch (SQLException ex) 
-            {
-                System.out.println("Error: " + ex.toString());
-            }            
-        }          
+          
         return retResults ;
     }
     
+    /** This method updates a database transaction and gets the 
+     * most recent transaction details
+     * @param SQLStatement
+     * @return
+     * @throws SQLException 
+     */
     public boolean update(String SQLStatement) throws SQLException
     {
          try 
@@ -113,19 +106,75 @@ public class DatabaseConnection
             
             // update the database
             statement.executeUpdate(SQLStatement); 
-
+            
+            // get the most recent transaction ID
+            ResultSet rs = statement.getGeneratedKeys() ;
+            if(null != rs)
+            {
+                while (rs.next())
+                {
+                    mostRecentTransactionID = rs.getInt(1) ;
+                }
+            }
         } 
         catch(SQLException ex) 
         {
              System.out.println("SQLException: " + ex.getMessage());
              return false; 
         }
-        finally
-        {
-            statement.close();
-            connection.close();
-        }
          
          return true; 
+    }
+    
+    public boolean insert(String SQLStatement) throws SQLException
+    {
+         try 
+        {       
+            // create a statement for connecting to the
+            // database
+            statement = connection.createStatement() ;
+            
+            // update the database
+            statement.executeUpdate(SQLStatement); 
+            
+            // get the most recent transaction ID
+            ResultSet rs = statement.getGeneratedKeys() ;
+            if(null != rs)
+            {
+                while (rs.next())
+                {
+                    mostRecentTransactionID = rs.getInt(1) ;
+                }
+            }
+        } 
+        catch(SQLException ex) 
+        {
+             System.out.println("SQLException: " + ex.getMessage());
+             return false; 
+        }
+         
+        return true; 
+    }
+    
+    /**
+     * This method closes the database connection and 
+     * destroys the various objects associated with it. 
+     * This method must be called for all instances where a
+     * database object is created
+     */
+    public void closeDatabaseConnection() throws SQLException
+    {
+        statement.close();
+        connection.close();
+    }
+    
+    
+    /**
+     * This method obtains the most recent transaction ID
+     * @return 
+     */
+    public int getMostRecentTransactionID()
+    {
+        return mostRecentTransactionID ;
     }
 }
