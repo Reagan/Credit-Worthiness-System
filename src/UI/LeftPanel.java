@@ -9,19 +9,16 @@ import ClientImages.DisplayUserImage;
 import DbConnection.UsersDetails;
 import UI.Listeners.UsersSelectionListener;
 import UI.Models.UsersModel;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.lang.Void;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,7 +34,9 @@ public class LeftPanel extends JPanel
     private static JComboBox userSelectCombo ;
     private static UserImage userImage ;
     private DepthButton deleteUserButton ;
+   // private 
     public static AppAction deleteUserAction ;
+    public static AppAction editCurrUserAction ;
     private static JLabel userName ;
     private static JLabel joinedDate ;
     

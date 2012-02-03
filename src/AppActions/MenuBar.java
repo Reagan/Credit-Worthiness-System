@@ -99,6 +99,7 @@ public class MenuBar extends JMenuBar
         changeSettingsAction = new AppAction(changeSettingsMenuItem, 
                                                 "Change Settings", true, KeyEvent.VK_G);
         changeSettingsMenuItem.setAction(changeSettingsAction);
+        changeSettingsAction.addActionClass(new SettingsUserAction());
         fileMenu.add(changeSettingsMenuItem);
               
         fileMenu.addSeparator();
