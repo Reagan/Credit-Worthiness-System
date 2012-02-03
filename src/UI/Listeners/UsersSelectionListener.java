@@ -130,6 +130,7 @@ public class UsersSelectionListener implements
                             // for the currently selected uses
                             MenuBar.enableUserMenuOptions(true);
                             LeftPanel.deleteUserAction.setEnabled(true);
+                            LeftPanel.editCurrUserAction.setEnabled(true);
                             
                             // set the model for the JList with the list 
                             // of transactions from the current user's model

@@ -5,12 +5,14 @@ package UI;
 
 import AppActions.AppAction;
 import AppActions.DeleteUserAction;
+import AppActions.EditCurrUserAction;
 import ClientImages.DisplayUserImage;
 import DbConnection.UsersDetails;
 import UI.Listeners.UsersSelectionListener;
 import UI.Models.UsersModel;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -34,7 +36,7 @@ public class LeftPanel extends JPanel
     private static JComboBox userSelectCombo ;
     private static UserImage userImage ;
     private DepthButton deleteUserButton ;
-   // private 
+    private DepthButton editCurrUserButton ;
     public static AppAction deleteUserAction ;
     public static AppAction editCurrUserAction ;
     private static JLabel userName ;
@@ -87,11 +89,25 @@ public class LeftPanel extends JPanel
         userSelectCombo.setPreferredSize(new Dimension(150, 27));
         userSelectCombo.setMaximumSize(new Dimension(150, 27));        
         
-        userImage = new UserImage();        
-        deleteUserAction = new AppAction(deleteUserButton, "Delete User", 
+        userImage = new UserImage();   
+        
+        // create the panel with the buttons
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        buttonsPanel.setPreferredSize(new Dimension(150, 30));
+        buttonsPanel.setOpaque(false) ;
+        
+        editCurrUserAction = new AppAction(editCurrUserButton, "Edit", 
+                                false, KeyEvent.VK_E);
+        editCurrUserAction.addActionClass(new EditCurrUserAction());
+        editCurrUserButton = new DepthButton(editCurrUserAction);
+        buttonsPanel.add(editCurrUserButton) ;
+        
+        deleteUserAction = new AppAction(deleteUserButton, "Delete", 
                                 false, KeyEvent.VK_D);
         deleteUserAction.addActionClass(new DeleteUserAction());
         deleteUserButton = new DepthButton(deleteUserAction);
+        buttonsPanel.add(deleteUserButton);
         
         userName = new JLabel(" ");
         userName.setFont(new Font("sanserif", Font.PLAIN, 18));
@@ -120,8 +136,8 @@ public class LeftPanel extends JPanel
         
         add(Box.createRigidArea(new Dimension(0, 29)));
         
-        deleteUserButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(deleteUserButton);
+        buttonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(buttonsPanel);
         add(Box.createHorizontalGlue());
         
         // finalise and display the panel

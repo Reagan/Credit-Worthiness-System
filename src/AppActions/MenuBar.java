@@ -24,12 +24,12 @@ public class MenuBar extends JMenuBar
     // JMenuBarItems
     private JMenuItem newUserMenuItem ;
     private JMenuItem deleteCurrentUserMenuItem ;
+    private JMenuItem editCurrentUserMenuItem ;
     private JMenuItem changeSettingsMenuItem ;
     private JMenuItem exitMenuItem;
     private JMenuItem newTransactionMenuItem ;
     private JMenuItem deleteTransactionMenuItem ;
     private JMenuItem saveTransactionDetailsMenuItem ;
-    private JMenuItem deleteTransactionDetailsMenuItem ;
     private JMenuItem userTransLogMenuItem ;
     private JMenuItem monthlyReportMenuItem ;
     private JMenuItem pendingCreditItemsMenuItem ;
@@ -37,6 +37,7 @@ public class MenuBar extends JMenuBar
     
     // Add the actions
     private static AppAction newUserAction ;
+    private static AppAction editCurrentUserAction ;
     private static AppAction deleteCurrentUserAction ;
     private static AppAction changeSettingsAction ;
     private static AppAction exitAction ;
@@ -57,13 +58,13 @@ public class MenuBar extends JMenuBar
 
         // JMenuBarItems
         newUserMenuItem = new JMenuItem();
+        editCurrentUserMenuItem = new JMenuItem() ;
         deleteCurrentUserMenuItem = new JMenuItem();
         changeSettingsMenuItem = new JMenuItem();
         exitMenuItem = new JMenuItem();
         newTransactionMenuItem = new JMenuItem();
         deleteTransactionMenuItem = new JMenuItem();
         saveTransactionDetailsMenuItem = new JMenuItem();
-        deleteTransactionDetailsMenuItem = new JMenuItem();
         userTransLogMenuItem = new JMenuItem();
         monthlyReportMenuItem = new JMenuItem();
         pendingCreditItemsMenuItem = new JMenuItem();
@@ -88,6 +89,11 @@ public class MenuBar extends JMenuBar
         newUserMenuItem.setAction(newUserAction);
         fileMenu.add(newUserMenuItem);
         
+        editCurrentUserAction = new AppAction(editCurrentUserMenuItem, 
+                                              "Edit Current User Details", false , KeyEvent.VK_E);
+        editCurrentUserAction.addActionClass(new EditCurrUserAction());
+        editCurrentUserMenuItem.setAction(editCurrentUserAction);
+        fileMenu.add(editCurrentUserMenuItem);
         
         deleteCurrentUserAction = new AppAction(deleteCurrentUserMenuItem, 
                                               "Delete Current User", false , KeyEvent.VK_D);
@@ -162,6 +168,7 @@ public class MenuBar extends JMenuBar
      */
     public static void enableUserMenuOptions(boolean state)
     {
+        editCurrentUserAction.enableAction(true);
         deleteCurrentUserAction.enableAction(true);
         newTransactionAction.enableAction(true);
         userTransLogAction.enableAction(true);
