@@ -139,19 +139,21 @@ public class MenuBar extends JMenuBar
         userTransLogAction = new AppAction(userTransLogMenuItem,
                                        "Print User Transaction Log", false, KeyEvent.VK_P);
         userTransLogMenuItem.setAction(userTransLogAction);
-        userTransLogAction.addActionClass(new PrintUserTransactionLogAction()) ;
+        userTransLogAction.addActionClass(new PrintLogsAction(PrintLogsAction.USER_TRANS_TABLE)) ;
         printMenu.add(userTransLogMenuItem);
         
         monthlyReportAction = new AppAction(monthlyReportMenuItem,
                                         "Print Monthly Report", true, KeyEvent.VK_R);
         monthlyReportMenuItem.setAction(monthlyReportAction);
-        monthlyReportAction.addActionClass(new PrintMonthlyReportAction()) ;
+        monthlyReportAction.addActionClass(new PrintLogsAction(
+                PrintLogsAction.MONTHLY_REPORT_TABLE)) ;
         printMenu.add(monthlyReportMenuItem);
         
         pendingCreditItemsAction = new AppAction(pendingCreditItemsMenuItem,
                                       "Pending Credit Items", true, KeyEvent.VK_C);
         pendingCreditItemsMenuItem.setAction(pendingCreditItemsAction);
-        pendingCreditItemsAction.addActionClass(new PrintCreditItemsAction()) ;
+        pendingCreditItemsAction.addActionClass(new PrintLogsAction(
+                PrintLogsAction.CREDIT_ITEMS_TABLE)) ;
         printMenu.add(pendingCreditItemsMenuItem);
                 
         // add the About JMenuItems

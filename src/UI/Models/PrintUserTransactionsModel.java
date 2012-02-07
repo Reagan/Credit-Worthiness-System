@@ -21,7 +21,7 @@ public class PrintUserTransactionsModel implements TableModel
     private Object[][] transactions ;
     
     public PrintUserTransactionsModel(int userID)
-    {System.out.println("PrintUserTransactionsModel called...") ;
+    {
         // This method determines the transactions for a 
         // specific user
         currentUserID = userID ;          
@@ -105,19 +105,20 @@ public class PrintUserTransactionsModel implements TableModel
      * array to format it to fit the model
      */
     private void populateTransactions() 
-    {System.out.println("populateTransactions.PrintUserTransactionsModel called...") ;        
+    {        
         // get the detailed transactions for the user 
         // from the database
         String[][] returnedTransactions ; 
         
-        UsersDetails usersTransactions = new UsersDetails() ;
-        returnedTransactions = (String[][]) usersTransactions
-                .getDetailedUserTransactions(CreditWorthinessSystem.getCurrentUserID()) ;
+      //  UsersDetails usersTransactions = new UsersDetails() ;
+      //  returnedTransactions = (String[][]) usersTransactions
+      //          .getDetailedUserTransactions(CreditWorthinessSystem.getCurrentUserID()) ;
         
         // loop through the returned data populating 
-        transactions =  new Object[returnedTransactions.length][]; 
-        System.out.println("Current User ID: "+CreditWorthinessSystem.getCurrentUserID()) ;
-        System.out.println("# of returned transactions: " + returnedTransactions.length);
+      //  transactions =  new Object[returnedTransactions.length][]; 
+        transactions = new Object[4][]; 
+      //  System.out.println("Current User ID: "+CreditWorthinessSystem.getCurrentUserID()) ;
+      //  System.out.println("# of returned transactions: " + returnedTransactions.length);
         
         /*
         for (int i = 0;  i < returnedTransactions.length; i ++)

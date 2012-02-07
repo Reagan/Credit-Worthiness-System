@@ -12,16 +12,26 @@ import java.sql.Statement;
 import java.util.Vector;
 
 /**
- *
+ * 
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
+ */
+/**
+ * !+ ACTION_RECONF - adding support for using H2 database
+ * @author reagan
  */
 public class DatabaseConnection 
 {
-    private final String DRIVER = "com.mysql.jdbc.Driver";
-    private final String DATABASE_URL = "jdbc:mysql://localhost/cws";
+    // private final String DRIVER = "com.mysql.jdbc.Driver";
+    private final String DRIVER = "org.h2.Driver" ;
+    
+    // private final String DATABASE_URL = "jdbc:mysql://localhost/cws";
+    private final String DATABASE_URL = "jdbc:h2:runtime_required/database";
+    
     public Connection connection = null;
-    private String user = "root";
-    private String password = "reagan7351";
+    //private String user = "root";
+    private String user = "sa";
+    // private String password = "reagan7351";
+    private String password = "";
     
     private Statement statement = null ;
     private DatabaseConnection dbConn = null ;

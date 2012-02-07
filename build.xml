@@ -71,4 +71,9 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <!-- copy the db with the embedded database to the dist folder for access
+        by the application-->
+    <copy todir="dist/runtime_required">
+        <fileset dir="runtime_required" />
+    </copy>
 </project>
