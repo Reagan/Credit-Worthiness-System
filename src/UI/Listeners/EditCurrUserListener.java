@@ -4,6 +4,7 @@
  */
 package UI.Listeners;
 
+import ApplicationImages.ClientImages;
 import DbConnection.UsersDetails;
 import UI.CurrUserPanel;
 import UI.LeftPanel;
@@ -68,11 +69,11 @@ public class EditCurrUserListener implements ActionListener
                 String userName = userPanel.nameTextField.getText() ;
 
                 // copy the picture to the images folder
-                fileDestination = "../images/" + userPanel.userPicName ;
+                fileDestination = ClientImages.getInstance().getImagesPath() + userPanel.userPicName ;
 
                 try 
                 {
-                    filesCopied = copyFiles(userPanel.userPicPath, fileDestination);
+                    filesCopied = ClientImages.getInstance().copyFiles(userPanel.userPicPath, fileDestination);
                 } 
                 catch (FileNotFoundException ex) 
                 {
@@ -122,40 +123,5 @@ public class EditCurrUserListener implements ActionListener
                 }
             }
         }            
-    }
-    
-    /**
-     * This method copies files from the source to the images 
-     * folder
-     * @param userPicPath
-     * @param fileDestination 
-     */
-    private boolean copyFiles(String userPicPath, String fileDestination) 
-            throws FileNotFoundException, IOException 
-    {
-        if(userPicPath == null || fileDestination == null)
-        {
-            System.out.println("Error: The destination or source file is invalid");
-            return false ;
-        }
-        
-        // initialise the files
-        File source = new File(userPicPath) ;
-        File destination = new File(fileDestination) ;
-            
-        InputStream in = new FileInputStream(source) ;
-        OutputStream ou = new FileOutputStream(destination) ;
-        
-        byte[] buffer = new byte[1024] ;
-        int len ;
-        while((len = in.read(buffer)) > 0 )
-        {
-            ou.write(buffer, 0, len) ;
-        }
-        
-        in.close();
-        ou.close();
-        
-        return true ;        
-    }    
+    }        
 }

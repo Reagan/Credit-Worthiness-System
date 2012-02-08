@@ -3,13 +3,10 @@
  */
 package UI;
 
+import ApplicationImages.ClientImages;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -22,8 +19,7 @@ import javax.swing.JFrame;
  */
 public class ApplicationIcon 
 {
-    private String appPathIcon = "runtime_required" + File.separator + "images"
-            + File.separator + "AppIcon.png" ;
+    private String appPathIcon = null  ;
     private static ApplicationIcon appIconClass = null ;
     private JFrame pFrame = null ;
     private JDialog pDialog = null ;
@@ -32,7 +28,8 @@ public class ApplicationIcon
     private ApplicationIcon() 
     {
         // get the image icon
-        try {            
+        try {      
+            appPathIcon = ClientImages.getInstance().getImagesPath() + "AppIcon.png" ;
             appIcon = ImageIO.read(new File(appPathIcon));
         } catch (IOException ex) {
             System.out.println("Error accessing the application icon : " + ex) ;

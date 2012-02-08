@@ -6,7 +6,8 @@ package UI;
 import AppActions.AppAction;
 import AppActions.DeleteUserAction;
 import AppActions.EditCurrUserAction;
-import ClientImages.DisplayUserImage;
+import ApplicationImages.ClientImages;
+import ApplicationImages.DisplayUserImage;
 import DbConnection.UsersDetails;
 import UI.Listeners.UsersSelectionListener;
 import UI.Models.UsersModel;
@@ -50,7 +51,7 @@ public class LeftPanel extends JPanel
     
     private static int currSelectedUserIndex = 0; // indicates the selected users
                                             // index in the JComboBox
-    public static final String DEFAULTUSERIMAGE = "runtime_required" + File.separator + "images" + File.separator ;           
+    public static final String DEFAULTUSERIMAGE = ClientImages.getInstance().getImagesPath() ;           
             
     public LeftPanel()
     {

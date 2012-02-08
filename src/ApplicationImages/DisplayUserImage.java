@@ -1,16 +1,13 @@
 /**
  * Credit Worthiness System Version 1.0
  */
-package ClientImages;
+package ApplicationImages;
 
-import UI.LeftPanel;
 import UI.UserImage;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
 
@@ -64,7 +61,7 @@ public class DisplayUserImage
                     try 
                     {
                         userImage =  (BufferedImage) get();
-                        System.out.println("Setting the user image") ;
+                        
                         // display the image when required
                         imagePanel.setUserImage(userImage);
                     } 

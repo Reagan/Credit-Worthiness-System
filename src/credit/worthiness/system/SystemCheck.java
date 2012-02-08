@@ -3,7 +3,7 @@
  */
 package credit.worthiness.system;
 
-import ClientImages.ClientImages;
+import ApplicationImages.ClientImages;
 import DbConnection.DatabaseConnection;
 
 /**
@@ -49,10 +49,8 @@ public class SystemCheck
      * @return state of the images folder
      */
     public static boolean checkImageFolder()
-    {
-        cImages = new ClientImages();
-        
-        if(ClientImages.checkImagesFolder())
+    {                
+        if(ClientImages.getInstance().checkImagesFolder())
         {
             return true; 
         }

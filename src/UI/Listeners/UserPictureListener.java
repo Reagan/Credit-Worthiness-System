@@ -4,7 +4,7 @@
  */
 package UI.Listeners;
 
-import ClientImages.DisplayUserImage;
+import ApplicationImages.DisplayUserImage;
 import UI.NewUserPanel;
 import UI.UserImage;
 import credit.worthiness.system.CreditWorthinessSystem;
