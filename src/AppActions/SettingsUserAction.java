@@ -3,6 +3,7 @@
  */
 package AppActions;
 
+import UI.ApplicationIcon;
 import UI.SettingsPanel;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -49,7 +50,8 @@ public class SettingsUserAction extends AbstractedAction
 
             Dimension parentSize = getSize(); 
             Point p = getLocation(); 
-            setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);            
+            setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4); 
+            ApplicationIcon.getInstance().setApplicationIcon(SettingsDialog.this);
 
             SettingsPanel panel = new SettingsPanel(this);   
             

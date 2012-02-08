@@ -3,6 +3,7 @@
  */
 package AppActions;
 
+import UI.ApplicationIcon;
 import UI.DepthButton;
 import UI.Models.PrintUserTransactionsModel;
 import credit.worthiness.system.CreditWorthinessSystem;
@@ -91,6 +92,7 @@ public class PrintLogsAction extends AbstractedAction
         }
         
         dialog = new JDialog();
+        ApplicationIcon.getInstance().setApplicationIcon(dialog); // add the application icon
         dialog.setLayout(new BorderLayout());
         dialog.setTitle(dialogTitle);
         

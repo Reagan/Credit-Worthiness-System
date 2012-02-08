@@ -29,7 +29,6 @@ public final class AppPanel extends JFrame
     private Dimension d = null; 
     private Toolkit toolKit = null; 
     private CWSWindowAdapter exitAction = new CWSWindowAdapter();
-    private String appPathIcon = "/AppImages/AppIcon.png" ;
     
     public AppPanel()
     {
@@ -44,7 +43,9 @@ public final class AppPanel extends JFrame
         setSize(d);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(exitAction);
-        setApplicationIcon();
+        
+        // set the application icon
+        ApplicationIcon.getInstance().setApplicationIcon(this) ;       
         
         // center the main window
         toolKit = Toolkit.getDefaultToolkit(); 
@@ -75,16 +76,5 @@ public final class AppPanel extends JFrame
         // add a JmenuBar
         MenuBar menu = new MenuBar();
         setJMenuBar(menu);
-    }    
-    
-    /**
-     * This application sets the application icon
-     * for the credit worthiness system
-     */
-    public void setApplicationIcon()
-    {    
-        URL url = AppPanel.class.getResource(appPathIcon) ;
-        Image appIcon = Toolkit.getDefaultToolkit().getImage(url); 
-        setIconImage(appIcon);        
-    }
+    }            
 }

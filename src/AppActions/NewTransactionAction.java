@@ -3,6 +3,7 @@
  */
 package AppActions;
 
+import UI.ApplicationIcon;
 import UI.BottomRightPanel;
 import UI.NewTransactionPanel;
 import java.awt.BorderLayout;
@@ -27,7 +28,7 @@ public class NewTransactionAction extends AbstractedAction
     private String appMessage ;
     private String aboutDialogTitle ;
     private int messageType ;
-    private static NewTansactionDialog nDialog ;
+    private static NewTransactionDialog nDialog ;
     
     // Main panel options
     
@@ -42,7 +43,7 @@ public class NewTransactionAction extends AbstractedAction
     @Override
     public void run() 
     {
-        nDialog  = new NewTansactionDialog("Create New Transaction");
+        nDialog  = new NewTransactionDialog("Create New Transaction");
     }      
     
     public static void closeFrame()
@@ -53,15 +54,16 @@ public class NewTransactionAction extends AbstractedAction
     // the inner class will display the
     // JFrame with the main ciomponents for the
     // transaction details
-    private class NewTansactionDialog extends JFrame 
+    private class NewTransactionDialog extends JFrame 
     {
-        public NewTansactionDialog(String title) 
+        public NewTransactionDialog(String title) 
         {
             super(title);
 
             Dimension parentSize = getSize(); 
             Point p = getLocation(); 
-            setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);            
+            setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4); 
+            ApplicationIcon.getInstance().setApplicationIcon(NewTransactionDialog.this);
 
             NewTransactionPanel panel = new NewTransactionPanel(this);   
             

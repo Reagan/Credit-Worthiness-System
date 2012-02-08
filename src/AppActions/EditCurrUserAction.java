@@ -3,6 +3,7 @@
  */
 package AppActions;
 
+import UI.ApplicationIcon;
 import UI.NewUserPanel;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -50,6 +51,7 @@ public class EditCurrUserAction extends AbstractedAction
                 Dimension parentSize = parent.getSize(); 
                 Point p = parent.getLocation(); 
                 setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);
+                ApplicationIcon.getInstance().setApplicationIcon(parent);
             }
 
             NewUserPanel panel = new NewUserPanel(this);                        
