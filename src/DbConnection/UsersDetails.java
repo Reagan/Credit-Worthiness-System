@@ -73,10 +73,10 @@ public class UsersDetails
         String[] result = new String[1] ;
         
         getUserIDQuery = "SELECT customers_id FROM customers WHERE "                 
-                + "CONCAT(customers_firstname, \" \", customers_secondname)" 
-                + " = \"" 
+                + "CONCAT(customers_firstname, ' ', customers_secondname)" 
+                + " = '" 
                 + userName
-                + "\"";
+                + "'";
                         
         
         dbConn = new DatabaseConnection();
@@ -95,10 +95,10 @@ public class UsersDetails
         String [] results = new String[3] ;
         
         getUserJoiningDateQuery = "SELECT joining_day, joining_month, year FROM customers WHERE "
-                + "CONCAT(customers_firstname, \" \", customers_secondname)" 
-                + " = \"" 
+                + "CONCAT(customers_firstname, ' ', customers_secondname)" 
+                + " = '" 
                 + userName
-                + "\"";
+                + "'";
         
         dbConn = new DatabaseConnection();
         dbConn.connect();
@@ -189,10 +189,10 @@ public class UsersDetails
         String [] results = new String[1] ;
         
         getUserAvatarQuery = "SELECT images_name FROM customers WHERE "
-                + "CONCAT(customers_firstname, \" \", customers_secondname)" 
-                + " = \"" 
+                + "CONCAT(customers_firstname, ' ' , customers_secondname)" 
+                + " = '" 
                 + userName
-                + "\"";
+                + "'";
         
         dbConn = new DatabaseConnection();
         dbConn.connect();
@@ -219,12 +219,12 @@ public class UsersDetails
         
         getUserTransactionsQuery = "SELECT IF(transaction_type=1,(SELECT items_name FROM items WHERE "
                 + "items.items_id = (SELECT items_id FROM credit_transactions WHERE "
-                + "credit_transactions.transaction_id = s.transaction_id)),(SELECT CONCAT (\"Kshs \", amount) "
+                + "credit_transactions.transaction_id = s.transaction_id)),(SELECT CONCAT ('Kshs ', amount) "
                 + "FROM debit_transactions WHERE "
                 + "debit_transactions.transaction_id = s.transaction_id)) "
                 + "AS item_name, if(transaction_type=1,(SELECT items_number "
                 + "FROM credit_transactions WHERE "
-                + "credit_transactions.transaction_id = s.transaction_id),\"Loan\") "
+                + "credit_transactions.transaction_id = s.transaction_id),'Loan') "
                 + "AS item_number, day, month, year FROM (SELECT * FROM transactions "
                 + "WHERE customers_id = "
                 + userID
@@ -353,11 +353,11 @@ public class UsersDetails
         
         setNewUserDetailsQuery = "INSERT into CUSTOMERS (customers_firstname, "
                 + " customers_secondname, images_name, joining_day, "
-                + " joining_month,year) values (\"" 
+                + " joining_month,year) values ('" 
                 + username
-                + "\", \" \", \""
+                + "', ' ', '"
                 + avatarPath
-                + "\","
+                + "',"
                 + day 
                 + ","
                 + month

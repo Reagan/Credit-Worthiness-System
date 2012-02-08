@@ -12,12 +12,10 @@ import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.util.concurrent.ExecutionException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -118,7 +116,7 @@ public class BottomCenterPanel extends JPanel
             {                                
                     // set the model with the user's
                     // list of transactions
-                    transactionsList.setModel(userTransactions);                        
+//                    transactionsList.setModel(userTransactions);                        
                     
                     // enable the create new Transaction button
                     createTransactionAction.enableAction(true);

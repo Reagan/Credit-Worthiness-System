@@ -16,6 +16,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
@@ -49,7 +50,7 @@ public class LeftPanel extends JPanel
     
     private static int currSelectedUserIndex = 0; // indicates the selected users
                                             // index in the JComboBox
-    public static final String DEFAULTUSERIMAGE = "1.gif" ;           
+    public static final String DEFAULTUSERIMAGE = "runtime_required" + File.separator + "images" + File.separator ;           
             
     public LeftPanel()
     {

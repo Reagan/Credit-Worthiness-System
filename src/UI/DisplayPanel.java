@@ -37,7 +37,7 @@ public class DisplayPanel extends JPanel
         separator = new JSeparator(SwingConstants.HORIZONTAL);
         bottomCenterPanel  = new BottomCenterPanel();
         bottomRightPanel = new BottomRightPanel();
-        statusBar = new StatusBar();
+        statusBar = StatusBar.getInstance();
     
         // lay out the components
         setLayout(new BorderLayout());

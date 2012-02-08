@@ -19,7 +19,6 @@ public class UserTransactionsModel extends AbstractListModel
     // create the object to store the data for the 
     // transactions JList
     
-    // @TODO : make sure that this JList is populated programmatically
     private int currentUserID ; // current User ID's transactions
     
     private Vector <String> transactions ; // list of all the transactions for 

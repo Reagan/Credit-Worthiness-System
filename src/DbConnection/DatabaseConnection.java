@@ -3,6 +3,7 @@
  */
 package DbConnection;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -25,7 +26,7 @@ public class DatabaseConnection
     private final String DRIVER = "org.h2.Driver" ;
     
     // private final String DATABASE_URL = "jdbc:mysql://localhost/cws";
-    private final String DATABASE_URL = "jdbc:h2:runtime_required/database";
+    private final String DATABASE_URL = "jdbc:h2:runtime_required" + File.separator + "database";
     
     public Connection connection = null;
     //private String user = "root";

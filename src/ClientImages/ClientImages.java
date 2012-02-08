@@ -12,7 +12,7 @@ import java.io.File;
 public class ClientImages 
 {
     private static File imagesFolder = null;
-    private String path = "../images";
+    private String path = "runtime_required" +  File.separator + "images";
     
     public ClientImages()
     {

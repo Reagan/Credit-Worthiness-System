@@ -113,7 +113,7 @@ public class UsersSelectionListener implements
                         userDetails[2] = userInfo.getUserJoiningDate(sName);
                         
                         // get the avatar for the user
-                        userDetails[3] = "../images/" + userInfo.getUserAvatarName(sName) ;
+                        userDetails[3] = LeftPanel.DEFAULTUSERIMAGE + userInfo.getUserAvatarName(sName) ;
                         
                         return userDetails ;
                     }

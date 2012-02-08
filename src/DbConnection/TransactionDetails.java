@@ -45,11 +45,11 @@ public class TransactionDetails
         getTransactionDetailsQuery = "SELECT IF(transaction_type=1,(SELECT items_id "
                 + " FROM items WHERE items.items_id = (SELECT items_id FROM "
                 + "credit_transactions WHERE credit_transactions.transaction_id "
-                + "= s.transaction_id)),(SELECT CONCAT (\"Kshs \", amount) "
+                + "= s.transaction_id)),(SELECT CONCAT ('Kshs ', amount) "
                 + "FROM debit_transactions WHERE debit_transactions.transaction_id "
                 + "= s.transaction_id)) AS item_name, if(transaction_type=1,"
                 + "(SELECT items_number FROM credit_transactions WHERE "
-                + "credit_transactions.transaction_id = s.transaction_id),\"Loan\") "
+                + "credit_transactions.transaction_id = s.transaction_id),'Loan') "
                 + "AS item_number, day, month, year,(SELECT info FROM credit_transactions "
                 + "WHERE credit_transactions.transaction_id = "
                 + "s.transaction_id) as information, transaction_type FROM "
@@ -276,11 +276,11 @@ public class TransactionDetails
                     + "items_number = "
                     + itemsNo
                     + ", items_id = (SELECT items_id FROM items "
-                    + "WHERE items_name=\""
+                    + "WHERE items_name='"
                     + selectedItem
-                    + "\"), info = \""
+                    + "'), info = '"
                     +  notes
-                    + "\" WHERE "
+                    + "' WHERE "
                     + "transaction_id = "
                     + transID;                                
         }
@@ -289,9 +289,9 @@ public class TransactionDetails
             updateTransactionQuery[0] = "UPDATE debit_transactions SET "
                     + " amount = "
                     + itemsNo
-                    + ", info = \""
+                    + ", info = '"
                     + notes
-                    + "\" where transaction_id = "
+                    + "' where transaction_id = "
                     + transID ;
         }
         
@@ -374,7 +374,6 @@ public class TransactionDetails
         
         // get the most recent transaction ID
         int mostRecentTransID = getMostRecentTransactionID();
-        System.out.println("x - mostRecentTransID : " + mostRecentTransID) ;
         
         // insert into credit transactions table
         insertCreditTransactionQuery[1] = "INSERT INTO credit_transactions "
@@ -451,8 +450,7 @@ public class TransactionDetails
         }
                
         // get the most recent transactions ID
-        int mostRecentTransID = getMostRecentTransactionID();
-        System.out.println("y - mostRecentTransID : " + mostRecentTransID) ; 
+        int mostRecentTransID = getMostRecentTransactionID();        
         
         // insert the details into the debit_transactions table
         insertDebitTransactionQuery[1] = "INSERT INTO debit_transactions "
