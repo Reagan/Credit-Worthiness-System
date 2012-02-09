@@ -1,0 +1,14 @@
+1. x Fix loading picture
+2. Style UI elements to render as desired
+3. Port all database queries 
+4. Get rid of starting Overspent alerter dialog on startup
+5. Finalise new user details and functionality
+6. Finalise edit current user details
+7. Finalise change settings details functionality
+8. Finalise Transaction options details 
+9. Finalise Print functionality modules
+10. x Link to JProgressBar item & status messages items
+11. x Place the application icon on each of the dialogs displayed	
+12. x Streamline the pictures obtained from the images folder
+13. Hook expensive procedures to the JProgressbar and the status message bar
+14. Cater for Credit & debit transactions in bottom left corner
