@@ -9,7 +9,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 /**
- * This class implmenents a singleton design pattern that allows 
+ * This class implements a singleton design pattern that allows 
  * the application to read and write to the properties file
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
@@ -18,7 +18,8 @@ public class AppProperties
     private static Properties properties = null ;
     private static String propertiesFile = 
             // "/home/reagan/Desktop/cws.config"; 
-            "C:\\Documents and Settings\\Reayn\\Desktop\\cws.config";
+            // "C:\\Documents and Settings\\Reayn\\Desktop\\cws.config";
+            "runtime_required" + File.separator + "cws.config" ;
     private static AppProperties thisInstance = null ;
     
     private AppProperties() 

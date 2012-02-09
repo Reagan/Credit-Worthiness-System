@@ -10,29 +10,24 @@ import AppActions.UpdateTransactionDetailsAction;
 import DbConnection.ItemsDetails;
 import DbConnection.TransactionDetails;
 import UI.Models.ItemsModel;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
-import javax.swing.border.BevelBorder;
 
 /**
  *
@@ -43,7 +38,6 @@ public class BottomRightPanel extends JPanel
     private DepthButton settingsButton ;
     private DepthButton saveTransactionButton ;
     private DepthButton deleteTransactionButton ;
-    private DepthButton printLogButton ;
     
     private JLabel dateLabel ;
     private JLabel itemLabel ;
@@ -57,6 +51,7 @@ public class BottomRightPanel extends JPanel
     
     private JLabel notesLabel ;
     public static JTextArea transactionNotes ;
+    private JScrollPane transScrollPane ;
     
     private JSeparator verticalSeparator ;      
     
@@ -94,21 +89,23 @@ public class BottomRightPanel extends JPanel
     
         // TextFields
         date = new JFormattedTextField(dateFomat);
-        date.setMaximumSize(new Dimension(136, 20));
+        date.setMaximumSize(new Dimension(166, 20));
         
         numberOfItems = new JTextField();
-        numberOfItems.setMaximumSize(new Dimension(136, 20));
-                
-        // set the dimensions for the maximum size
-        items.setMaximumSize(new Dimension(136, 20));
+        numberOfItems.setMaximumSize(new Dimension(166, 20));
+        
+        // adjust the JComboBox dimensions
+        items.setMaximumSize(new Dimension(166, 20));
         
         // populate the list
         getItems();
         
         notesLabel = new JLabel("Notes");
         
-        transactionNotes = new JTextArea();
-        transactionNotes.setMaximumSize(new Dimension(343, 198));
+        transactionNotes = new JTextArea();        
+        transactionNotes.setWrapStyleWord(true);
+        transactionNotes.setLineWrap(true);
+        transScrollPane = new JScrollPane(transactionNotes) ;
         
         verticalSeparator = new JSeparator(SwingConstants.VERTICAL);
         
@@ -146,7 +143,7 @@ public class BottomRightPanel extends JPanel
                 .addComponent(verticalSeparator)
                 .addGroup(layout.createParallelGroup()
                     .addComponent(notesLabel)
-                    .addComponent(transactionNotes)
+                    .addComponent(transScrollPane)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(settingsButton)
                         .addComponent(saveTransactionButton)
@@ -165,7 +162,7 @@ public class BottomRightPanel extends JPanel
                     .addComponent(verticalSeparator)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(notesLabel)
-                        .addComponent(transactionNotes)))
+                        .addComponent(transScrollPane)))
                 .addGroup(layout.createParallelGroup()
                     .addComponent(settingsButton)
                     .addComponent(saveTransactionButton)

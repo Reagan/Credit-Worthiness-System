@@ -30,20 +30,19 @@ public class AlertLabel extends JComponent
     private final String UNDERSPENT_TEXT = "Underspent" ;
     
     private double creditOrDebit ;
-    private final int ALERT_WIDTH = 165 ;
+    private final int ALERT_WIDTH = 175 ;
     private final int ALERT_HEIGHT = 60 ;
     private final int ARC_WIDTH = 20 ;
     private final int ARC_HEIGHT = 20 ;
     private final Color textColor = new Color(255, 255, 255);
     
     private final Point2D.Double alertConditionPosition 
-                = new Point2D.Double(11, 30);
+                = new Point2D.Double(5, 30);
     private final Point2D.Double amountOverOrUnderAmountPostion 
-            = new Point2D.Double(14, 50);
+            = new Point2D.Double(9, 50);
     
     private Font statusFont ;
     private Font statusAmountFont ;
-    private Font creditOrDebitAmountFont ;
     
     public AlertLabel(double creditOrDebitAmount)
     {

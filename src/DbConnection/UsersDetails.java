@@ -108,7 +108,7 @@ public class UsersDetails
         results = (String[]) joiningDate.get(0) ;
         
         // return the [ day, month & year ]
-        return  results[0] + "," + months[Integer.parseInt(results[1])] + " "
+        return  results[0] + ", " + months[Integer.parseInt(results[1])] + " "
                 + results[2] ;
     }
     

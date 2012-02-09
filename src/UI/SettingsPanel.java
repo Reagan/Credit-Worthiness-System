@@ -434,7 +434,6 @@ public class SettingsPanel extends JPanel
                    
            case(CREDIT_DISPLAY_RADIO_GROUP):
            case(HOVER_POPUP_DISPLAY_RADIO_GROUP):
-               System.out.println(AppProperties.getInstance().getValueOf(configOptionName).equals("yes")) ;
                JRadioButton yes = new JRadioButton("Yes", 
                       (AppProperties.getInstance().getValueOf(configOptionName).equals("yes")));               
                JRadioButton no = new JRadioButton("No", 
