@@ -22,14 +22,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 /**
  *
@@ -50,7 +48,7 @@ public class CenterPanel extends JPanel
     public CenterPanel()
     {
         // initialise the components
-        alerter = new AlertLabel(0.00);
+        alerter = new AlertLabel();
         monthNav = new MonthChartNavigator();
         title = new JLabel("Transactions");
         title.setFont(new Font("sanSerif", Font.PLAIN, 31));
@@ -78,7 +76,8 @@ public class CenterPanel extends JPanel
         });
         
         //~---------------------------------------------------------
-        // add a test border
+        // add a test border to ensure that the chart component respects borders
+        // when it is embedded in other components
         /**
         Border outterBorder = BorderFactory.createEmptyBorder(10,10,10,10);
         Border innerBorder = BorderFactory.createTitledBorder("Chart");

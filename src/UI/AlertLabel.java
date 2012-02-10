@@ -44,16 +44,17 @@ public class AlertLabel extends JComponent
     private Font statusFont ;
     private Font statusAmountFont ;
     
-    public AlertLabel(double creditOrDebitAmount)
+    private boolean alerterInitialised = false; // determines whether or not the
+                    // alerter has been configured to initialise an amount
+    
+    public AlertLabel()
     {
         // initialise the variables
-        alertColor = overSpentColor ;
-        alertStatus = OVERSPENT_CONDITION ;
+        // alertColor = overSpentColor ;
+        // alertStatus = OVERSPENT_CONDITION ;
         
         statusFont = new Font("sanSerif", Font.PLAIN, 28);
         statusAmountFont = new Font("sanSerif", Font.PLAIN, 13) ;
-        
-        creditOrDebit = creditOrDebitAmount ;
         
         setPreferredSize(new Dimension(ALERT_WIDTH, ALERT_HEIGHT));
         setMaximumSize(new Dimension(ALERT_WIDTH, ALERT_HEIGHT));
@@ -69,6 +70,13 @@ public class AlertLabel extends JComponent
         // set the displayed font to be antialiased
         graphics.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        // check if the credit/debit amount has been set
+        if ( !alerterInitialised )
+        {
+            graphics.dispose();
+            return ;
+        }            
         
         // obtain the status of the alerter
         String currentStatus = (alertStatus == OVERSPENT_CONDITION) ?
@@ -127,5 +135,6 @@ public class AlertLabel extends JComponent
     public void setAlerterAmount(double amount)
     {
         creditOrDebit = amount ;
+        alerterInitialised = true ;
     }
 }
