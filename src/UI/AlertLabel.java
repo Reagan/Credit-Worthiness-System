@@ -100,8 +100,12 @@ public class AlertLabel extends JComponent
         String amountOverOrUnderSpent = (alertStatus == OVERSPENT_CONDITION) ?
                 "+" :"-";
         
+        String creditOrDebitAmount = roundTwoDecimals(creditOrDebit) ;
+        String displayedAmount = (creditOrDebitAmount.substring(0,1).equals("-") ?
+               creditOrDebitAmount.substring(1) : creditOrDebitAmount) ;
+        
         amountOverOrUnderSpent += "Kshs "
-                                    + Double.toString(roundTwoDecimals(creditOrDebit)) ;
+                                    +  displayedAmount ;
         graphics.setFont(currentFont);
         graphics.drawString(amountOverOrUnderSpent, (int) amountOverOrUnderAmountPostion.x,
                 (int) amountOverOrUnderAmountPostion.y );
@@ -109,10 +113,10 @@ public class AlertLabel extends JComponent
         graphics.dispose();
     }
     
-    private double roundTwoDecimals(double d) 
+    private String roundTwoDecimals(double d) 
     {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
-        return Double.valueOf(twoDForm.format(d));
+        return twoDForm.format(d);        
     } 
     
     /**

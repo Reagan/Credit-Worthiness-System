@@ -104,7 +104,7 @@ public class NewUserPanel extends JPanel
                     .addComponent(nameLabel)
                     .addComponent(nameTextField))
                 .addComponent(separator)
-                .addGroup(layout.createParallelGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                     .addComponent(uploadPictureLabel)
                     .addComponent(pictureArea)
                     .addComponent(browseButton)));

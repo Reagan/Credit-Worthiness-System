@@ -16,18 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
-import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 
 /**
  *
@@ -51,7 +40,7 @@ public class BottomRightPanel extends JPanel
     
     private JLabel notesLabel ;
     public static JTextArea transactionNotes ;
-    private JScrollPane transScrollPane ;
+    private JScrollPane transNotesScrollpane ;
     
     private JSeparator verticalSeparator ;      
     
@@ -76,36 +65,38 @@ public class BottomRightPanel extends JPanel
         // initialise the variablesprivate JLabel dateLabel ;
         // labels
         dateLabel = new JLabel("Date (dd/MM/YYYY)");
-        dateLabel.setBorder(BorderFactory
-                .createEmptyBorder(0, 5, 0, 5));
         
         itemLabel = new JLabel("Item");
-        itemLabel.setBorder(BorderFactory
-                .createEmptyBorder(20, 5, 0, 5));
         
         itemNumberLabel = new JLabel("Number of Items");
-        itemNumberLabel.setBorder(BorderFactory
-                .createEmptyBorder(20, 5, 0, 5));
     
         // TextFields
         date = new JFormattedTextField(dateFomat);
-        date.setMaximumSize(new Dimension(166, 20));
+        date.setMinimumSize(new Dimension(166, 28));
+        date.setPreferredSize(new Dimension(166, 28));
+        date.setMaximumSize(new Dimension(166, 28));
         
         numberOfItems = new JTextField();
-        numberOfItems.setMaximumSize(new Dimension(166, 20));
+        numberOfItems.setMinimumSize(new Dimension(166, 28));
+        numberOfItems.setPreferredSize(new Dimension(166, 28));
+        numberOfItems.setMaximumSize(new Dimension(166, 28));
         
         // adjust the JComboBox dimensions
-        items.setMaximumSize(new Dimension(166, 20));
+        items.setMinimumSize(new Dimension(166, 28));
+        items.setPreferredSize(new Dimension(166, 28));
+        items.setMaximumSize(new Dimension(166, 28));
         
         // populate the list
         getItems();
         
         notesLabel = new JLabel("Notes");
         
-        transactionNotes = new JTextArea();        
-        transactionNotes.setWrapStyleWord(true);
+        transactionNotes = new JTextArea();
         transactionNotes.setLineWrap(true);
-        transScrollPane = new JScrollPane(transactionNotes) ;
+        transactionNotes.setWrapStyleWord(true);
+        transactionNotes.setPreferredSize(new Dimension(215,150)) ;
+        transactionNotes.setMinimumSize(new Dimension(215,150)) ;
+        transNotesScrollpane = new JScrollPane(transactionNotes) ;
         
         verticalSeparator = new JSeparator(SwingConstants.VERTICAL);
         
@@ -143,7 +134,7 @@ public class BottomRightPanel extends JPanel
                 .addComponent(verticalSeparator)
                 .addGroup(layout.createParallelGroup()
                     .addComponent(notesLabel)
-                    .addComponent(transScrollPane)
+                    .addComponent(transNotesScrollpane)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(settingsButton)
                         .addComponent(saveTransactionButton)
@@ -162,7 +153,7 @@ public class BottomRightPanel extends JPanel
                     .addComponent(verticalSeparator)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(notesLabel)
-                        .addComponent(transScrollPane)))
+                        .addComponent(transNotesScrollpane)))
                 .addGroup(layout.createParallelGroup()
                     .addComponent(settingsButton)
                     .addComponent(saveTransactionButton)

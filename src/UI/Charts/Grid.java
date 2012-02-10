@@ -4,13 +4,7 @@
 package UI.Charts;
 
 import UI.Models.ChartModel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.nio.DoubleBuffer;
@@ -102,10 +96,21 @@ public final class Grid extends JComponent
         // OK
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
                 RenderingHints.VALUE_ANTIALIAS_ON);
-           
-        // fill the background 
-        graphics.setColor(bgColor);
-        graphics.fillRect(X_POS , Y_POS, GRID_WIDTH, GRID_HEIGHT);
+        
+        // create a gradient object
+        LinearGradientPaint p;
+        p = new LinearGradientPaint(0.0f, 0.0f, 0.0f, getHeight(),
+                new float[] { 0.0f, 0.499f, 0.5f, 1.0f },
+                new Color[] { new Color(255, 255, 255),
+                new Color(228, 228, 228),
+                new Color(221, 221, 221),
+                new Color(255, 255, 255) });
+
+        // add the gradient to the grid background        
+        graphics.setPaint(p);
+        
+        // draw the grid with the gradient background
+        graphics.fillRect(X_POS , Y_POS, GRID_WIDTH, GRID_HEIGHT);        
         
         // draw the grid 
         graphics.setColor(gridBorderColor);

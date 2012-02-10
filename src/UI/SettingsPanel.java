@@ -76,6 +76,7 @@ public class SettingsPanel extends JPanel
     private JComboBox monthsList ;
     private JTextField imagesLocation ;
     private UserImage pictureArea ;
+    private JScrollPane aboutInfoPane ;
 
     public SettingsPanel(SettingsDialog c)
     {
@@ -143,10 +144,11 @@ public class SettingsPanel extends JPanel
         appVersion.setEditable(false);
         
         appInfo = (JTextArea) createUserInputField(TEXT_AREA, "aboutInfo");
-        appInfo.setPreferredSize(new Dimension(panelDimension.width-30, 120));
-        appInfo.setBorder(BorderFactory.createTitledBorder("Application Information"));
+        //appInfo.setPreferredSize(new Dimension(panelDimension.width-30, 120));
+        //appInfo.setBorder(BorderFactory.createTitledBorder("Application Information"));
         appInfo.setLineWrap(true);
-        appInfo.setWrapStyleWord(true);        
+        appInfo.setWrapStyleWord(true); 
+        aboutInfoPane = new JScrollPane(appInfo) ;
         
         // layout the components for the settings panel
         GroupLayout layout = new GroupLayout(generalSettings) ;
@@ -166,7 +168,7 @@ public class SettingsPanel extends JPanel
                             .addComponent(appVersion)
                          )
                     )
-                .addComponent(appInfo)
+                .addComponent(aboutInfoPane)
              );
         
         // add vertically
@@ -179,7 +181,7 @@ public class SettingsPanel extends JPanel
                     .addComponent(appVersionLabel)
                     .addComponent(appVersion)
                   )
-                .addComponent(appInfo)
+                .addComponent(aboutInfoPane)
            );
                 
         // add the tab
@@ -315,15 +317,15 @@ public class SettingsPanel extends JPanel
         
         // add vertically
         layout.setVerticalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(displayCreditPlotLabel)
                         .addComponent(creditRadioGroup)
                     )
-                .addGroup(layout.createParallelGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(hoverPopupLabel)
                         .addComponent(hoverTransPopup)
                     )
-                .addGroup(layout.createParallelGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(initialMonthLabel)
                         .addComponent(monthsList)
                     )                    
@@ -363,7 +365,7 @@ public class SettingsPanel extends JPanel
                     .addComponent(imagesLocationLabel)
                     .addComponent(defaultImagesLocation)
                     )
-                .addGroup(layout.createParallelGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                     .addComponent(imagesLocation)
                     .addComponent(browseButton)
                     .addComponent(pictureArea)

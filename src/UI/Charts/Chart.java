@@ -4,20 +4,13 @@
 package UI.Charts;
 
 import UI.CenterPanel;
-import UI.StackLayout;
 import UI.Models.ChartModel;
-import java.awt.BorderLayout;
+import UI.StackLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
