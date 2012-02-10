@@ -217,6 +217,8 @@ public class UsersDetails
         Vector userTransactions = null;
         Vector userTransactionsRes = new Vector() ;
         
+        // deprecating IF command
+        /**
         getUserTransactionsQuery = "SELECT IF(transaction_type=1,(SELECT items_name FROM items WHERE "
                 + "items.items_id = (SELECT items_id FROM credit_transactions WHERE "
                 + "credit_transactions.transaction_id = s.transaction_id)),(SELECT CONCAT ('Kshs ', amount) "
@@ -229,7 +231,21 @@ public class UsersDetails
                 + "WHERE customers_id = "
                 + userID
                 + ") AS s ORDER BY year, month, day";        
-        
+         **/
+        getUserTransactionsQuery = "SELECT "
+                + "CASE WHEN transaction_type=1 THEN (SELECT items_name FROM items WHERE "
+                + "items.items_id = (SELECT items_id FROM credit_transactions WHERE "
+                + "credit_transactions.transaction_id = s.transaction_id)) ELSE (SELECT CONCAT ('Kshs ', amount) "
+                + "FROM debit_transactions WHERE "
+                + "debit_transactions.transaction_id = s.transaction_id) END "
+                + "AS item_name, CASE WHEN transaction_type=1 THEN (SELECT items_number "
+                + "FROM credit_transactions WHERE "
+                + "credit_transactions.transaction_id = s.transaction_id) ELSE 0 END "
+                + "AS item_number, day, month, year FROM (SELECT * FROM transactions "
+                + "WHERE customers_id = "
+                + userID
+                + ") AS s ORDER BY year, month, day";        
+                
         dbConn = new DatabaseConnection();
         dbConn.connect();
         

@@ -116,7 +116,7 @@ public class BottomCenterPanel extends JPanel
             {                                
                     // set the model with the user's
                     // list of transactions
-//                    transactionsList.setModel(userTransactions);                        
+                    transactionsList.setModel(userTransactions);                        
                     
                     // enable the create new Transaction button
                     createTransactionAction.enableAction(true);

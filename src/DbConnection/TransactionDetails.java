@@ -4,17 +4,17 @@
  */
 package DbConnection;
 
-import UI.NewTransactionPanel;
 import credit.worthiness.system.CreditWorthinessSystem;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * This class creates and obtains the results for database queries involving
+ * transaction details. To ensure support for both MySQL and 
+ * H2 (embedded database), the CASE WHEN command is used as opposed 
+ * to the IF command that is unsupported by H2 and other embedded databases
  * @author rmbitiru
  */
 public class TransactionDetails 
@@ -41,7 +41,8 @@ public class TransactionDetails
     public String[] getTransactionDetails(int transactionID)
     {  
         String [] results = new String[1] ;          
-        
+                
+        /**
         getTransactionDetailsQuery = "SELECT IF(transaction_type=1,(SELECT items_id "
                 + " FROM items WHERE items.items_id = (SELECT items_id FROM "
                 + "credit_transactions WHERE credit_transactions.transaction_id "
@@ -50,6 +51,23 @@ public class TransactionDetails
                 + "= s.transaction_id)) AS item_name, if(transaction_type=1,"
                 + "(SELECT items_number FROM credit_transactions WHERE "
                 + "credit_transactions.transaction_id = s.transaction_id),'Loan') "
+                + "AS item_number, day, month, year,(SELECT info FROM credit_transactions "
+                + "WHERE credit_transactions.transaction_id = "
+                + "s.transaction_id) as information, transaction_type FROM "
+                + "(SELECT * FROM transactions WHERE transaction_id = "
+                + transactionID
+                + ") AS s ";
+        **/
+        
+         getTransactionDetailsQuery = "SELECT "
+                 + "CASE WHEN transaction_type=1 THEN (SELECT items_id "
+                + " FROM items WHERE items.items_id = (SELECT items_id FROM "
+                + "credit_transactions WHERE credit_transactions.transaction_id "
+                + "= s.transaction_id)) ELSE (SELECT CONCAT ('Kshs ', amount) "
+                + "FROM debit_transactions WHERE debit_transactions.transaction_id "
+                + "= s.transaction_id) END AS item_name, CASE WHEN transaction_type=1 THEN"
+                + "(SELECT items_number FROM credit_transactions WHERE "
+                + "credit_transactions.transaction_id = s.transaction_id) ELSE 0 END "
                 + "AS item_number, day, month, year,(SELECT info FROM credit_transactions "
                 + "WHERE credit_transactions.transaction_id = "
                 + "s.transaction_id) as information, transaction_type FROM "

@@ -6,6 +6,7 @@ package UI;
 import AppActions.AppAction;
 import AppActions.DeleteTransactionAction;
 import AppActions.MenuBar;
+import AppActions.SettingsUserAction;
 import AppActions.UpdateTransactionDetailsAction;
 import DbConnection.ItemsDetails;
 import DbConnection.TransactionDetails;
@@ -103,6 +104,7 @@ public class BottomRightPanel extends JPanel
         // buttons
         settingsAction = new AppAction(settingsButton, "Settings"
                                         , true, KeyEvent.VK_S);
+        settingsAction.addActionClass(new SettingsUserAction());
         settingsButton = new DepthButton(settingsAction) ;
         
         saveTransactionAction = new AppAction(saveTransactionButton, "Save"

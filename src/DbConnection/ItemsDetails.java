@@ -8,7 +8,9 @@ import java.util.Vector;
 
 /**
  * This class obtains information about Items 
- * from the database
+ * from the database. To ensure support for both MySQL and 
+ * H2 (embedded database), the CASE WHEN command is used as opposed 
+ * to the IF command that is unsupported by H2 and other embedded databases
  * @author rmbitiru
  */
 public class ItemsDetails 
