@@ -10,8 +10,6 @@ package credit.worthiness.system;
 import AppSplashScreen.AppSplashScreen;
 import UI.AppPanel;
 import java.awt.EventQueue;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 

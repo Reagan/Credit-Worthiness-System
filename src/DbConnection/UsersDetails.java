@@ -240,7 +240,7 @@ public class UsersDetails
                 + "debit_transactions.transaction_id = s.transaction_id) END "
                 + "AS item_name, CASE WHEN transaction_type=1 THEN (SELECT items_number "
                 + "FROM credit_transactions WHERE "
-                + "credit_transactions.transaction_id = s.transaction_id) ELSE 0 END "
+                + "credit_transactions.transaction_id = s.transaction_id) ELSE -1 END "
                 + "AS item_number, day, month, year FROM (SELECT * FROM transactions "
                 + "WHERE customers_id = "
                 + userID
@@ -261,6 +261,15 @@ public class UsersDetails
                 transNo < s ; transNo ++)
         {
             String [] currTransaction = (String[]) userTransactions.get(transNo) ;
+            
+            // indicate when money is received from the user
+            currTransaction[1] = ("-1".equals(currTransaction[1])) ? "Received" : currTransaction[1] ;
+            
+            // properly indicate when cash is given to the 
+            currTransaction[1] = ("Cash".equals(currTransaction[0])) ? "Kshs "+currTransaction[1] :
+                    currTransaction[1] ;
+            
+            // add the results to the res vector
             userTransactionsRes.add(currTransaction[0] 
                     + " [" 
                     + currTransaction[1]

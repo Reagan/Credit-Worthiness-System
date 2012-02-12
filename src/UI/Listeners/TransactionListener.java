@@ -4,10 +4,10 @@
  */
 package UI.Listeners;
 
+import UI.BottomCenterPanel;
 import UI.BottomRightPanel;
 import UI.Models.UserTransactionsModel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -50,6 +50,9 @@ public class TransactionListener implements ListSelectionListener
                         UserTransactionsModel.transIDs[selection] ;                
                 BottomRightPanel
                         .setTransactionDetails(UserTransactionsModel.transIDs[selection]);
+                
+                // enable the delete transaction button
+                BottomCenterPanel.deleteButton.setEnabled(true);
             }                       
         }
     }    

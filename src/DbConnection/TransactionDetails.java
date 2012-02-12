@@ -28,7 +28,7 @@ public class TransactionDetails
     private String [] deleteTransactionDetails = new String[2] ;
     private String [] insertCreditTransactionQuery = new String[2] ;
     private String [] insertDebitTransactionQuery = new String[2] ;
-    private String mostRecentTransactionIDQuery = null ;
+    private String mostRecentTransactionIDQuery = null ;    
     
     public TransactionDetails(){}
     
@@ -60,17 +60,18 @@ public class TransactionDetails
         **/
         
          getTransactionDetailsQuery = "SELECT "
-                 + "CASE WHEN transaction_type=1 THEN (SELECT items_id "
+                 + "CASE WHEN transaction_type=1 THEN (SELECT items_name "
                 + " FROM items WHERE items.items_id = (SELECT items_id FROM "
                 + "credit_transactions WHERE credit_transactions.transaction_id "
-                + "= s.transaction_id)) ELSE (SELECT CONCAT ('Kshs ', amount) "
-                + "FROM debit_transactions WHERE debit_transactions.transaction_id "
-                + "= s.transaction_id) END AS item_name, CASE WHEN transaction_type=1 THEN"
+                + "= s.transaction_id)) ELSE 'Cash' END AS item_name, CASE WHEN transaction_type=1 THEN"
                 + "(SELECT items_number FROM credit_transactions WHERE "
-                + "credit_transactions.transaction_id = s.transaction_id) ELSE 0 END "
-                + "AS item_number, day, month, year,(SELECT info FROM credit_transactions "
-                + "WHERE credit_transactions.transaction_id = "
-                + "s.transaction_id) as information, transaction_type FROM "
+                + "credit_transactions.transaction_id = s.transaction_id) ELSE "
+                + "(SELECT  amount FROM debit_transactions WHERE debit_transactions.transaction_id = s.transaction_id) "
+                + " END "
+                + "AS item_number, day, month, year,CASE WHEN transaction_type=1 "
+                + " THEN (SELECT info FROM credit_transactions WHERE credit_transactions.transaction_id = s.transaction_id) "
+                + " ELSE (SELECT info FROM debit_transactions WHERE debit_transactions.transaction_id = s.transaction_id) "
+                + " END as information , transaction_type FROM "
                 + "(SELECT * FROM transactions WHERE transaction_id = "
                 + transactionID
                 + ") AS s ";

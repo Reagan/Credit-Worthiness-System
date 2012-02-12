@@ -70,7 +70,7 @@ public class DatabaseConnection
             // database
             statement = connection.createStatement() ;
             
-            // query the databasjava adownload System.out.println("\n[ " + SQLStatement + " ]\n") ;e
+            // query the database
             statement.executeQuery(SQLStatement);
             
             result = statement.getResultSet();

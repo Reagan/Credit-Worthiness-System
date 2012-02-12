@@ -28,7 +28,7 @@ import javax.swing.SwingWorker;
 public class BottomCenterPanel extends JPanel
 {
     private DepthButton createNewButton ;
-    private DepthButton deleteButton ;
+    public static DepthButton deleteButton ;
     public static JList transactionsList ;    
     
     private static UserTransactionsModel userTransactions ;
