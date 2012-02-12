@@ -3,23 +3,12 @@
  */
 package UI.Charts;
 
-import AppActions.AppAction;
-import AppActions.UpdateTransactionAction;
 import UI.Models.ChartModel;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.LayoutManager;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.event.MouseInputAdapter;
 
 /**
  * This class will read the chart model and draw the nodes and

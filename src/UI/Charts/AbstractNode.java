@@ -209,7 +209,7 @@ public abstract class AbstractNode
         // ensure that the Node is not
         // a credit node type        
         String items = null ; // will indicate the items
-        String worth ; // will indicate the worth of the items
+        String worth = null ; // will indicate the worth of the items
         String paid ; // will indicate how much the client is paying
         String loanTakenOrPaid ; // will store whether or not a loan
                                 // is taken or paid
@@ -247,8 +247,7 @@ public abstract class AbstractNode
             }
             
            
-        
-            // specify the details for a transaction payment
+        // specify the details for a transaction payment
             if(nodeType == Node.TRANSACTION_ITEM_NODE)
             {
                 if(info.length !=2 )
@@ -261,7 +260,25 @@ public abstract class AbstractNode
                 // populate the fields                
                 items = info[0] ;
                 worth = info[1] ;
-                
+            }
+            
+            
+            // draw the border
+            FontMetrics metrics = graphics.getFontMetrics(graphics.getFont()) ;
+            popUpwidth = (int) metrics.getStringBounds(items, graphics).getWidth() + 7  ;
+            popUpwidth = (popUpwidth < 50 )? 50 : popUpwidth ;
+            
+            graphics.setColor(Color.WHITE);
+            graphics.fillRoundRect((int) plotLocation.x + 15, yLocation,
+                popUpwidth , popupHeight, arcWidth, arcHeight);
+            
+            graphics.setColor(Color.BLACK);
+            graphics.drawRoundRect((int) plotLocation.x + 15, yLocation,
+                popUpwidth , popupHeight, arcWidth, arcHeight);
+            
+            // specify the details for a transaction payment
+            if(nodeType == Node.TRANSACTION_ITEM_NODE)
+            {                               
                 // draw the text
                 // 1. draw the title
                 graphics.drawString(items, (int) plotLocation.x + 18,
@@ -290,15 +307,6 @@ public abstract class AbstractNode
                 graphics.drawString("W: " + loanTakenOrPaid, (int) plotLocation.x + 18,
                         yLocation2) ;
             }  
-            
-            // draw the border
-            FontMetrics metrics = graphics.getFontMetrics(graphics.getFont()) ;
-            popUpwidth = (int) metrics.getStringBounds(items, graphics).getWidth() + 7  ;
-            popUpwidth = (popUpwidth < 50 )? 50 : popUpwidth ;
-            
-            graphics.setColor(Color.BLACK);
-            graphics.drawRoundRect((int) plotLocation.x + 15, yLocation,
-                popUpwidth , popupHeight, arcWidth, arcHeight);
         }        
     }
     
