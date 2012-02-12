@@ -80,10 +80,10 @@ public class BottomRightPanel extends JPanel
     // debit transactions panel components 
     private JLabel debitDateLabel ;        
     private JLabel debitAmountLabel ;
-    private static JFormattedTextField debitDate ;
-    private static JTextField debitAmount ;
+    public static JFormattedTextField debitDate ;
+    public static JTextField debitAmount ;
     private JLabel debitNotesLabel ;
-    private static JTextArea debitTransactionNotes ;
+    public static JTextArea debitTransactionNotes ;
     private JSeparator debitVerticalSeparator ;
     private JScrollPane debitTransScrollpane ;
     
@@ -449,12 +449,8 @@ public class BottomRightPanel extends JPanel
             transactionNotes.setText("");
             
             // set the debit fields to null
-             debitAmount.setText("") ;
-                
-            // set the debit amount
+            debitAmount.setText("") ;
             debitDate.setText("");
-                
-            // add the transaction notes to the transactions textarea
             debitTransactionNotes.setText("") ;
             
             // reset the current transaction ID

@@ -274,10 +274,10 @@ public class TransactionDetails
      * @throws SQLException 
      */
     public boolean updateTransactionDetails(int transType, int transID, int itemsNo, 
-            String notes, String selectedItem, int day
+            String notes, String selectedItem, int amount, int day
             , int month, int year ) throws SQLException
     {
-        if(transID == 0 || selectedItem.length() < 0 )
+        if(transID == 0 || !(transType == 1 || transType == 2) )
         {
             // Error with the selected item             
             // alert error
@@ -288,7 +288,7 @@ public class TransactionDetails
         }
         
         // insert the information into the database
-        // start with the credit transactions
+        // update the CREDIT or DEBIT transactions table
         if(1 == transType)
         {
             updateTransactionQuery[0] = "UPDATE credit_transactions SET "
@@ -296,7 +296,7 @@ public class TransactionDetails
                     + itemsNo
                     + ", items_id = (SELECT items_id FROM items "
                     + "WHERE items_name='"
-                    + selectedItem
+                    + selectedItem.trim()
                     + "'), info = '"
                     +  notes
                     + "' WHERE "
@@ -307,7 +307,7 @@ public class TransactionDetails
         {
             updateTransactionQuery[0] = "UPDATE debit_transactions SET "
                     + " amount = "
-                    + itemsNo
+                    + amount
                     + ", info = '"
                     + notes
                     + "' where transaction_id = "
@@ -315,6 +315,7 @@ public class TransactionDetails
         }
         
         // create the second part of the query
+        // update the TRANSACTIONS table
         updateTransactionQuery[1] = "UPDATE transactions SET day =  "
                     + day
                     + ","
