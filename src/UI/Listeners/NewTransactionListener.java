@@ -4,19 +4,14 @@
 package UI.Listeners;
 
 import DbConnection.TransactionDetails;
+import DbConnection.TransactionTypes;
 import UI.BottomCenterPanel;
 import UI.Charts.Chart;
-import UI.LeftPanel;
 import UI.NewTransactionPanel;
-import UI.NewUserPanel;
-import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -59,34 +54,30 @@ public class NewTransactionListener implements ActionListener
             }                      
         }
         else if("Save".equals(ae.getActionCommand()))
-        {System.out.println("Currently selected Transaction Type : " +
-                NewTransactionPanel.currSelectedTransactionType);
+        {
             // check if all the required transaction details
             // are entered
             if(NewTransactionPanel.currSelectedTransactionType == 
-                    NewTransactionPanel.CREDIT_TRANSACTION)
-            {System.out.println("1 XXXXX") ;
-                // get the currently selected panel
-                int currPanel = NewTransactionPanel.currSelectedTransactionType; 
-                
+                    TransactionTypes.CREDIT_TRANSACTION)
+            {                               
                 if( NewTransactionPanel.date.getText().length() == 0 
                         || NewTransactionPanel.numberOfItems.getText().length() == 0
                         || NewTransactionPanel.items.getSelectedIndex() == -1 
                         || NewTransactionPanel.transactionNotes.getText().length() == 0 )
                 {
-                    JOptionPane.showMessageDialog(newTransPanel, "1. Please insert all transaction details"
+                    JOptionPane.showMessageDialog(newTransPanel, "Please insert all Credit transaction details"
                             , "Transaction Details Error", JOptionPane.INFORMATION_MESSAGE); 
                     return ;
                 }
             }
             else if (NewTransactionPanel.currSelectedTransactionType == 
-                    NewTransactionPanel.DEBIT_TRANSACTION)
-            {System.out.println("2 XXXXX") ;
+                    TransactionTypes.DEBIT_TRANSACTION)
+            {
                 if(NewTransactionPanel.debitDate.getText().length() == 0
                         || NewTransactionPanel.debitAmount.getText().length() == 0
                          || NewTransactionPanel.debitTransactionNotes.getText().length() == 0 )
                 {
-                    JOptionPane.showMessageDialog(newTransPanel, "2. Please insert all transaction details"
+                    JOptionPane.showMessageDialog(newTransPanel, "Please insert all debit transaction details"
                             , "Transaction Details Error", JOptionPane.INFORMATION_MESSAGE); 
                     return ;
                 }
@@ -95,42 +86,30 @@ public class NewTransactionListener implements ActionListener
             // insert the details into the database
             String [] date ;
             int noOfItems ;
-            int selectedItem ;
-            String transactionNotes = null ;
-            int dateTokensCounter = 0 ;
+            String selectedItem ;
+            String transactionNotes ;
             int debitAmount = 0;
             
             if(NewTransactionPanel.currSelectedTransactionType == 
-                    NewTransactionPanel.CREDIT_TRANSACTION)
+                    TransactionTypes.CREDIT_TRANSACTION)
             {
-                // split the date 
-                StringTokenizer tokens = new StringTokenizer(newTransPanel.date.getText().trim()
-                        , "/");
-
-                // initialise the date variable
-                date = new String[tokens.countTokens()];
-
-                // populate the date variable
-                while( tokens.hasMoreTokens() )
-                {
-                    date[dateTokensCounter] = tokens.nextToken() ;
-                    dateTokensCounter ++ ;
-                }
-
+                // get the date components
+                date = getDateTokens(NewTransactionPanel.date.getText().trim()) ;
+                                
                 // get the number of items
-                noOfItems = Integer.parseInt(newTransPanel.numberOfItems.getText().trim()) ;
+                noOfItems = Integer.parseInt(NewTransactionPanel.numberOfItems.getText().trim()) ;
 
                 // get the selected item
-                selectedItem = newTransPanel.items.getSelectedIndex() ;
+                selectedItem = (String) NewTransactionPanel.items.getSelectedItem() ;
 
                 // get the transaction notes
-                String notes = newTransPanel.transactionNotes.getText() ;
+                transactionNotes = NewTransactionPanel.transactionNotes.getText() ;
 
                 // populate the database with details of the new transaction
                 TransactionDetails tDetails = new TransactionDetails();
                 try 
                 {
-                    if( tDetails.insertCreditTransactionDetails(date, noOfItems, selectedItem, notes) )
+                    if( tDetails.insertCreditTransactionDetails(date, noOfItems, selectedItem, transactionNotes) )
                     {
                         // alert the user of the success in updating the message
                         JOptionPane.showMessageDialog(newTransPanel, "Transaction details "
@@ -157,33 +136,22 @@ public class NewTransactionListener implements ActionListener
                 }
             }
             else if (NewTransactionPanel.currSelectedTransactionType == 
-                    NewTransactionPanel.DEBIT_TRANSACTION)
-            {
-                // split the date 
-                StringTokenizer tokens = new StringTokenizer(newTransPanel.debitDate.getText().trim()
-                        , "/");
-
+                    TransactionTypes.DEBIT_TRANSACTION)
+            {                
                 // initialise the date variable
-                date = new String[tokens.countTokens()];
+                date = getDateTokens(NewTransactionPanel.debitDate.getText().trim());
 
-                // populate the date variable
-                while( tokens.hasMoreTokens() )
-                {
-                    date[dateTokensCounter] = tokens.nextToken() ;
-                    dateTokensCounter ++ ;
-                }
-
-                // get the debitted amount
-                debitAmount = Integer.parseInt(newTransPanel.debitAmount.getText().trim()) ;
+                // get the debited amount
+                debitAmount = Integer.parseInt(NewTransactionPanel.debitAmount.getText().trim()) ;
                 
                 // get the transaction notes
-                String notes = newTransPanel.debitTransactionNotes.getText() ;
+                transactionNotes = NewTransactionPanel.debitTransactionNotes.getText() ;
 
                 // populate the database with details of the new transaction
                 TransactionDetails tDetails = new TransactionDetails();
                 try 
                 {
-                    if( tDetails.insertDebitTransactionDetails(date, debitAmount, notes) )
+                    if( tDetails.insertDebitTransactionDetails(date, debitAmount, transactionNotes) )
                     {
                         // alert the user of the success in updating the message
                         JOptionPane.showMessageDialog(newTransPanel, "Transaction details "
@@ -239,4 +207,24 @@ public class NewTransactionListener implements ActionListener
         Chart.goToMonth(0);                
     }
     
+    private String[] getDateTokens ( String trimmedDate )
+    {
+        String [] date ;
+        int dateTokensCounter = 0 ;
+            
+        // split the date 
+        StringTokenizer tokens = new StringTokenizer(trimmedDate, "/");
+
+        // initialise the date variable
+        date = new String[tokens.countTokens()];
+
+        // populate the date variable
+        while( tokens.hasMoreTokens() )
+        {
+            date[dateTokensCounter] = tokens.nextToken() ;
+            dateTokensCounter ++ ;
+        }
+        
+        return date ;
+    }    
 }

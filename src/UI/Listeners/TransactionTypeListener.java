@@ -3,6 +3,7 @@
  */
 package UI.Listeners;
 
+import DbConnection.TransactionTypes;
 import UI.NewTransactionPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -22,19 +23,16 @@ public class TransactionTypeListener implements ChangeListener
 
         switch(index)
         {
-            case(NewTransactionPanel.CREDIT_TRANSACTION):
+            case(0):
                 NewTransactionPanel.currSelectedTransactionType = 
-                        NewTransactionPanel.CREDIT_TRANSACTION ;
+                        TransactionTypes.CREDIT_TRANSACTION ;
                 break ;
 
-            case(NewTransactionPanel.DEBIT_TRANSACTION):
+            case(1):
                 NewTransactionPanel.currSelectedTransactionType = 
-                        NewTransactionPanel.DEBIT_TRANSACTION ;
+                        TransactionTypes.DEBIT_TRANSACTION ;
                 break ;
         }
-        
-        System.out.println("Current Transaction Type : " + index + " " +
-                NewTransactionPanel.currSelectedTransactionType) ;
     }
 }
         

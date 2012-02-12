@@ -5,6 +5,7 @@ package UI;
 
 import AppActions.AppAction;
 import DbConnection.ItemsDetails;
+import DbConnection.TransactionTypes;
 import UI.Listeners.NewTransactionListener;
 import UI.Listeners.TransactionTypeListener;
 import UI.Models.ItemsModel;
@@ -76,13 +77,10 @@ public class NewTransactionPanel extends JPanel
     public static JTextArea debitTransactionNotes ;
     private JScrollPane debitTransScrollpane ;
     private JSeparator debitVerticalSeparator ;
-    private GroupLayout debitPaneLayout ;
-    
-    public static final int CREDIT_TRANSACTION = 0 ;
-    public static final int DEBIT_TRANSACTION = 1 ;
+    private GroupLayout debitPaneLayout ;    
     
     // set the default transaction
-    public static int currSelectedTransactionType = CREDIT_TRANSACTION ;
+    public static int currSelectedTransactionType = TransactionTypes.CREDIT_TRANSACTION ;
     
     
     public NewTransactionPanel(JFrame dialog)

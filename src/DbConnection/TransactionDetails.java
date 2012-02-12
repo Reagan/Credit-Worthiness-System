@@ -356,7 +356,7 @@ public class TransactionDetails
      * @return  
      */
     public boolean insertCreditTransactionDetails(String[] date, int noOfItems, 
-            int selectedItem, String transactionNotes) throws SQLException
+            String selectedItem, String transactionNotes) throws SQLException
     {       
         int transactionType = 1 ;
         int day = Integer.parseInt(date[0]); 
@@ -400,9 +400,9 @@ public class TransactionDetails
                 + "( transaction_id, items_id, items_number, info )"
                 + " VALUES ("
                 + mostRecentTransID
-                + ","
+                + ", (SELECT items_id FROM items WHERE items_name='"
                 + selectedItem
-                + ","
+                + "'),"
                 + noOfItems
                 + ", '"
                 + transactionNotes
