@@ -1,14 +1,28 @@
 1. x Fix loading picture
-2. Style UI elements to render as desired
-3. Port all database queries 
-4. Get rid of starting Overspent alerter dialog on startup
+2. x Style UI elements to render as desired
+3. x Port all database queries 
+4. x Get rid of starting Overspent alerter dialog on startup
 5. Finalise new user details and functionality
 6. Finalise edit current user details
 7. Finalise change settings details functionality
-8. Finalise Transaction options details 
+8. x Finalise Transaction display & options details 
 9. Finalise Print functionality modules
 10. x Link to JProgressBar item & status messages items
 11. x Place the application icon on each of the dialogs displayed	
 12. x Streamline the pictures obtained from the images folder
 13. Hook expensive procedures to the JProgressbar and the status message bar
-14. Cater for Credit & debit transactions in bottom left corner
+14. x Cater for Credit & debit transactions in bottom left corner
+15. x Add gradient to chart
+16. Finalise config options
+17. x Make all accelerators unique
+18. Correct displayed alerter amount (include amounts given to shop keeper, display credit limit)
+19. x white bg behind popup
+20. x enable Delete button in the transactions list
+21. Display nodes where cash was returned on chart
+22. Edit Items panel
+23. Navigate next & previous months via keyboard
+24. In status bar show modified and unmodified status of transaction
+25. On selection of node, scroll to transaction on  JList
+26. Use escape to close dialogs
+27. Debit transactions should be attached to the payment of some transaction or to '->Credit Limit-<'
+28. x Change the 'Overspent'  and 'underspent' labels to 'overlimit' & 'underlimit'

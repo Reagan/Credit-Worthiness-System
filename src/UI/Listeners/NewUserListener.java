@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -46,7 +47,7 @@ public class NewUserListener implements ActionListener
         if ("Cancel".equals(ae.getActionCommand()))
         {
             // close the new User dialog
-            JDialog g = userPanel.parent ;
+            JFrame g = userPanel.parent ;
             g.setVisible(false);
             g.dispose();
             
@@ -107,7 +108,7 @@ public class NewUserListener implements ActionListener
                             , "Details entered", JOptionPane.PLAIN_MESSAGE);
                     
                     // close the new User dialog
-                    JDialog g = userPanel.parent ;
+                    JFrame g = userPanel.parent ;
                     g.setVisible(false);
                     g.dispose();
                     

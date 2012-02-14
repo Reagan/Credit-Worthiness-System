@@ -26,8 +26,8 @@ public class AlertLabel extends JComponent
     public int alertStatus ;
     public static final int OVERSPENT_CONDITION = 1  ;
     public static final int UNDERSPENT_CONDITION = 2  ;
-    private final String OVERSPENT_TEXT = "Overspent" ;
-    private final String UNDERSPENT_TEXT = "Underspent" ;
+    private final String OVERSPENT_TEXT = "Overlimit" ;
+    private final String UNDERSPENT_TEXT = "Underlimit" ;
     
     private double creditOrDebit ;
     private final int ALERT_WIDTH = 175 ;

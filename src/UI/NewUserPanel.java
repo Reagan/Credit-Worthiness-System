@@ -11,6 +11,7 @@ import java.awt.FlowLayout;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -42,9 +43,9 @@ public class NewUserPanel extends JPanel
     public String userPicPath = null ; // stores the URL to the picture 
     public String userPicName = null ; // stores the name to the picture
     
-    public JDialog parent ; // stores the containing JDialog
+    public JFrame parent ; // stores the containing JDialog
     
-    public NewUserPanel(JDialog dialog)
+    public NewUserPanel(JFrame dialog)
     {
         // initialise the variables
         topPanel = new JPanel();
