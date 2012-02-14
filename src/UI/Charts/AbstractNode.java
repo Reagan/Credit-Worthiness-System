@@ -247,7 +247,7 @@ public abstract class AbstractNode
             }
             
            
-        // specify the details for a transaction payment
+            // specify the details for a transaction payment
             if(nodeType == Node.TRANSACTION_ITEM_NODE)
             {
                 if(info.length !=2 )
@@ -260,8 +260,7 @@ public abstract class AbstractNode
                 // populate the fields                
                 items = info[0] ;
                 worth = info[1] ;
-            }
-            
+            }            
             
             // draw the border
             FontMetrics metrics = graphics.getFontMetrics(graphics.getFont()) ;

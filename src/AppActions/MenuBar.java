@@ -125,7 +125,7 @@ public class MenuBar extends JMenuBar
         transactionsMenu.add(newTransactionMenuItem);
         
         deleteTransactionAction = new AppAction(deleteTransactionMenuItem,
-                                       "Delete Transaction", false, KeyEvent.VK_E);
+                                       "Delete Transaction", false, KeyEvent.VK_L);
         deleteTransactionAction.addActionClass(new DeleteTransactionAction());
         deleteTransactionMenuItem.setAction(deleteTransactionAction);
         transactionsMenu.add(deleteTransactionMenuItem);

@@ -269,7 +269,7 @@ public class BottomRightPanel extends JPanel
         
         // add the settings, save & delete buttons for the transactions panel section
         settingsAction = new AppAction(settingsButton, "Settings"
-                                        , true, KeyEvent.VK_S);
+                                        , true, KeyEvent.VK_G);
         settingsAction.addActionClass(new SettingsUserAction());
         settingsButton = new DepthButton(settingsAction) ;
         buttonsPanel.add(settingsButton) ;
