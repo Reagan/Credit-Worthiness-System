@@ -23,6 +23,6 @@
 23. Navigate next & previous months via keyboard
 24. In status bar show modified and unmodified status of transaction
 25. On selection of node, scroll to transaction on  JList
-26. Use escape to close dialogs
+26. x Use escape to close dialogs
 27. Debit transactions should be attached to the payment of some transaction or to '->Credit Limit-<'
 28. x Change the 'Overspent'  and 'underspent' labels to 'overlimit' & 'underlimit'

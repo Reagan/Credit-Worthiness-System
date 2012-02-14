@@ -69,6 +69,7 @@ public class UpdateTransactionAction extends AbstractedAction
         if(-1 != transToSelect)
         {
             BottomCenterPanel.transactionsList.setSelectedIndex(transToSelect);
+            BottomCenterPanel.transactionsList.ensureIndexIsVisible(transToSelect); 
         }
     }      
     
