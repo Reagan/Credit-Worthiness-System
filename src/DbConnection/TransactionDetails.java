@@ -190,13 +190,14 @@ public class TransactionDetails
                 + " AS item_name , items_number, (SELECT items_number*items_cost "
                 +" FROM items AS k where k.items_id = c.items_id) AS total_items_cost "
                 + " FROM credit_transactions AS c, (SELECT transaction_id,transaction_type, "
-                + " day FROM transactions where customers_id= "
+                + " day, month, year FROM transactions where customers_id= "
                 + customers_id
                 + " AND month= "
                 + month
                 + " AND year= "
                 + year
-                + ") AS s WHERE c.transaction_id = s.transaction_id ";
+                + ") AS s WHERE c.transaction_id = s.transaction_id ORDER BY s.day, "
+                + "s.month, s.year ";
         
         Vector plottedTransValues = new Vector() ;
         

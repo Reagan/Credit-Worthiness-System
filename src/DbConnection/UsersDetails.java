@@ -33,6 +33,8 @@ public class UsersDetails
     private String getTotalExpenditureQuery ;
     private String getCreditAmountQuery ;
     private String [] getCustomerCreditLimit ;
+    private String getAmountRepaidQuery ; // query to determine the amount of money 
+                // that a user has repaid for items taken on credit
     
     public UsersDetails(){}
 
@@ -463,6 +465,7 @@ public class UsersDetails
     {
         double totalExpenditure = 0 ;
         double creditOrDebitAmount  = 0 ;
+        double amountRepaid = 0 ;
         
         // get the user's total expenditure
         getTotalExpenditureQuery = "SELECT total_items_cost FROM (SELECT transaction_id, "
@@ -492,7 +495,7 @@ public class UsersDetails
             
             String [] results = new String[1] ;
             results = (String[]) expenditureAmount.get(counter) ;
-            totalExpenditure = totalExpenditure + Double.parseDouble(results[0]) ;                                                             
+            totalExpenditure += Double.parseDouble(results[0]) ;                                                             
         }
         
         // get the user's credit limit
@@ -521,8 +524,34 @@ public class UsersDetails
  
         }
         
+        // get the total amount that the user has paid back 
+        // for the purchase of various items
+        getAmountRepaidQuery = "SELECT amount FROM debit_TRANSACTIONS AS d , "
+                + "(SELECT transaction_id  FROM transactions WHERE customers_id = "
+                + custID
+                + "AND transaction_type = 2) AS t WHERE d.transaction_id = t.transaction_id" ;
+        
+        Vector repaidAmount = null ;
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        repaidAmount = dbConn.fetch(getAmountRepaidQuery);
+        
+        // open up the returned values and 
+        // return the user names in the desired 
+        // format [firstname lastname]
+        for(int counter = 0, s = repaidAmount.size();
+                counter < s ; counter ++)
+        {
+            
+            String [] results = new String[1] ;
+            results = (String[]) repaidAmount.get(counter) ;
+            amountRepaid += Double.parseDouble(results[0]) ;
+        }
+        
         // get the difference to see if the customer is 
         // underspending or overspending              
-        return creditOrDebitAmount - totalExpenditure ;
+        return creditOrDebitAmount - totalExpenditure + amountRepaid ;
     }        
 }

@@ -4,9 +4,12 @@
 package AppActions;
 
 import DbConnection.TransactionDetails;
+import DbConnection.UsersDetails;
 import UI.BottomCenterPanel;
 import UI.BottomRightPanel;
+import UI.CenterPanel;
 import UI.Charts.Chart;
+import credit.worthiness.system.CreditWorthinessSystem;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
@@ -75,8 +78,33 @@ public class DeleteTransactionAction extends AbstractedAction
                 
                 // update the chart to show that the transaction has been deleted
                 Chart.goToMonth(0) ;
+                
+                // update the alerter pane with the users credit/debit amount
+                CenterPanel.updateAlertLabel(
+                    getUserCreditOrDebitAmount(
+                        CreditWorthinessSystem.getCurrentUserID()
+                    ));
             }
                         
         }
+    }
+    
+    /**
+     * This method obtains the amount by which a customer
+     * is in debt or credit and returns this value
+     * @param currentUserID
+     * @return 
+     */
+    private double getUserCreditOrDebitAmount(int currentUserID) 
+    {
+        double creditOrDebitAmount = 0 ;
+        
+        // get the current month and year
+        int [] currYearAndMonth = CenterPanel.getCurrentMonthAndYear() ;
+        
+        UsersDetails user = new UsersDetails() ;
+        creditOrDebitAmount = user.getCustCreditOrDebitAmount(currentUserID) ;
+        
+        return creditOrDebitAmount ;
     }  
 }

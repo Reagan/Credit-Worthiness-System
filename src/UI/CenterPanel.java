@@ -6,13 +6,7 @@ package UI;
 import AppActions.UpdateTransactionAction;
 import DbConnection.TransactionDetails;
 import DbConnection.UsersDetails;
-import UI.Charts.Chart;
-import UI.Charts.ChartPlot;
-import UI.Charts.GraphNode;
-import UI.Charts.Grid;
-import UI.Charts.Node;
-import UI.Charts.NodeSelected;
-import UI.Charts.NodeSelectedListener;
+import UI.Charts.*;
 import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -22,12 +16,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 /**
  *
@@ -75,16 +64,14 @@ public class CenterPanel extends JPanel
             }
         });
         
-        //~---------------------------------------------------------
+        /**~---------------------------------------------------------
         // add a test border to ensure that the chart component respects borders
-        // when it is embedded in other components
-        /**
+        // when it is embedded in other components        
         Border outterBorder = BorderFactory.createEmptyBorder(10,10,10,10);
         Border innerBorder = BorderFactory.createTitledBorder("Chart");
         Border compoundBorder = BorderFactory.createCompoundBorder(outterBorder, innerBorder);
-        chart.setBorder(compoundBorder);
-        **/
-        //~----------------------------------------------------------
+        chart.setBorder(compoundBorder);        
+        ~----------------------------------------------------------**/
         
         // set the model to null since no user has been selected
         allChartPlots = null ;

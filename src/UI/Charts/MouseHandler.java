@@ -78,7 +78,7 @@ public class MouseHandler extends MouseInputAdapter
         Point p = e.getPoint();
         AbstractNode hoveredNode = getNodeAt(p);
 
-        if(hoveredNode != null  && e.getClickCount() == 2)
+        if(hoveredNode != null)
         {
             // select the node
             // make sure first that no node has a border
@@ -97,7 +97,8 @@ public class MouseHandler extends MouseInputAdapter
                 }
             }                   
            
-            hoveredNode.selected = true ;                
+            if ( hoveredNode.getNodeType() != Node.CREDIT_ITEM_NODE )
+                hoveredNode.selected = true ;                
 
             // add the border around the node
             graph.repaint();               
@@ -114,13 +115,16 @@ public class MouseHandler extends MouseInputAdapter
             }
             else
             {
-                // obtain the transaction id for the selected 
-                // node
-                int selectedNodeID = transIDs[0] ;
-                
-                // fire custom event
-                NodeSelected n = new NodeSelected(chart, selectedNodeID) ;
-                chart.fireNodeSelected(n);                                           
+                if ( hoveredNode.getNodeType() != Node.CREDIT_ITEM_NODE )
+                {
+                    // obtain the transaction id for the selected 
+                    // node
+                    int selectedNodeID = transIDs[0] ;
+
+                    // fire custom event
+                    NodeSelected n = new NodeSelected(chart, selectedNodeID) ;
+                    chart.fireNodeSelected(n);  
+                }
             }              
         }
     }

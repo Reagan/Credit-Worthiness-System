@@ -15,14 +15,18 @@
 15. x Add gradient to chart
 16. Finalise config options
 17. x Make all accelerators unique
-18. Correct displayed alerter amount (include amounts given to shop keeper, display credit limit)
+18. x Correct displayed alerter amount (include amounts given to shop keeper, display credit limit)
 19. x white bg behind popup
 20. x enable Delete button in the transactions list
 21. Display nodes where cash was returned on chart
 22. Edit Items panel
-23. Navigate next & previous months via keyboard
+23. x Navigate next & previous months via keyboard
 24. In status bar show modified and unmodified status of transaction
-25. On selection of node, scroll to transaction on  JList
+25. x On selection of node, scroll to transaction on  JList
 26. x Use escape to close dialogs
 27. Debit transactions should be attached to the payment of some transaction or to '->Credit Limit-<'
 28. x Change the 'Overspent'  and 'underspent' labels to 'overlimit' & 'underlimit'
+29. x Display graph of nodes in sequence of dates that the transaction occurred and not DB entries
+30. x Update alerter when a transaction is updated...
+31. x Disable selection of credit nodes
+32. Add focus to the Chart on start up

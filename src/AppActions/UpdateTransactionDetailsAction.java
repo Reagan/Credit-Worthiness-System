@@ -6,9 +6,12 @@ package AppActions;
 
 import DbConnection.TransactionDetails;
 import DbConnection.TransactionTypes;
+import DbConnection.UsersDetails;
 import UI.BottomCenterPanel;
 import UI.BottomRightPanel;
+import UI.CenterPanel;
 import UI.Charts.Chart;
+import credit.worthiness.system.CreditWorthinessSystem;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -116,6 +119,13 @@ public class UpdateTransactionDetailsAction extends AbstractedAction
             
             // set the dirty tag to false
             BottomRightPanel.dirty = false ;
+            
+            // update the alerter with the right credit/debit amount for the
+            // user
+            CenterPanel.updateAlertLabel(
+                    getUserCreditOrDebitAmount(
+                        CreditWorthinessSystem.getCurrentUserID()
+                    ));
         }
         else
         {
@@ -187,4 +197,24 @@ public class UpdateTransactionDetailsAction extends AbstractedAction
         cal.setTime(d);     
         return cal ;
     }
+    
+    
+    /**
+     * This method obtains the amount by which a customer
+     * is in debt or credit and returns this value
+     * @param currentUserID
+     * @return 
+     */
+    private double getUserCreditOrDebitAmount(int currentUserID) 
+    {
+        double creditOrDebitAmount = 0 ;
+        
+        // get the current month and year
+        int [] currYearAndMonth = CenterPanel.getCurrentMonthAndYear() ;
+        
+        UsersDetails user = new UsersDetails() ;
+        creditOrDebitAmount = user.getCustCreditOrDebitAmount(currentUserID) ;
+        
+        return creditOrDebitAmount ;
+    }      
 }

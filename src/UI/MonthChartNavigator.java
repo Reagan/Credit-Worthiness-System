@@ -14,11 +14,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  *
@@ -56,15 +55,25 @@ public class MonthChartNavigator extends JPanel
         // add the action for the previous month        
         monthMovePreviousAction = new AppAction(nextMonthButton, "<", 
                                 false, KeyEvent.VK_LEFT);
-        monthMovePreviousAction.addActionClass(new GoToPreviousMonthAction());
-        previousMonthButton = new DepthButton(monthMovePreviousAction);
+        GoToPreviousMonthAction goToPreviousMonthAction = new GoToPreviousMonthAction() ;
+        monthMovePreviousAction.addActionClass(goToPreviousMonthAction);
+        previousMonthButton = new DepthButton(monthMovePreviousAction) ;
+            
+        // allow the user to navigate months using the keyboard > 
+        previousMonthButton.registerKeyboardAction(monthMovePreviousAction,
+        KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0),
+        JComponent.WHEN_IN_FOCUSED_WINDOW);
         
         // add the action for the next month        
         monthMoveNextAction = new AppAction(nextMonthButton, ">", 
                                 false, KeyEvent.VK_RIGHT);
         monthMoveNextAction.addActionClass(new GoToNextMonthAction());
         nextMonthButton = new DepthButton(monthMoveNextAction);
-              
+        
+        // allow user to use the keyboard to navigate months using keyboard <
+        nextMonthButton.registerKeyboardAction(monthMoveNextAction,
+        KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0),
+        JComponent.WHEN_IN_FOCUSED_WINDOW);
         
         // lay out the components
         setPreferredSize(new Dimension(COMPONENT_WIDTH, COMPONENT_HEIGHT));        

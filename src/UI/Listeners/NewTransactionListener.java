@@ -5,9 +5,12 @@ package UI.Listeners;
 
 import DbConnection.TransactionDetails;
 import DbConnection.TransactionTypes;
+import DbConnection.UsersDetails;
 import UI.BottomCenterPanel;
+import UI.CenterPanel;
 import UI.Charts.Chart;
 import UI.NewTransactionPanel;
+import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -178,6 +181,12 @@ public class NewTransactionListener implements ActionListener
                 }
             }
             
+            // update the alerter showing the amount of credit/debit user has
+            CenterPanel.updateAlertLabel(
+                    getUserCreditOrDebitAmount(
+                        CreditWorthinessSystem.getCurrentUserID()
+                    ));
+            
             // close the dialog
             closeNewTransactionDialog();
         }
@@ -226,5 +235,24 @@ public class NewTransactionListener implements ActionListener
         }
         
         return date ;
-    }    
+    } 
+    
+    /**
+     * This method obtains the amount by which a customer
+     * is in debt or credit and returns this value
+     * @param currentUserID
+     * @return 
+     */
+    private double getUserCreditOrDebitAmount(int currentUserID) 
+    {
+        double creditOrDebitAmount = 0 ;
+        
+        // get the current month and year
+        int [] currYearAndMonth = CenterPanel.getCurrentMonthAndYear() ;
+        
+        UsersDetails user = new UsersDetails() ;
+        creditOrDebitAmount = user.getCustCreditOrDebitAmount(currentUserID) ;
+        
+        return creditOrDebitAmount ;
+    }  
 }
