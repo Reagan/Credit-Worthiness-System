@@ -6,8 +6,8 @@ package DbConnection;
 import UI.LeftPanel;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Vector;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,6 +35,7 @@ public class UsersDetails
     private String [] getCustomerCreditLimit ;
     private String getAmountRepaidQuery ; // query to determine the amount of money 
                 // that a user has repaid for items taken on credit
+    private String getUserSettingsDetails ; // gets all the details about the user in a go
     
     public UsersDetails(){}
 
@@ -219,7 +220,7 @@ public class UsersDetails
         Vector userTransactions = null;
         Vector userTransactionsRes = new Vector() ;
         
-        // deprecating IF command
+        // deprecating IF command, no support for command in H2
         /**
         getUserTransactionsQuery = "SELECT IF(transaction_type=1,(SELECT items_name FROM items WHERE "
                 + "items.items_id = (SELECT items_id FROM credit_transactions WHERE "
@@ -553,5 +554,51 @@ public class UsersDetails
         // get the difference to see if the customer is 
         // underspending or overspending              
         return creditOrDebitAmount - totalExpenditure + amountRepaid ;
-    }        
+    }     
+    
+    /** 
+     * This method gets the settings details for a specific user as identified
+     * by the user ID. 
+     * @param userID
+     * @return 
+     */
+    public String[]  getUserSettingsDetails(int userID)
+    {        
+        HashMap<String, String> userDetails = null ;
+        Vector resUserDetails = null ;
+        String [] returnedUserDetails = {} ;
+        
+        getUserSettingsDetails = "SELECT customers.customers_id, customers_firstname, "
+                + "customers_secondname, customers_address, images_name, "
+                + "customers_contact_number, credit_limit.credit_allowed, joining_day , "
+                + "joining_month , year  FROM customers , (SELECT credit_allowed "
+                + "FROM credit WHERE customers_id="
+                + userID
+                + ") AS credit_limit WHERE customers.customers_id="
+                + userID ;
+        
+        dbConn = new DatabaseConnection();
+        dbConn.connect();
+        
+        resUserDetails = dbConn.fetch(getUserSettingsDetails);
+        returnedUserDetails = (String[]) resUserDetails.get(0) ;
+        
+        return returnedUserDetails ;
+    }
+    
+    /**
+     * This method sets the user settings for a specific user as contained in the 
+     * userSettings hashmap arg
+     * @param userID
+     * @param userSettings
+     * @return 
+     */
+    public boolean setUserSettingsDetails(int userID, 
+            HashMap<String, String> userSettings)
+    {
+        boolean status = false ; 
+        
+        
+        return status ;
+    }
 }

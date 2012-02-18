@@ -5,6 +5,7 @@ package AppActions;
 
 import UI.ApplicationIcon;
 import UI.NewUserPanel;
+import credit.worthiness.system.CreditWorthinessSystem;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -56,7 +57,7 @@ public class EditCurrUserAction extends AbstractedAction
             setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);
             ApplicationIcon.getInstance().setApplicationIcon(this);            
 
-            NewUserPanel panel = new NewUserPanel(this);                        
+            NewUserPanel panel = new NewUserPanel(this, CreditWorthinessSystem.getCurrentUserID());                        
             getContentPane().add(panel);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             pack(); 

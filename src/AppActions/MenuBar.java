@@ -3,8 +3,8 @@
  */
 package AppActions;
 
-import UI.BottomRightPanel;
 import java.awt.event.KeyEvent;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -25,6 +25,7 @@ public class MenuBar extends JMenuBar
     private JMenuItem newUserMenuItem ;
     private JMenuItem deleteCurrentUserMenuItem ;
     private JMenuItem editCurrentUserMenuItem ;
+    private JMenuItem editItemsMenuItem ;
     private JMenuItem changeSettingsMenuItem ;
     private JMenuItem exitMenuItem;
     private JMenuItem newTransactionMenuItem ;
@@ -33,12 +34,13 @@ public class MenuBar extends JMenuBar
     private JMenuItem userTransLogMenuItem ;
     private JMenuItem monthlyReportMenuItem ;
     private JMenuItem pendingCreditItemsMenuItem ;
-    private JMenuItem aboutMenuItem ;
+    private JMenuItem aboutMenuItem ;    
     
     // Add the actions
     private static AppAction newUserAction ;
     private static AppAction editCurrentUserAction ;
     private static AppAction deleteCurrentUserAction ;
+    private static AppAction editItemsAction ;
     private static AppAction changeSettingsAction ;
     private static AppAction exitAction ;
     private static AppAction newTransactionAction ;
@@ -60,6 +62,7 @@ public class MenuBar extends JMenuBar
         newUserMenuItem = new JMenuItem();
         editCurrentUserMenuItem = new JMenuItem() ;
         deleteCurrentUserMenuItem = new JMenuItem();
+        editItemsMenuItem = new JMenuItem() ;
         changeSettingsMenuItem = new JMenuItem();
         exitMenuItem = new JMenuItem();
         newTransactionMenuItem = new JMenuItem();
@@ -101,6 +104,10 @@ public class MenuBar extends JMenuBar
         deleteCurrentUserMenuItem.setAction(deleteCurrentUserAction);
         fileMenu.add(deleteCurrentUserMenuItem);
         
+        editItemsAction = new AppAction(editItemsMenuItem, "Edit Items", true, KeyEvent.VK_I) ;
+        editItemsMenuItem.setAction(editItemsAction);
+        editItemsAction.addActionClass(new EditItemsAction());
+        fileMenu.add(editItemsMenuItem) ;
         
         changeSettingsAction = new AppAction(changeSettingsMenuItem, 
                                                 "Change Settings", true, KeyEvent.VK_G);
@@ -120,7 +127,7 @@ public class MenuBar extends JMenuBar
         // add the Transactions JMenuItems
         newTransactionAction = new AppAction(newTransactionMenuItem,
                                       "New Transaction", false, KeyEvent.VK_T);
-        newTransactionAction.addActionClass(new NewTransactionAction());
+        newTransactionAction.addActionClass(new EditItemsAction());
         newTransactionMenuItem.setAction(newTransactionAction);
         transactionsMenu.add(newTransactionMenuItem);
         

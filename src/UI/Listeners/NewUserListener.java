@@ -10,15 +10,9 @@ import UI.LeftPanel;
 import UI.NewUserPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.SQLException;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -54,6 +48,7 @@ public class NewUserListener implements ActionListener
         }
         else if("Save".equals(ae.getActionCommand()))
         {
+            /**
             // get the entered details
             if( userPanel.nameTextField.getText().length() == 0 )
             // enter the details to the database
@@ -122,6 +117,7 @@ public class NewUserListener implements ActionListener
                             , "Error in details entered", JOptionPane.PLAIN_MESSAGE);
                 }
             }
+            **/
         }            
     }       
 }

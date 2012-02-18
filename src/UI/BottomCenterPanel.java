@@ -5,7 +5,7 @@ package UI;
 
 import AppActions.AppAction;
 import AppActions.DeleteTransactionAction;
-import AppActions.NewTransactionAction;
+import AppActions.EditItemsAction;
 import UI.Listeners.TransactionListener;
 import UI.Models.UserTransactionsModel;
 import credit.worthiness.system.CreditWorthinessSystem;
@@ -46,7 +46,7 @@ public class BottomCenterPanel extends JPanel
         // initialise the variables
         createTransactionAction = new AppAction(createNewButton, "Create"
                                         , false, KeyEvent.VK_T);
-        createTransactionAction.addActionClass(new NewTransactionAction());
+        createTransactionAction.addActionClass(new EditItemsAction());
         createNewButton = new DepthButton(createTransactionAction);
         
         

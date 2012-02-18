@@ -5,6 +5,7 @@ package UI.Charts;
 
 import AppActions.UpdateTransactionAction;
 import java.awt.Point;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.event.MouseInputAdapter;
@@ -24,6 +25,20 @@ public class MouseHandler extends MouseInputAdapter
         // attach the Graph Panel to the MouseHandler
         graph = g ;
         chart = c ;
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) 
+    {
+        switch(e.getModifiers()) 
+        {
+            case InputEvent.BUTTON3_MASK: 
+        
+            // display the popup menu
+            ChartPopup popUp = new ChartPopup() ;
+            popUp.show(e.getComponent(), e.getX(), e.getY());
+            break;
+        }
     }
     
     @Override
