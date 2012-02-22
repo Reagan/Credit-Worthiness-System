@@ -130,7 +130,7 @@ public class Chart extends JPanel
         }
         
         // initialise the model
-        cModel = new ChartModel(month, year, 
+        cModel = new ChartModel(chartInitialDisplayMonth, chartInitialDisplayYear, 
                 yMinAndMaxValues, chartPlots) ;        
                 
         // add the model to the grid and graph
@@ -242,10 +242,10 @@ public class Chart extends JPanel
     private void initialiseChartProperties() 
     {
         creditPlotDisplayed = (AppProperties.getInstance()
-                .getValueOf(AppProperties.CREDIT_PLOT_DISPLAYED).equals("true")) ? true : false ;
+                .getValueOf(AppProperties.CREDIT_PLOT_DISPLAYED).equals("yes")) ? true : false ;
         
         hoverTransactionPopupDefaultOn = (AppProperties.getInstance()
-                .getValueOf(AppProperties.POPUP_DEFAULT).equals("true")) ? true : false ;
+                .getValueOf(AppProperties.POPUP_DEFAULT).equals("yes")) ? true : false ;
         
         String initialMonth = AppProperties.getInstance()
                 .getValueOf(AppProperties.CHART_INITIAL_MONTH) ;

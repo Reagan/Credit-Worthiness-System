@@ -3,6 +3,7 @@
  */
 package DbConnection;
 
+import AppProperties.AppProperties;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,32 +23,39 @@ import java.util.Vector;
  */
 public class DatabaseConnection 
 {
-    // private final String DRIVER = "com.mysql.jdbc.Driver";
-    private final String DRIVER = "org.h2.Driver" ;
+    // retrieve the database connection details from the 
+    // config file -- defaults to connection on H2 embedded database
+    private String user = null  ;    
+    private String password = null ;            
+    private String dbDriver = ""  ;        
+    private String databaseURL = "" ;
     
-    // private final String DATABASE_URL = "jdbc:mysql://localhost/cws";
-    private final String DATABASE_URL = "jdbc:h2:runtime_required" + File.separator + "database";
+    private String databaseName = null ;
+    private String databaseHost = null ;
+    private String databasePort = null ;
     
-    public Connection connection = null;
-    //private String user = "root";
-    private String user = "sa";
-    // private String password = "reagan7351";
-    private String password = "";
-    
+    public Connection connection = null;       
     private Statement statement = null ;
     private DatabaseConnection dbConn = null ;
     private ResultSet result = null ;
     
     private int mostRecentTransactionID = -1 ;
     
-    public DatabaseConnection(){}
+    public DatabaseConnection()
+    {
+       if ( dbDriver.equals("") && databaseURL.equals(""))
+       {
+           initialiseDbObect() ;
+       }
+    }
+    
     
     public boolean connect()
     {
         try
         {
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(DATABASE_URL,user,password);
+            Class.forName(dbDriver);
+            connection = DriverManager.getConnection(databaseURL,user,password);
             
             if(null != connection)
             {
@@ -187,5 +195,36 @@ public class DatabaseConnection
     public int getMostRecentTransactionID()
     {
         return mostRecentTransactionID ;
+    }
+
+    private void initialiseDbObect() 
+    {
+     // set the user and the password
+        user = (AppProperties.getInstance().getValueOf(AppProperties.DB_USERNAME).equals(""))?
+            "sa" : (AppProperties.getInstance().getValueOf(AppProperties.DB_USERNAME))  ;
+    
+        password = (AppProperties.getInstance().getValueOf(AppProperties.DB_PASSWORD).equals(""))?
+            "" : (AppProperties.getInstance().getValueOf(AppProperties.DB_USERNAME)) ;
+    
+        // get the database host, name & port
+        databaseName = (AppProperties.getInstance().getValueOf(AppProperties.DB_NAME).equals(""))?
+                "database" : (AppProperties.getInstance().getValueOf(AppProperties.DB_NAME)) ;
+        databaseHost = (AppProperties.getInstance().getValueOf(AppProperties.DB_HOST).equals(""))?
+                "localhost" : (AppProperties.getInstance().getValueOf(AppProperties.DB_HOST)) ;
+        databasePort = (AppProperties.getInstance().getValueOf(AppProperties.DB_PORT).equals(""))?
+                "8082" : (AppProperties.getInstance().getValueOf(AppProperties.DB_PORT)) ;
+                
+        // set the db DRIVER
+        String dbType = (AppProperties.getInstance().getValueOf(AppProperties.DB_TYPE)) ; 
+        if ( dbType.equals("") || dbType.equals("h2") )
+        {
+                dbDriver = "org.h2.Driver" ;
+                databaseURL = "jdbc:h2:runtime_required" + File.separator + databaseName;
+        }
+        else if ( dbType.equals("MySQL") )
+        {
+            dbDriver = "com.mysql.jdbc.Driver" ;
+            databaseURL = "jdbc:mysql://" + databaseHost+ ":" +databasePort+"/" +databaseName ; 
+        }    
     }
 }

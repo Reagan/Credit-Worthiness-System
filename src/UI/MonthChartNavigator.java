@@ -7,6 +7,7 @@ import AppActions.AbstractedAction;
 import AppActions.AppAction;
 import AppActions.GoToNextMonthAction;
 import AppActions.GoToPreviousMonthAction;
+import UI.Charts.Chart;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -49,8 +50,9 @@ public class MonthChartNavigator extends JPanel
         monthNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         
         // set the label for the month and year
-        int[] monthYear = getCurrentMonthAndYear();
-        setMonthAndYear(monthYear[0], monthYear[1]);        
+       //  int[] monthYear = getCurrentMonthAndYear();
+        setMonthAndYear(
+                Chart.chartInitialDisplayMonth, Chart.chartInitialDisplayYear);        
                       
         // add the action for the previous month        
         monthMovePreviousAction = new AppAction(nextMonthButton, "<", 

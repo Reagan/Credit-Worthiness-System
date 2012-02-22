@@ -3,6 +3,7 @@
  */
 package AppActions;
 
+import AppProperties.AppProperties;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,8 +20,9 @@ public class AboutAction extends AbstractedAction
     
     public AboutAction()
     {
-        String appMessage = "Credit Worthiness System version 1.0 \n"+
-            "was developed towards the completion of a Project";
+        appMessage = (AppProperties.getInstance().getValueOf(AppProperties.ABOUT_INFO).equals("")) ?
+                "Credit Worthiness System version 1.0 \n"+
+            "was developed towards the completion of a Project" : (AppProperties.getInstance().getValueOf(AppProperties.ABOUT_INFO)) ;
         aboutDialogTitle = "About CWS vs 1.0";
         messageType = JOptionPane.PLAIN_MESSAGE;
     }

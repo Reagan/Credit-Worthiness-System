@@ -37,15 +37,17 @@ public class CenterPanel extends JPanel
     public CenterPanel()
     {
         // initialise the components
-        alerter = new AlertLabel();
-        monthNav = new MonthChartNavigator();
+        alerter = new AlertLabel();        
         title = new JLabel("Transactions");
         title.setFont(new Font("sanSerif", Font.PLAIN, 31));
         yAxisLabel = new VerticalJLabel("Amount, Kshs");                
         
         // create a new Chart instance
         chart = new Chart();
-
+        
+        // initialise the month chart navigator
+        monthNav = new MonthChartNavigator();
+        
         // Attach a custom event listener to the chart
         chart.addNodeSelectedListener(new NodeSelectedListener() {
             @Override

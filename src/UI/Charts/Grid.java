@@ -5,9 +5,6 @@ package UI.Charts;
 
 import UI.Models.ChartModel;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
-import java.nio.DoubleBuffer;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

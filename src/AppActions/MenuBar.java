@@ -4,7 +4,6 @@
 package AppActions;
 
 import java.awt.event.KeyEvent;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;

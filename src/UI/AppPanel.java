@@ -4,6 +4,7 @@
 package UI;
 
 import AppActions.MenuBar;
+import AppProperties.AppProperties;
 import UI.Listeners.CWSWindowAdapter;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -25,7 +26,8 @@ public final class AppPanel extends JFrame
     // Application dimensions
     private int appWidth = 911 ;
     private int appHeight = 774 ;
-    private String applicationName = "Credit Worthiness System";
+    private String applicationName = (AppProperties.getInstance().getValueOf(AppProperties.APP_NAME).equals("")) ?
+            "Credit Worthiness System" : (AppProperties.getInstance().getValueOf(AppProperties.APP_NAME)) ;
     private Dimension d = null; 
     private Toolkit toolKit = null; 
     private CWSWindowAdapter exitAction = new CWSWindowAdapter();

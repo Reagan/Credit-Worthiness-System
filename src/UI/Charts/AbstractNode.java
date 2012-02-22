@@ -167,7 +167,7 @@ public abstract class AbstractNode
                     , nodeRadius, nodeRadius) ;  
         graphics.fill(circle);
         
-        if(true == popUpEnabled)
+        if( true == popUpEnabled || Chart.hoverTransactionPopupDefaultOn == true )
         {
             showPopupInfo(nodeInfo);
         }                
