@@ -3,8 +3,10 @@
  */
 package AppProperties;
 
-import java.io.*;
-import java.net.URL;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
 import javax.swing.JOptionPane;
 
@@ -21,6 +23,32 @@ public class AppProperties
             // "C:\\Documents and Settings\\Reayn\\Desktop\\cws.config";
             "runtime_required" + File.separator + "cws.config" ;
     private static AppProperties thisInstance = null ;
+    
+    // define the properties as  stored in the config file
+    // Application properties 
+    public final static String APP_NAME = "appName" ;
+    public final static String APP_VERSION = "appVersion" ;
+    public final static String APP_INFO = "appInfo" ;
+
+    // database properties
+    public final static String DB_NAME = "dbName" ;
+    public final static String DB_HOST = "dbHost" ;
+    public final static String DB_PORT = "dbPort" ;
+    public final static String DB_USERNAME = "dbUsername" ;
+    public final static String DB_PASSWORD = "dbPassword" ;
+    public final static String DB_TYPE = "dbType" ;
+
+    // about application information
+    public final static String ABOUT_INFO = "aboutInfo" ;
+
+    // chart settings
+    public final static String CREDIT_PLOT_DISPLAYED = "creditPlotDisplayed" ;
+    public final static String POPUP_DEFAULT = "hoverTransactionPopupDefaultOn" ;
+    public final static String CHART_INITIAL_MONTH = "chartInitialDisplayMonthYear" ;
+
+    // user icon images
+    public final static String IMAGES_LOCATION = "imagesLocation" ;
+    public final static String DEFAULT_USER_ICON = "defaultUserImageIcon" ;
     
     private AppProperties() 
     {      
@@ -83,9 +111,6 @@ public class AppProperties
         // initialise the properties object
         properties = new Properties() ;
         
-        // create the file input stream
-       // InputStream in;
-        
         // get the properties
         try 
         {  
@@ -118,6 +143,6 @@ public class AppProperties
     // config file
     public static void main(String[] args)
     {
-        System.out.println(AppProperties.getInstance().getValueOf("dbName"));
+        System.out.println(AppProperties.getInstance().getValueOf(AppProperties.ABOUT_INFO));
     }
 }

@@ -3,6 +3,7 @@
  */
 package UI.Charts;
 
+import AppProperties.AppProperties;
 import UI.CenterPanel;
 import UI.Models.ChartModel;
 import UI.StackLayout;
@@ -20,25 +21,47 @@ import javax.swing.event.EventListenerList;
  */
 public class Chart extends JPanel 
 {
+    // chart dimensions
     public static int CHART_WIDTH = 640 ;
     public static int CHART_HEIGHT = 233 ;
     private static Grid grid; // the grid object store separately for 
                         // further customization
     private static GraphPanel graph ; // will store the nodes and the chart lines   
     
+    // legend items
     private static String[] legendItems  = {"Credit Limit" , "Transactions"} ;
     private static Color[] legendColors = { new Color(255, 0, 0), new Color(0, 97, 0)} ;
             
+    // Calendar & Chart instances
     private static Calendar cal ;        
     private static ChartModel cModel ;   
     
-    
+    // stores current time
     public static int currTime[] = { 0,0 } ;
+    
+    // insets so that the border is observed when the component
+    // is embedded in component with Border
     public static Insets insets ;
         
+    // detects mouse motions on the chart
     private MouseHandler mh ; 
     
+    // populated with the application's current 
+    // year and month
+    private static int month ; 
+    private static int year ;
+    
+    // container for custom events for chart component
     protected EventListenerList listenerList = new EventListenerList() ;
+    
+    // chart settings
+    public static boolean creditPlotDisplayed = true ; // determines 
+                                // whether the credit plot will be displayed
+    public static boolean hoverTransactionPopupDefaultOn = false ; // determines whether or not popups
+                                // should be displayed by default or not
+    public static int chartInitialDisplayMonth ; // displays the default month to 
+                                // be displayed by the chart
+    public static int chartInitialDisplayYear  ; // stores the default display year for the chart
     
     public Chart()
     {
@@ -51,6 +74,12 @@ public class Chart extends JPanel
         setMinimumSize(new Dimension(CHART_WIDTH, CHART_HEIGHT));
         setOpaque(false);     
         setLayout(new StackLayout());
+        
+        // get the current month and year
+        getCurrentMonthAndYear();
+        
+        // initialise chart properties
+        initialiseChartProperties() ;
     }
       
     /**
@@ -86,8 +115,7 @@ public class Chart extends JPanel
      * @param yMinAndMaxValues
      * @param chartPlots  
      */
-    public void setModel(int month, int year, 
-               int[] yMinAndMaxValues, ChartPlot[] chartPlots)
+    public void setModel( int[] yMinAndMaxValues, ChartPlot[] chartPlots )
     {      
         // check if a border has been applied around the 
         // component for scaling  the component within
@@ -114,8 +142,9 @@ public class Chart extends JPanel
     }   
     
     /**
-     * This method moves to the next month from 
-     * that currently displayed on the chart
+     * This method moves to the # of months from 
+     * that currently displayed on the chart. The chart
+     * may be moved months ahead or behind
      */
     public static int[] goToMonth(int additionalNumberOfMonths)
     {     
@@ -195,7 +224,7 @@ public class Chart extends JPanel
     }
 
     // method that should be run to trigger the node selected events
-    void fireNodeSelected(NodeSelected evt) 
+    public void fireNodeSelected(NodeSelected evt) 
     {
             Object[] listeners = listenerList.getListenerList();
             for (int i = 0; i < listeners.length; i = i+2) 
@@ -205,5 +234,61 @@ public class Chart extends JPanel
                             ((NodeSelectedListener) listeners[i+1]).nodeSelected(evt);
                     }
             }
+    }
+
+    /**
+     * This method initializes the chart properties
+     */
+    private void initialiseChartProperties() 
+    {
+        creditPlotDisplayed = (AppProperties.getInstance()
+                .getValueOf(AppProperties.CREDIT_PLOT_DISPLAYED).equals("true")) ? true : false ;
+        
+        hoverTransactionPopupDefaultOn = (AppProperties.getInstance()
+                .getValueOf(AppProperties.POPUP_DEFAULT).equals("true")) ? true : false ;
+        
+        String initialMonth = AppProperties.getInstance()
+                .getValueOf(AppProperties.CHART_INITIAL_MONTH) ;
+        
+        if ( initialMonth.equals("current") || initialMonth.equals("") )
+        {
+            // set the current month and year
+            chartInitialDisplayMonth = month ;
+            chartInitialDisplayYear = year ;
+        }
+        else
+        {
+            // parse the entered string to obtain the initial month and 
+            // year for the display of the chart
+            String [] initialMonthAndYearTokens = initialMonth.split("/") ;
+            chartInitialDisplayMonth = Integer.parseInt(initialMonthAndYearTokens[0]) ;
+            chartInitialDisplayYear = Integer.parseInt(initialMonthAndYearTokens[1]) ;
+        }
+        
+    }
+    
+    
+    public static int[] getCurrentMonthAndYear() 
+    {
+        Calendar cal = Calendar.getInstance();        
+        month = cal.get(Calendar.MONTH) ;
+        year = cal.get(Calendar.YEAR) ;
+        
+        int[] currMonthAndYear = new int[2];
+        currMonthAndYear[0] = month ;
+        currMonthAndYear[1] = year ;
+        return currMonthAndYear ;
+    }  
+    
+    public static int[] getChartMonthAndYear()
+    {
+        if( Chart.currTime[0] == 0 )
+        {            
+            return getCurrentMonthAndYear() ;
+        }
+        else
+        {            
+            return Chart.currTime ;
+        }
     }
 }

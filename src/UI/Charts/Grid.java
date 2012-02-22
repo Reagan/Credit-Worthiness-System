@@ -258,7 +258,7 @@ public final class Grid extends JComponent
     @Override
     public int getHeight()
     {
-        // difference betwee the chart and grid height
+        // difference between the chart and grid height
         // is 33 pixels
         return Chart.CHART_HEIGHT - Chart.insets.top - Chart.insets.bottom;
     }

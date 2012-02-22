@@ -127,7 +127,7 @@ public class MenuBar extends JMenuBar
         // add the Transactions JMenuItems
         newTransactionAction = new AppAction(newTransactionMenuItem,
                                       "New Transaction", false, KeyEvent.VK_T);
-        newTransactionAction.addActionClass(new EditItemsAction());
+        newTransactionAction.addActionClass(new NewTransactionAction());
         newTransactionMenuItem.setAction(newTransactionAction);
         transactionsMenu.add(newTransactionMenuItem);
         

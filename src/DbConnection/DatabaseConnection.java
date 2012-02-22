@@ -107,7 +107,7 @@ public class DatabaseConnection
      * @return
      * @throws SQLException 
      */
-    public boolean update(String SQLStatement) throws SQLException
+    public boolean update(String SQLStatement)
     {
          try 
         {       
@@ -137,7 +137,7 @@ public class DatabaseConnection
          return true; 
     }
     
-    public boolean insert(String SQLStatement) throws SQLException
+    public boolean insert(String SQLStatement)
     {
          try 
         {       

@@ -248,7 +248,7 @@ public class NewTransactionListener implements ActionListener
         double creditOrDebitAmount = 0 ;
         
         // get the current month and year
-        int [] currYearAndMonth = CenterPanel.getCurrentMonthAndYear() ;
+        int [] currYearAndMonth = Chart.getCurrentMonthAndYear() ;
         
         UsersDetails user = new UsersDetails() ;
         creditOrDebitAmount = user.getCustCreditOrDebitAmount(currentUserID) ;

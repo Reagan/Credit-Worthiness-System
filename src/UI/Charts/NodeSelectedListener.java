@@ -9,7 +9,7 @@ import java.util.EventListener;
 /**
  * This interface defines the custom event listener triggered when a node
  * is selected
- * @author reagan
+ * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
 public interface NodeSelectedListener extends EventListener
 {

@@ -65,6 +65,10 @@ public class GraphPanel extends JPanel
             int plotType = p.getPlotType() ;
             AbstractNode[] plot = p.getPlot() ;
             
+            // make sure to not display credit plots if configs set to this
+            if (!Chart.creditPlotDisplayed && plotType == ChartPlot.CREDIT_PLOT)
+                return ;
+            
             // for each of the plots get the nodes
             for(int nodesCounter = 0, n = plot.length ;
                     nodesCounter < n; nodesCounter ++)

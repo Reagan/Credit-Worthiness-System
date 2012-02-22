@@ -19,7 +19,7 @@
 19. x white bg behind popup
 20. x enable Delete button in the transactions list
 21. Display nodes where cash was returned on chart
-22. Edit Items panel
+22. x Edit Items panel
 23. x Navigate next & previous months via keyboard
 24. In status bar show modified and unmodified status of transaction
 25. x On selection of node, scroll to transaction on  JList

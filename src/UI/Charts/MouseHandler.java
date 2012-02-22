@@ -3,7 +3,6 @@
  */
 package UI.Charts;
 
-import AppActions.UpdateTransactionAction;
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -36,7 +35,9 @@ public class MouseHandler extends MouseInputAdapter
         
             // display the popup menu
             ChartPopup popUp = new ChartPopup() ;
-            popUp.show(e.getComponent(), e.getX(), e.getY());
+            popUp.setLocation(e.getLocationOnScreen());
+            popUp.setVisible(true);
+            
             break;
         }
     }

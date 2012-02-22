@@ -5,7 +5,12 @@
 package UI;
 
 import AppActions.EditItemsAction.EditItemsDialog;
+import AppActions.*;
+import DbConnection.ItemsDetails;
+import UI.Listeners.ItemsListener;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.util.Vector;
 import javax.swing.*;
 
 /**
@@ -22,42 +27,82 @@ public class EditItemsPanel extends JPanel
     
     // the buttons
     private DepthButton createItemButton ; 
-    private DepthButton deleteButton ;
-    private DepthButton saveButton ;
+    private DepthButton deleteItemButton ;
+    private DepthButton saveItemDetailsButton ;
     private DepthButton closeButton ;
     
     // create the Input fields
-    private JTextField itemName ;
-    private JTextField itemCost ;
-    private JList itemsList ;
+    public JTextField itemName ;
+    public JTextField itemCost ;
+    public JList itemsList ;
     private JScrollPane itemsListScrollPane ;
     
-    public EditItemsPanel(EditItemsDialog aThis) 
+    public static boolean dirty = false ; // shows when an items details are being edited   
+    public static String currentlySelectedItem = null ; // saves the currently selected item
+    public static int currentlySelectedItemId = -1 ; // stores the id for the current item
+    private ItemsDetails itemsCont ; // stores an instance of the currently selected item
+    
+    // actions for the buttons
+    public AppAction createItemAction ;
+    public AppAction deleteItemAction ;
+    public AppAction saveItemAction ;
+    public AppAction closePanelAction ;
+    
+    public EditItemsDialog mDialog = null ;
+    
+    public EditItemsPanel(final EditItemsDialog aThis) 
     {
         // initialise all the UI elements
         itemsNameLabel = new JLabel("Items Name"); 
         itemsCostLabel = new JLabel("Items Cost") ;
         
+        // initialise the parent dialog
+        mDialog = aThis ;
+        
         createItemButton = new DepthButton("Create") ; 
-        deleteButton = new DepthButton("Delete");
-        saveButton = new DepthButton("Save");
+        deleteItemButton = new DepthButton("Delete");
+        saveItemDetailsButton = new DepthButton("Save");
         closeButton = new DepthButton("Close");
         
+        // initialise the actions and add them to the buttons
+        createItemAction = new AppAction(createItemButton, "Create", true, KeyEvent.VK_T) ;
+        createItemAction.addActionClass(new CreateItemAction(EditItemsPanel.this));
+        createItemButton.setAction(createItemAction);
+        
+        saveItemAction = new AppAction(saveItemDetailsButton, "Save", false, KeyEvent.VK_L) ;
+        saveItemAction.addActionClass(new SaveItemAction(EditItemsPanel.this));
+        saveItemDetailsButton.setAction(saveItemAction);
+        
+        closePanelAction = new AppAction(closeButton, "Close", true, KeyEvent.VK_O) ;
+        closePanelAction.addActionClass(new CloseItemsPanelAction(EditItemsPanel.this));
+        closeButton.setAction(closePanelAction);                
+        
+        deleteItemAction = new AppAction(deleteItemButton, "Delete", false, KeyEvent.VK_D) ;
+        deleteItemAction.addActionClass(new DeleteItemAction(EditItemsPanel.this));
+        deleteItemButton.setAction(deleteItemAction);
+        
+        
         itemName = new JTextField();
-        itemName.setMaximumSize(new Dimension(155, 25));
+        itemName.setMaximumSize(new Dimension(195, 25));
+        itemName.setEditable(false);
         
         itemCost = new JTextField();
-        itemCost.setMaximumSize(new Dimension(155, 25));
+        itemCost.setMaximumSize(new Dimension(195, 25));
+        itemCost.setEditable(false);
         
         itemsList = new JList();        
+        setItemsModel();
+        itemsList.revalidate();
         itemsListScrollPane = new JScrollPane(itemsList);
         itemsListScrollPane.setMaximumSize(new Dimension(130, 180));
         
-        // layout the components
-        layoutComponents() ;
+        // add the items listener to the list
+        itemsList.addListSelectionListener(new ItemsListener(this));
+        itemsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        // set final configs for the panel
-        setPreferredSize(new Dimension(330, 240));
+        // layout the components
+        setPreferredSize(new Dimension(390, 270));
+        layoutComponents() ;
         
         // add a titled border
         setBorder(BorderFactory.createTitledBorder("Edit Items Details"));
@@ -80,7 +125,7 @@ public class EditItemsPanel extends JPanel
                     .addComponent(itemsListScrollPane)
                     .addGroup(layout.createSequentialGroup()
                             .addComponent(createItemButton)
-                            .addComponent(deleteButton)
+                            .addComponent(deleteItemButton)
                         )
                     )                
                 .addGroup(layout.createParallelGroup()
@@ -89,7 +134,7 @@ public class EditItemsPanel extends JPanel
                     .addComponent(itemsCostLabel)
                     .addComponent(itemCost)
                     .addGroup(layout.createSequentialGroup()
-                            .addComponent(saveButton)
+                            .addComponent(saveItemDetailsButton)
                             .addComponent(closeButton)
                         )
                     )
@@ -109,13 +154,99 @@ public class EditItemsPanel extends JPanel
                 .addGroup(layout.createParallelGroup()
                         .addGroup(layout.createParallelGroup()
                                 .addComponent(createItemButton)
-                                .addComponent(deleteButton)
+                                .addComponent(deleteItemButton)
                             )
                         .addGroup(layout.createParallelGroup()
-                                .addComponent(saveButton)
+                                .addComponent(saveItemDetailsButton)
                                 .addComponent(closeButton)
                             )
                     )
          );
+    }
+    
+    private String[] getItems() 
+    {                
+        itemsCont = new ItemsDetails() ;
+        
+        Vector<String[]> itemsDetailsVector =  itemsCont.getAllItemsDetails() ;
+        String[] items = new String[itemsDetailsVector.size()] ;
+        
+        // loop through the vector obtaining the items details 
+        for ( int itemsCounter =  0; itemsCounter <  itemsDetailsVector.size() ;
+                itemsCounter++ )
+        {
+            String[] currItems = itemsDetailsVector.get(itemsCounter) ;
+            String currItemName = currItems[1] ;
+            items[itemsCounter] = currItemName ;
+            
+            // save the currently selected item
+            if ( currentlySelectedItem == null ) 
+            {
+                currentlySelectedItem = items[itemsCounter] ;
+            }
+        }
+        return items ;
+    }
+    
+    /**
+     * This method saves the details for the currently selected transaction
+     */
+    public void  saveCurrentItemDetails()
+    {
+        // get the details of the currently selected item
+        if ( itemName.getText().length() < 0 || Integer.parseInt(itemCost.getText()) < 0 )
+        {
+            JOptionPane.showMessageDialog(null, "Please enter all the details for the item", 
+                    "Enter all details", JOptionPane.ERROR_MESSAGE);
+            return ;
+        }
+        
+        // and update the database
+        if ( itemsCont.updateItemDetails(currentlySelectedItemId, itemName.getText().trim(), 
+                Integer.parseInt(itemCost.getText().trim())) )
+        {
+            JOptionPane.showMessageDialog(null, "The item details were updated successfully",
+                    "Item details updated" , JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        dirty = false ;
+    }
+    
+    /**
+     * This method revalidates the items displayed in the list of 
+     * items in the JList
+     */
+    public void revalidateItemsList()
+    {
+        setItemsModel();
+    }
+    
+    /**
+     * This method extracts the names of the items from the database and adds
+     * them as the model for the JList displayed
+     */
+    public void setItemsModel()
+    {
+        Runnable getItems = new Runnable() 
+        {
+            @Override
+            public void run() 
+            {
+                DefaultListModel listModel = new DefaultListModel();
+                
+                // loop through adding the array elements
+                String [] items =  getItems() ;
+                
+                for ( String item : items )
+                {
+                    listModel.addElement(item);
+                }
+                
+                // set the model to the JList
+                itemsList.setModel(listModel) ;
+            }
+        };
+        
+        getItems.run();
     }
 }

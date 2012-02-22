@@ -41,10 +41,7 @@ public class CenterPanel extends JPanel
         monthNav = new MonthChartNavigator();
         title = new JLabel("Transactions");
         title.setFont(new Font("sanSerif", Font.PLAIN, 31));
-        yAxisLabel = new VerticalJLabel("Amount, Kshs");
-        
-        // get the current month and year
-        getCurrentMonthAndYear();
+        yAxisLabel = new VerticalJLabel("Amount, Kshs");                
         
         // create a new Chart instance
         chart = new Chart();
@@ -77,7 +74,7 @@ public class CenterPanel extends JPanel
         allChartPlots = null ;
         
         // set the chart model
-        setChartModel(month, year, minMaxTransValues, allChartPlots);                
+        setChartModel(minMaxTransValues, allChartPlots);                
         
         // lay out and add the components
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -123,35 +120,11 @@ public class CenterPanel extends JPanel
         setPreferredSize(new Dimension(686, 344));
     }
     
-    public static void setChartModel(int chartMonth, int chartYear, 
-            int[] yMinMax,ChartPlot[] allChartPlots)
+    public static void setChartModel(int[] yMinMax,ChartPlot[] allChartPlots)
     {        
-         chart.setModel(chartMonth, chartYear, yMinMax, allChartPlots);
+         chart.setModel(yMinMax, allChartPlots);
     }
 
-    public static int[] getCurrentMonthAndYear() 
-    {
-        Calendar cal = Calendar.getInstance();        
-        month = cal.get(Calendar.MONTH) ;
-        year = cal.get(Calendar.YEAR) ;
-        
-        int[] currMonthAndYear = new int[2];
-        currMonthAndYear[0] = month ;
-        currMonthAndYear[1] = year ;
-        return currMonthAndYear ;
-    }  
-    
-    public static int[] getChartMonthAndYear()
-    {
-        if( Chart.currTime[0] == 0 )
-        {            
-            return getCurrentMonthAndYear() ;
-        }
-        else
-        {            
-            return Chart.currTime ;
-        }
-    }
     
     /**
      * This method displays the alerter with the 
@@ -185,7 +158,7 @@ public class CenterPanel extends JPanel
         double[] transactionCredits ; // stores the credit items for the transactions
         
         // get the current year and month
-        int [] currYearAndMonth = getChartMonthAndYear() ;  
+        int [] currYearAndMonth = Chart.getChartMonthAndYear() ;  
         
         // initialise the chart plots and max and min transaction values to null
         allChartPlots = null ;

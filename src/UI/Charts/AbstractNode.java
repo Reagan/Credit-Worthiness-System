@@ -6,12 +6,9 @@ package UI.Charts;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JOptionPane;
-import javax.swing.event.MouseInputAdapter;
 
 /**
  *
@@ -33,14 +30,9 @@ public abstract class AbstractNode
     
     public String[] nodeInfo ;
     public boolean selected = false ; // indicates if a node is selected
-                                    // or not
-        
-    private Color selectRectBorderColor ; // this shows that the node
-                                // is selected
+                                    // or not           
     private final int smallerWidthNodes = 5 ;  // shows the width of the sorrounding 
-                                        // nodes
-    private int translatedYValue ;
-    private int translatedXValue ;
+                                  
     private int[] transactionIDs ; // stores the ID for the transaction that the node
                                     // represents
     
@@ -53,7 +45,6 @@ public abstract class AbstractNode
         bounds = new Rectangle2D.Double();
         bounds.setFrame(plotLocation.x, plotLocation.y, 
                 20, 20 );
-        selectRectBorderColor = new Color(255, 0, 0) ;
         transactionIDs = transIDs ;
     }   
     
@@ -61,6 +52,7 @@ public abstract class AbstractNode
      * This method generates a unique ID
      * for the node
      */
+    @Override
     public void setNodeID(int nodeID)
     {
         this.nodeID = nodeID ;

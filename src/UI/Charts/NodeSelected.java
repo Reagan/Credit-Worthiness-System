@@ -9,7 +9,7 @@ import java.util.EventObject;
  * This class defines the NodeSelected event
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
-public class NodeSelected extends EventObject 
+public final class NodeSelected extends EventObject 
 {
     private int componentNumber ;
 

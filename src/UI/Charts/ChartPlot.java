@@ -9,7 +9,7 @@ package UI.Charts;
  * joined together by edges
  * The chart plot can either be a CREDIT_PLOT
  * or TRANSACTION_PLOT
- * @author rmbitiru
+ * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
 public class ChartPlot 
 {
