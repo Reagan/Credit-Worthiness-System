@@ -59,7 +59,10 @@ public class ClientImages
      * This method copies files from the source to the images 
      * folder
      * @param userPicPath
-     * @param fileDestination 
+     * @param fileDestination
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException  
      */
     public boolean copyFiles(String userPicPath, String fileDestination) 
             throws FileNotFoundException, IOException 

@@ -17,11 +17,11 @@ import javax.swing.event.ListSelectionListener;
  * with details of the currently selected item
  * @author Reagan Mbitiru <reaganmbitiru@gmail.com>
  */
-public class ItemsListener implements ListSelectionListener
+public class TransItemsListener implements ListSelectionListener
 {
     private EditItemsPanel panel ;
     
-    public ItemsListener(EditItemsPanel editPanel)
+    public TransItemsListener(EditItemsPanel editPanel)
     {
         panel = editPanel ;
     }

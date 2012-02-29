@@ -527,10 +527,10 @@ public class UsersDetails
         
         // get the total amount that the user has paid back 
         // for the purchase of various items
-        getAmountRepaidQuery = "SELECT amount FROM debit_TRANSACTIONS AS d , "
+        getAmountRepaidQuery = "SELECT amount FROM debit_transactions AS d , "
                 + "(SELECT transaction_id  FROM transactions WHERE customers_id = "
                 + custID
-                + "AND transaction_type = 2) AS t WHERE d.transaction_id = t.transaction_id" ;
+                + " AND transaction_type = 2) AS t WHERE d.transaction_id = t.transaction_id" ;
         
         Vector repaidAmount = null ;
         

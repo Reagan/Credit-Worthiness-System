@@ -18,10 +18,7 @@ import javax.swing.JOptionPane;
 public class AppProperties 
 {
     private static Properties properties = null ;
-    private static String propertiesFile = 
-            // "/home/reagan/Desktop/cws.config"; 
-            // "C:\\Documents and Settings\\Reayn\\Desktop\\cws.config";
-            "runtime_required" + File.separator + "cws.config" ;
+    private static String propertiesFile = "runtime_required" + File.separator + "cws.config" ;
     private static AppProperties thisInstance = null ;
     
     // define the properties as  stored in the config file
@@ -52,6 +49,9 @@ public class AppProperties
     
     private AppProperties() 
     {      
+        // initialise the properties object
+        properties = new Properties() ;
+                
         // initialise the variables
         initialise();        
     }
@@ -70,7 +70,7 @@ public class AppProperties
     
     /**
      * This method obtains the value of a specific key in the config file
-     * @param properties
+     * @param key 
      * @return 
      */
     public String getValueOf(String key)
@@ -107,14 +107,10 @@ public class AppProperties
      * required to fetch keys & values from the config file
      */
     private void initialise()
-    {
-        // initialise the properties object
-        properties = new Properties() ;
-        
+    {       
         // get the properties
         try 
-        {  
-            // in = getClass().getResourceAsStream(propertiesFile);
+        {             
             FileInputStream in = new FileInputStream(propertiesFile);
             
             if(null==in)

@@ -7,7 +7,7 @@ package UI;
 import AppActions.EditItemsAction.EditItemsDialog;
 import AppActions.*;
 import DbConnection.ItemsDetails;
-import UI.Listeners.ItemsListener;
+import UI.Listeners.TransItemsListener;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
@@ -97,7 +97,7 @@ public class EditItemsPanel extends JPanel
         itemsListScrollPane.setMaximumSize(new Dimension(130, 180));
         
         // add the items listener to the list
-        itemsList.addListSelectionListener(new ItemsListener(this));
+        itemsList.addListSelectionListener(new TransItemsListener(this));
         itemsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         // layout the components
